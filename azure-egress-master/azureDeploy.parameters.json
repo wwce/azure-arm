@@ -1,0 +1,26 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+	"vmSize": {
+		"defaultValue": "Standard_DS3_v2",
+		"type": "string",
+		"allowedValues": [
+			"Standard_DS3_v2",
+			"Standard_DS4_v2",
+			"Standard_DS5_v2"
+		],
+		"metadata": {
+        	"description": "Azure VM size for VM-Series"
+    	},
+    	"Username": {
+            "defaultValue": "paloalto",
+            "type": "String"
+        },
+        "Password": {
+            "defaultValue": null,
+            "type": "SecureString"
+        } 
+    
+  }
+}  
