@@ -1,0 +1,344 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.13",
+  "parameters": {
+    "vmName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of VM-Series FW in the Azure portal"
+      },
+      "defaultValue": ""
+    },
+    "BootstrapStorageAccount": {
+      "defaultValue": "",
+      "type": "String",
+      "metadata": {
+        "description": "Storage account hosting the bootstrap files"
+      }
+    },
+    
+    "bootstrapFirewall": {
+      "type": "string",
+      "metadata": {
+        "description": "Specifies if bootstrap storage account will be used"
+        }
+      ,
+      "allowedValues": [
+        "True",
+        "False"
+      ],
+      "defaultValue": "False"
+    },
+    "StorageAccountAccessKey": {
+      "defaultValue": "",
+      "type": "String",
+      "metadata": {
+        "description": "Authentication key to access the storage account"
+      }
+    },
+    "StorageAccountFileShare": {
+      "defaultValue": "",
+      "type": "String",
+      "metadata": {
+        "description": "The file share in the storage account where the bootstrap files are located"
+      }
+    },
+    "StorageAccountFileShareDirectory": {
+      "defaultValue": "",
+      "type": "String",
+      "metadata": {
+        "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share"
+      }
+    },
+    "fwAvSet": {
+      "type": "string",
+      "metadata": {
+        "description": "EXISTING Availability Set name for Firewalls"
+      },
+      "defaultValue": ""
+    },
+    "vmSize": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_DS3_v2",
+        "Standard_DS4_v2",
+        "Standard_DS5_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2",
+        "Standard_D5_v2" 
+      ],
+      "metadata": {
+        "description": "Azure VM size for VM-Series"
+      },
+      "defaultValue": "Standard_DS3_v2"
+    },
+    "imageVersion": {
+      "type": "string",
+      "allowedValues": [
+        "8.0.0",
+        "8.1.0",
+        "latest"
+      ],
+      "metadata": {
+        "description": "PAN OS Version"
+      },
+      "defaultValue": "latest"
+    },
+    "imageSku": {
+      "type": "string",
+      "allowedValues": [
+        "byol",
+        "bundle1",
+        "bundle2"
+      ],
+      "metadata": {
+        "description": "Firewall License Model"
+      },
+      "defaultValue": "bundle2"
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the EXISTING Virtual Network (VNET)"
+      },
+      "defaultValue": ""
+    },
+    "virtualNetworkExistingRGName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Name of resource group of EXISTING VNET"
+      }
+    },
+    "managementSubnetName": {
+      "type": "string",
+      "defaultValue": "Management",
+      "metadata": {
+        "description": "EXISTING Subnet for Management"
+      }
+    },
+    "untrustSubnetName": {
+      "type": "string",
+      "defaultValue": "Untrust",
+      "metadata": {
+        "description": "EXISTING Subnet for Untrust"
+      }
+    },
+    "trustSubnetName": {
+      "type": "string",
+      "defaultValue": "Trust",
+      "metadata": {
+        "description": "EXISTING Subnet for Trust"
+      }
+    },
+    "vpnSubnetName": {
+        "type": "string",
+        "defaultValue": "VPN",
+        "metadata": {
+          "description": "EXISTING Subnet for Trust"
+        }
+    },
+    "Username": {
+      "type": "string",
+      "metadata": {
+        "description": "Username of the administrator account of VM-Series"
+      }
+    },
+    "Password": {
+      "type": "securestring",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Password for the administrator account of VM-Series"
+      }
+    },
+    "publicIPAddressName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of FW1 MGMT Public Address"
+      }
+    }
+  },
+  "variables": {
+    "customDataField": "[concat('storage-account=', parameters('BootstrapStorageAccount'), ',access-key=', parameters('StorageAccountAccessKey'), ',file-share=', parameters('StorageAccountFileShare'),',share-directory=', parameters('StorageAccountFileShareDirectory'))]",
+    "vnetID": "[resourceId(parameters('virtualNetworkExistingRGName'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+    "subnet0Ref": "[concat(variables('vnetID'),'/subnets/',parameters('managementSubnetName'))]",
+    "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',parameters('untrustSubnetName'))]",
+    "subnet2Ref": "[concat(variables('vnetID'),'/subnets/',parameters('trustSubnetName'))]",
+    "subnet3Ref": "[concat(variables('vnetID'),'/subnets/',parameters('vpnSubnetName'))]",
+    "fwManagementNic": "[concat(parameters('vmName'), 'Management')]",
+    "fwUntrustNic": "[concat('INT-',parameters('vmName'), '-Untrust')]",
+    "fwTrustNic": "[concat('INT-',parameters('vmName'), '-Trust')]",
+    "fwVpnNic": "[concat('INT-',parameters('vmName'), '-VPN')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[parameters('publicIPAddressName')]",
+      "apiVersion": "2017-08-01",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Static",
+        "idleTimeoutInMinutes": 4
+      },
+      "resources": [],
+      "dependsOn": []
+    },
+    {
+      "name": "[variables('fwManagementNic')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIPAddressName'))]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig-mgmt",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
+              },
+              "subnet": {
+                "id": "[variables('subnet0Ref')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[variables('fwUntrustNic')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [],
+      "apiVersion": "2015-06-15",
+      "properties": {
+        "enableIPForwarding": true,
+        "ipConfigurations": [
+          {
+            "name": "ipconfig-untrust",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('subnet1Ref')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[variables('fwTrustNic')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "properties": {
+        "enableIPForwarding": true,
+        "ipConfigurations": [
+          {
+            "name": "ipconfig-trust",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('subnet2Ref')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+        "name": "[variables('fwVpnNic')]",
+        "type": "Microsoft.Network/networkInterfaces",
+        "location": "[resourceGroup().location]",
+        "apiVersion": "2015-06-15",
+        "properties": {
+          "enableIPForwarding": true,
+          "ipConfigurations": [
+            {
+              "name": "ipconfig-trust",
+              "properties": {
+                "privateIPAllocationMethod": "Dynamic",
+                "subnet": {
+                  "id": "[variables('subnet3Ref')]"
+                }
+              }
+            }
+          ]
+        }
+      },
+    {
+      "apiVersion": "2016-04-30-preview",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[parameters('vmName')]",
+      "location": "[resourceGroup().location]",
+      "plan": {
+        "name": "[parameters('imageSku')]",
+        "product": "vmseries1",
+        "publisher": "paloaltonetworks"
+      },
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('fwAvSet'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('vmName')]",
+          "adminUsername": "[parameters('Username')]",
+          "adminPassword": "[parameters('Password')]",
+          "customData": "[if(equals(parameters('bootstrapFirewall'), bool('false')), json('null'), base64(variables('customDataField')))]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "paloaltonetworks",
+            "offer": "vmseries1",
+            "sku": "[parameters('imageSku')]",
+            "version": "[parameters('imageVersion')]"
+          },
+          "osDisk": {
+            "managedDisk": {
+              "storageAccountType": "Premium_LRS"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fwManagementNic'))]",
+              "properties": {
+                "primary": true
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fwUntrustNic'))]",
+              "properties": {
+                "primary": false
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fwTrustNic'))]",
+              "properties": {
+                "primary": false
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('fwManagementNic'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('fwUntrustNic'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('fwTrustNic'))]"
+      ]
+    }
+  ]
+}
