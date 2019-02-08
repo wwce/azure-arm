@@ -1,0 +1,84 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vmSize": {
+      "value": "Standard_DS3_v2"
+    },
+    "imageVersion": {
+      "value": "latest"
+    },
+    "imageSku": {
+      "value": "bundle2"
+    },
+    "vnetNewOrExisting": {
+      "value": "new"
+    },
+    "virtualNetworkName": {
+      "value": "NET-Demo"
+    },
+    "virtualNetworkAddressPrefix": {
+      "value": "10.0.0.0/16"
+    },
+    "managementSubnetName": {
+      "value": "Management"
+    },
+    "managementSubnetAddressPrefix": {
+      "value": "10.0.0.0/24"
+    },
+    "untrustSubnetName": {
+      "value": "Untrust"
+    },
+    "untrustSubnetAddressPrefix": {
+      "value": "10.0.1.0/24"
+    },
+    "trustSubnetName": {
+      "value": "Trust"
+    },
+    "trustSubnetAddressPrefix": {
+      "value": "10.0.2.0/24"
+    },
+    "vpnSubnetName":{
+      "value": "VPN"
+    },
+    "vpnSubnetAddressPrefix": {
+      "value": "10.0.3.0/24"
+    },
+    "protectedSubnetName": {
+      "value": "Dev"
+    },
+    "protectedSubnetAddressPrefix": {
+      "value": "10.0.4.0/24"
+    },
+    "egressLBFrontEndAddress": {
+      "value": "10.0.2.100"
+    },
+    "egressLBVPNFrontEndAddress": {
+      "value": "10.0.3.100"
+    },
+    "Username": {
+      "value": "paloalto"
+    },
+    "Password": {
+      "value": ""
+    },
+    "sourcePublicAddress": {
+      "value": "0.0.0.0/0"
+    },
+    "bootstrapFirewall": {
+      "value": "yes"
+    },
+    "BootstrapStorageAccount":{
+      "value": ""
+    },
+    "StorageAccountAccessKey":{
+      "value":""
+    },
+    "StorageAccountFileShare":{
+      "value":""
+    },
+    "StorageAccountFileShareDirectory": {
+      "value": ""
+    }
+  }
+}
