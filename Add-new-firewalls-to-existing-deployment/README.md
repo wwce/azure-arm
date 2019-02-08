@@ -22,7 +22,7 @@ The following are required
 
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjharris10%2Ffw-existing-vnet%2Fmaster%2FAdd-New-Firewall-AzureDeploy-4NIC.json)
 
-# FW - 3 Interfaces with NO Availability Set
+## FW - 3 Interfaces with NO Availability Set
 
 This template was created to support the deployment of a 3 interface Palo Alto Networks firewall into an existing Microsoft Azure environment that has the following items already deployed but is NOT a member of an availability set:
                     -VNET - with 3 subnets
