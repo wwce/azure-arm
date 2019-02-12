@@ -25,4 +25,4 @@ It includes following components:
  
  If bootstraping with default configuration file is used default credentials are:
  - Username: paloalto
- - Password: PaloAlt0!123!
+ - Password: Pal0Alt0123!
