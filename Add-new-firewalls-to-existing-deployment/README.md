@@ -2,10 +2,18 @@
 
 Select the template that matches your requirements
 
+This template was created to support the deployment of a 2 interface Palo Alto Networks firewall into an existing Microsoft Azure environment that has the following items already deployed:
+The following are required
+                    -Availability Set for the Firewall
+                    -VNET - with 2 subnets (Management + Trust)
+                    -Resource Group for Firewall
+
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAdd-new-firewalls-to-existing-deployment%2FAdd-New-Firewall-AzureDeploy-2NIC.json)
+
 This template was created to support the deployment of a 3 interface Palo Alto Networks firewall into an existing Microsoft Azure environment that has the following items already deployed:
 The following are required
                     -Availability Set for the Firewall
-                    -VNET - with 3 subnets
+                    -VNET - with 2 subnets (Management + Untrust + Trust)
                     -Resource Group for Firewall
 
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAdd-new-firewalls-to-existing-deployment%2FAdd-New-Firewall-AzureDeploy.json)
