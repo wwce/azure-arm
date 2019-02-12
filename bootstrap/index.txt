@@ -1,2 +1,0 @@
-bootstrap.xml
-init-cfg.txt
