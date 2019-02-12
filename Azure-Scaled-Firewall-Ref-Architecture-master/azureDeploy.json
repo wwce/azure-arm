@@ -3,204 +3,204 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "vnetNewOrExisting": {
-      "type": "string",
+      "defaultValue": "new",
       "allowedValues": [
         "new",
         "existing"
       ],
-      "defaultValue": "new",
+      "type": "String",
       "metadata": {
         "description": "Identify whether to use a new or existing vnet"
       }
     },
     "virtualNetworkName": {
-      "type": "string",
       "defaultValue": "hub-vnet",
+      "type": "String",
       "metadata": {
         "description": "Virtual Network Name"
       }
     },
     "virtualNetworkAddressPrefix": {
-      "type": "string",
       "defaultValue": "10.0.0.0/16",
+      "type": "String",
       "metadata": {
         "description": "CIDR for Virtual Network"
       }
     },
     "BootstrapStorageAccount": {
       "defaultValue": "",
-      "type": "string",
+      "type": "String",
       "metadata": {
         "description": "Storage account hosting the bootstrap files"
       }
     },
     "StorageAccountAccessKey": {
       "defaultValue": "",
-      "type": "string",
+      "type": "String",
       "metadata": {
         "description": "Authentication key to access the storage account"
       }
     },
     "StorageAccountFileShare": {
       "defaultValue": "",
-      "type": "string",
+      "type": "String",
       "metadata": {
         "description": "The file share in the storage account where the bootstrap files are located"
       }
     },
     "EgressFWFileShareDirectory": {
       "defaultValue": "",
-      "type": "string",
+      "type": "String",
       "metadata": {
         "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share"
       }
     },
     "IngressFWFileShareDirectory": {
       "defaultValue": "",
-      "type": "string",
+      "type": "String",
       "metadata": {
         "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share"
       }
     },
     "mgmtSubnetName": {
-      "type": "string",
       "defaultValue": "Mgmt",
+      "type": "String",
       "metadata": {
         "description": "Subnet for Management Network"
       }
     },
     "mgmtSubnetPrefix": {
-      "type": "string",
       "defaultValue": "10.0.0.0/24",
+      "type": "String",
       "metadata": {
         "description": "CIDR for Management Network"
       }
     },
     "untrustSubnetName": {
-      "type": "string",
       "defaultValue": "EgressFW-Untrust",
+      "type": "String",
       "metadata": {
         "description": "Subnet for Egress firewall Untrust Network"
       }
     },
     "untrustSubnetPrefix": {
-      "type": "string",
       "defaultValue": "10.0.1.0/24",
+      "type": "String",
       "metadata": {
         "description": "CIDR for Egress firewall Untrust Network"
       }
     },
     "trustSubnetName": {
-      "type": "string",
       "defaultValue": "EgressFW-Trust",
+      "type": "String",
       "metadata": {
         "description": "Subnet for Egress firewall Trust Network"
       }
     },
     "trustSubnetPrefix": {
-      "type": "string",
       "defaultValue": "10.0.2.0/24",
+      "type": "String",
       "metadata": {
         "description": "Subnet for Egress firewall Trust Network"
       }
     },
     "egressLBFrontEndAddress": {
-      "type": "string",
+      "defaultValue": "10.0.2.100",
+      "type": "String",
       "metadata": {
         "description": "IP Address for the egress load balancer"
-      },
-      "defaultValue": "10.0.2.100"
+      }
     },
     "imageSku": {
-      "type": "string",
       "defaultValue": "bundle1",
       "allowedValues": [
         "byol",
         "bundle1",
         "bundle2"
       ],
+      "type": "String",
       "metadata": {
         "description": "byol = Bring Your Own License; bundle1 = Bundle 1 PAYG (Hourly); bundle2 = Bundle 2 PAYG (Hourly)"
       }
     },
     "firewallVmSize": {
-      "type": "string",
+      "defaultValue": "Standard_DS3_v2",
       "allowedValues": [
         "Standard_DS3_v2",
         "Standard_DS4_v2",
         "Standard_DS5_v2"
       ],
+      "type": "String",
       "metadata": {
         "description": "Azure VM size for VM-Series"
-      },
-      "defaultValue": "Standard_DS3_v2"
+      }
     },
     "disktype": {
-      "type": "string",
+      "defaultValue": "Standard_LRS",
       "allowedValues": [
         "Standard_LRS",
         "Premium_LRS"
       ],
-      "defaultValue": "Standard_LRS"
+      "type": "String"
     },
     "imageVersion": {
-      "type": "string",
+      "defaultValue": "latest",
       "allowedValues": [
         "latest",
         "8.1.0",
         "8.0.0",
         "7.1.1"
       ],
+      "type": "String",
       "metadata": {
         "description": "PAN OS Version"
-      },
-      "defaultValue": "latest"
+      }
     },
     "username": {
-      "type": "string",
       "defaultValue": "pandemo",
+      "type": "String",
       "metadata": {
         "description": "Username of the administrator account of VM instances"
       }
     },
     "password": {
-      "type": "securestring",
       "defaultValue": "Dem0pa$$w0rd",
+      "type": "SecureString",
       "metadata": {
         "description": "Password for the administrator account of all VM instances. Must be specified if Authentication Type is 'password'."
       }
     },
     "networkSecurityGroupName": {
-      "type": "string",
       "defaultValue": "nsg",
+      "type": "String",
       "metadata": {
         "description": "Network Security Group Name"
       }
     },
     "networkSecurityGroupInboundIP": {
-      "type": "string",
+      "defaultValue": "0.0.0.0/0",
+      "type": "String",
       "metadata": {
         "description": "Your source public IP address. Added to the inbound NSG on eth0 (MGMT), to restrict access to the deployment."
-      },
-      "defaultValue": "0.0.0.0/0"
+      }
     },
     "enable-palo-alto-bootstrap": {
-      "type": "bool",
+      "defaultValue": "false",
+      "type": "Bool",
       "metadata": {
         "description": "Specifies if bootstrap storage account will be used"
-      },
-      "defaultValue": "false"
+      }
     },
     "virtualMachine-count": {
-      "type": "int",
       "defaultValue": 1,
+      "type": "Int",
       "metadata": {
         "description": "Number of NVA VMs to be created."
       }
     },
     "virtualNetworkExistingRGName": {
-      "type": "string",
       "defaultValue": "",
+      "type": "String",
       "metadata": {
         "description": "Name of resource group of EXISTING VNET"
       }
@@ -220,9 +220,9 @@
   },
   "resources": [
     {
+      "type": "Microsoft.Resources/deployments",
       "name": "deployNsg",
       "apiVersion": "2017-05-10",
-      "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -246,10 +246,9 @@
       }
     },
     {
-      "apiVersion": "2016-06-01",
       "type": "Microsoft.Network/virtualNetworks",
-      "condition": "[equals(parameters('vnetNewOrExisting'),'new')]",
       "name": "[parameters('virtualNetworkName')]",
+      "apiVersion": "2016-06-01",
       "location": "[resourceGroup().location]",
       "properties": {
         "addressSpace": {
@@ -290,16 +289,17 @@
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkSecurityGroups', 'Allow-All')]",
         "[resourceId('Microsoft.Network/networkSecurityGroups', 'Management')]"
-      ]
+      ],
+      "condition": "[equals(parameters('vnetNewOrExisting'),'new')]"
     },
     {
-      "apiVersion": "2017-08-01",
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-pip')]",
-      "location": "[resourceGroup().location]",
       "sku": {
         "name": "Standard"
       },
+      "name": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-pip')]",
+      "apiVersion": "2017-08-01",
+      "location": "[resourceGroup().location]",
       "copy": {
         "name": "nicPipLoop",
         "count": "[parameters('virtualMachine-count')]"
@@ -314,12 +314,12 @@
     },
     {
       "type": "Microsoft.Network/loadBalancers",
-      "name": "LB-Egress",
-      "apiVersion": "2017-08-01",
-      "location": "[resourceGroup().location]",
       "sku": {
         "name": "Standard"
       },
+      "name": "LB-Egress",
+      "apiVersion": "2017-08-01",
+      "location": "[resourceGroup().location]",
       "properties": {
         "frontendIPConfigurations": [
           {
@@ -383,19 +383,15 @@
     },
     {
       "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-mgmt')]",
       "apiVersion": "2017-09-01",
       "location": "[resourceGroup().location]",
-      "name": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-mgmt')]",
-      "tags": {
-        "displayName": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-mgmt')]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "LB-Egress"
-      ],
       "copy": {
         "name": "nic1Loop",
         "count": "[parameters('virtualMachine-count')]"
+      },
+      "tags": {
+        "displayName": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-mgmt')]"
       },
       "properties": {
         "enableIPForwarding": true,
@@ -411,23 +407,23 @@
             }
           }
         ]
-      }
-    },
-    {
-      "type": "Microsoft.Network/networkInterfaces",
-      "apiVersion": "2017-09-01",
-      "location": "[resourceGroup().location]",
-      "name": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-untrust')]",
-      "tags": {
-        "displayName": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-untrust')]"
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "nicPipLoop"
-      ],
+        "LB-Egress"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-untrust')]",
+      "apiVersion": "2017-09-01",
+      "location": "[resourceGroup().location]",
       "copy": {
         "name": "nic1Loop",
         "count": "[parameters('virtualMachine-count')]"
+      },
+      "tags": {
+        "displayName": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-untrust')]"
       },
       "properties": {
         "enableIPForwarding": true,
@@ -445,24 +441,24 @@
             }
           }
         ]
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "nicPipLoop"
+      ]
     },
     {
       "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-trust')]",
       "apiVersion": "2017-09-01",
       "location": "[resourceGroup().location]",
-      "name": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-trust')]",
-      "tags": {
-        "displayName": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-trust')]"
-      },
       "copy": {
         "name": "nic1Loop",
         "count": "[parameters('virtualMachine-count')]"
       },
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "[resourceId('Microsoft.Network/loadBalancers', 'LB-Egress')]"
-      ],
+      "tags": {
+        "displayName": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-trust')]"
+      },
       "properties": {
         "enableIPForwarding": true,
         "enableAcceleratedNetworking": true,
@@ -482,7 +478,11 @@
             }
           }
         ]
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "[resourceId('Microsoft.Network/loadBalancers', 'LB-Egress')]"
+      ]
     },
     {
       "type": "Microsoft.Network/networkSecurityGroups",
@@ -764,6 +764,9 @@
     },
     {
       "type": "Microsoft.Compute/availabilitySets",
+      "sku": {
+        "name": "Aligned"
+      },
       "name": "AS-FW",
       "apiVersion": "2016-04-30-preview",
       "location": "[resourceGroup().location]",
@@ -772,35 +775,26 @@
         "platformUpdateDomainCount": 2,
         "platformFaultDomainCount": 2
       },
-      "sku": {
-        "name": "Aligned"
-      },
       "resources": [],
       "dependsOn": []
     },
     {
       "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1))]",
       "apiVersion": "2017-03-30",
       "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "vmLoop",
+        "count": "[parameters('virtualMachine-count')]"
+      },
       "plan": {
         "name": "[parameters('imageSku')]",
         "product": "vmseries1",
         "publisher": "paloaltonetworks"
       },
-      "name": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1))]",
       "tags": {
         "displayName": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1))]"
       },
-      "copy": {
-        "name": "vmLoop",
-        "count": "[parameters('virtualMachine-count')]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Compute/availabilitySets', 'AS-FW')]",
-        "[concat('Microsoft.Network/networkInterfaces/', concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-mgmt'))]",
-        "[concat('Microsoft.Network/networkInterfaces/', concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-untrust'))]",
-        "[concat('Microsoft.Network/networkInterfaces/', concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-trust'))]"
-      ],
       "properties": {
         "availabilitySet": {
           "id": "[resourceId('Microsoft.Compute/availabilitySets', 'AS-FW')]"
@@ -851,16 +845,22 @@
             }
           ]
         }
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/availabilitySets', 'AS-FW')]",
+        "[concat('Microsoft.Network/networkInterfaces/', concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-mgmt'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-untrust'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-trust'))]"
+      ]
     },
     {
-      "apiVersion": "2017-08-01",
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-pip')]",
-      "location": "[resourceGroup().location]",
       "sku": {
         "name": "Standard"
       },
+      "name": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-pip')]",
+      "apiVersion": "2017-08-01",
+      "location": "[resourceGroup().location]",
       "copy": {
         "name": "nicPipLoop",
         "count": "[parameters('virtualMachine-count')]"
@@ -875,12 +875,12 @@
     },
     {
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "Ingress-LB-Pub",
-      "apiVersion": "2017-08-01",
-      "location": "[resourceGroup().location]",
       "sku": {
         "name": "Standard"
       },
+      "name": "Ingress-LB-Pub",
+      "apiVersion": "2017-08-01",
+      "location": "[resourceGroup().location]",
       "properties": {
         "publicIPAllocationMethod": "Static",
         "idleTimeoutInMinutes": 4,
@@ -893,6 +893,9 @@
     },
     {
       "type": "Microsoft.Compute/availabilitySets",
+      "sku": {
+        "name": "Aligned"
+      },
       "name": "Ingress-AS-FW",
       "apiVersion": "2016-04-30-preview",
       "location": "[resourceGroup().location]",
@@ -901,20 +904,17 @@
         "platformUpdateDomainCount": 2,
         "platformFaultDomainCount": 2
       },
-      "sku": {
-        "name": "Aligned"
-      },
       "resources": [],
       "dependsOn": []
     },
     {
       "type": "Microsoft.Network/loadBalancers",
-      "name": "LB-Ingress",
-      "apiVersion": "2017-08-01",
-      "location": "[resourceGroup().location]",
       "sku": {
         "name": "Standard"
       },
+      "name": "LB-Ingress",
+      "apiVersion": "2017-08-01",
+      "location": "[resourceGroup().location]",
       "properties": {
         "frontendIPConfigurations": [
           {
@@ -977,19 +977,15 @@
     },
     {
       "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-mgmt')]",
       "apiVersion": "2017-09-01",
       "location": "[resourceGroup().location]",
-      "name": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-mgmt')]",
-      "tags": {
-        "displayName": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-mgmt')]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "LB-Ingress"
-      ],
       "copy": {
         "name": "nic1Loop",
         "count": "[parameters('virtualMachine-count')]"
+      },
+      "tags": {
+        "displayName": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-mgmt')]"
       },
       "properties": {
         "enableIPForwarding": true,
@@ -1005,24 +1001,23 @@
             }
           }
         ]
-      }
-    },
-    {
-      "type": "Microsoft.Network/networkInterfaces",
-      "apiVersion": "2017-09-01",
-      "location": "[resourceGroup().location]",
-      "name": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-untrust')]",
-      "tags": {
-        "displayName": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-untrust')]"
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "[resourceId('Microsoft.Network/loadBalancers', 'LB-Ingress')]",
-        "nicPipLoop"
-      ],
+        "LB-Ingress"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-untrust')]",
+      "apiVersion": "2017-09-01",
+      "location": "[resourceGroup().location]",
       "copy": {
         "name": "nic1Loop",
         "count": "[parameters('virtualMachine-count')]"
+      },
+      "tags": {
+        "displayName": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-untrust')]"
       },
       "properties": {
         "enableIPForwarding": true,
@@ -1042,24 +1037,25 @@
             }
           }
         ]
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "[resourceId('Microsoft.Network/loadBalancers', 'LB-Ingress')]",
+        "nicPipLoop"
+      ]
     },
     {
       "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-trust')]",
       "apiVersion": "2017-09-01",
       "location": "[resourceGroup().location]",
-      "name": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-trust')]",
-      "tags": {
-        "displayName": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-trust')]"
-      },
       "copy": {
         "name": "nic1Loop",
         "count": "[parameters('virtualMachine-count')]"
       },
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "[resourceId('Microsoft.Network/loadBalancers', 'LB-Ingress')]"
-      ],
+      "tags": {
+        "displayName": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-trust')]"
+      },
       "properties": {
         "enableIPForwarding": true,
         "enableAcceleratedNetworking": true,
@@ -1074,31 +1070,29 @@
             }
           }
         ]
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "[resourceId('Microsoft.Network/loadBalancers', 'LB-Ingress')]"
+      ]
     },
     {
       "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1))]",
       "apiVersion": "2017-03-30",
       "location": "[resourceGroup().location]",
+      "copy": {
+        "name": "vmLoop",
+        "count": "[parameters('virtualMachine-count')]"
+      },
       "plan": {
         "name": "[parameters('imageSku')]",
         "product": "vmseries1",
         "publisher": "paloaltonetworks"
       },
-      "name": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1))]",
       "tags": {
         "displayName": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1))]"
       },
-      "copy": {
-        "name": "vmLoop",
-        "count": "[parameters('virtualMachine-count')]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Compute/availabilitySets', 'Ingress-AS-FW')]",
-        "[concat('Microsoft.Network/networkInterfaces/', concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-mgmt'))]",
-        "[concat('Microsoft.Network/networkInterfaces/', concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-untrust'))]",
-        "[concat('Microsoft.Network/networkInterfaces/', concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-trust'))]"
-      ],
       "properties": {
         "availabilitySet": {
           "id": "[resourceId('Microsoft.Compute/availabilitySets', 'Ingress-AS-FW')]"
@@ -1150,7 +1144,13 @@
           ]
         }
       },
-      "resources": []
+      "resources": [],
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/availabilitySets', 'Ingress-AS-FW')]",
+        "[concat('Microsoft.Network/networkInterfaces/', concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-mgmt'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-untrust'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-trust'))]"
+      ]
     }
   ],
   "outputs": {}
