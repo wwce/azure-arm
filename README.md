@@ -11,9 +11,11 @@ The design models primarily differ in how traffic flows are divided amongst VM-S
 
 * Shared model—In this model, all traffic flows through a single set of firewalls. This model keeps the number of firewalls low for small deployments and proof-of-concepts. However, the technical integration complexity is
 high.
-[Shared Model ARM Template](https://github.com/wwce/azure-arm/tree/master/Azure-Shared-Firewall-Ref-Architecture-master)
+
+###[Shared Model ARM Template](https://github.com/wwce/azure-arm/tree/master/Azure-Shared-Firewall-Ref-Architecture-master)
 
 * Scaled model—The model separates inbound traffic flows onto a dedicated set of firewalls while all other traffic flows through a shared firewall set. This design reduces technical integration complexity and increases scale compared to the shared model.
-[Scaled Model ARM Template](https://github.com/wwce/azure-arm/tree/master/Azure-Scaled-Firewall-Ref-Architecture-master)
+
+###[Scaled Model ARM Template](https://github.com/wwce/azure-arm/tree/master/Azure-Scaled-Firewall-Ref-Architecture-master)
 
 * Dedicated model—Inbound, outbound and east-west, and backhaul traffic are each on dedicated sets of firewalls. This model offers increased operational resiliency and reduces the chances of high bandwidth use from one traffic profile affecting another.
