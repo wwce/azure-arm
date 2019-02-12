@@ -4,7 +4,7 @@ Deploy a Scaled firewall infrastructure described in the Paloaltonetworks Azure 
 
 ![alt text](https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Scaled-Firewall-Ref-Architecture-master/Documentation/topology.png)
 
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https:%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Scaled-Firewall-Ref-Architecture-master%2FazureDeploy.json)
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Scaled-Firewall-Ref-Architecture-master%2FazureDeploy.json)
 
 This template automates deployment of 2 pairs of firewalls LB for ingress and egress Security.
 It includes following components:
