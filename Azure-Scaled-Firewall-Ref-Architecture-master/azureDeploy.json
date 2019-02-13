@@ -28,35 +28,35 @@
             }
         },
         "BootstrapStorageAccount": {
-            "defaultValue": "",
+            "defaultValue": "scaledfwbootstrap",
             "type": "String",
             "metadata": {
                 "description": "Storage account hosting the bootstrap files"
             }
         },
         "StorageAccountAccessKey": {
-            "defaultValue": "",
+            "defaultValue": "lGCcuTF8rVeolLpNpmlW+m0NE9ust4SqMmfynALSi6I1dHjuDyeVgwSenERpGLyQOlXgMgfmhGjAxu4Co/mmSg==",
             "type": "String",
             "metadata": {
                 "description": "Authentication key to access the storage account"
             }
         },
         "StorageAccountFileShare": {
-            "defaultValue": "",
+            "defaultValue": "sharedfw",
             "type": "String",
             "metadata": {
                 "description": "The file share in the storage account where the bootstrap files are located"
             }
         },
         "EgressFWFileShareDirectory": {
-            "defaultValue": "",
+            "defaultValue": "egressbootstrap",
             "type": "String",
             "metadata": {
                 "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share"
             }
         },
         "IngressFWFileShareDirectory": {
-            "defaultValue": "",
+            "defaultValue": "ingressbootstrap",
             "type": "String",
             "metadata": {
                 "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share"
@@ -400,16 +400,23 @@
                     {
                         "name": "ipconfig1",
                         "properties": {
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-mgmt-pip'))]"
+                            },
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
                                 "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/',parameters('mgmtSubnetName'))]"
                             }
                         }
                     }
-                ]
+                ],
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups','Allow-All')]"
+                }
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups','Allow-All')]",
                 "LB-Egress"
             ]
         },
@@ -858,6 +865,46 @@
             "sku": {
                 "name": "Standard"
             },
+            "name": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-mgmt-pip')]",
+            "apiVersion": "2017-08-01",
+            "location": "[resourceGroup().location]",
+            "copy": {
+                "name": "nicPipLoop",
+                "count": "[parameters('virtualMachine-count')]"
+            },
+            "tags": {
+                "displayName": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-mgmt-pip')]"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static",
+                "publicIPAddressVersion": "IPv4"
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "sku": {
+                "name": "Standard"
+            },
+            "name": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-mgmt-pip')]",
+            "apiVersion": "2017-08-01",
+            "location": "[resourceGroup().location]",
+            "copy": {
+                "name": "nicPipLoop",
+                "count": "[parameters('virtualMachine-count')]"
+            },
+            "tags": {
+                "displayName": "[concat(variables('egress-virtualMachine-name-prefix'), copyindex(1), '-mgmt-pip')]"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static",
+                "publicIPAddressVersion": "IPv4"
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "sku": {
+                "name": "Standard"
+            },
             "name": "[concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-pip')]",
             "apiVersion": "2017-08-01",
             "location": "[resourceGroup().location]",
@@ -994,16 +1041,23 @@
                     {
                         "name": "ipconfig1",
                         "properties": {
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('ingress-virtualMachine-name-prefix'), copyindex(1), '-mgmt-pip'))]"
+                            },
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
                                 "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/',parameters('mgmtSubnetName'))]"
                             }
                         }
                     }
-                ]
+                ],
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups','Allow-All')]"
+                }
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups','Allow-All')]",
                 "LB-Ingress"
             ]
         },
