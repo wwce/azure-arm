@@ -1,7 +1,7 @@
 ## 1 x VM-Series (1 NIC)
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/wwce/azure-arm/master/standard_deployments/v1/images/1fw_1nic_avset.png">
+<img src="https://raw.githubusercontent.com/wwce/azure-arm/master/azure-arm-mclimans/standard_deployments/v1/images/1fw_1nic_avset.png">
 </p>
 
 ### Overview
