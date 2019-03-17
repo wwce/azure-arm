@@ -24,6 +24,3 @@ This template deploys the following:
 
 
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2Fazure-arm-mclimans%2Fdemo_deployments%2Ftransit_1fw_3nic_avset_intlb_extlb_2spokes%2Fv1%2FazureDeploy.json)
-
-
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2Fazure-arm-mclimans%2Fdemo_deployments%2Ftransit_1fw_3nic_avset_intlb_extlb_2spokes%2Fv1%2Fstep2.azureDeploy.json)
