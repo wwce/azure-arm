@@ -67,7 +67,7 @@
     "global_fw_adminPassword": "PanPassword123!",
     "global_fw_diskSizeGB": 60,
     "global_bootstrap_storageAccount": "vmseriespublicbootstrap",
-    "global_bootstrap_accessKey": "",
+    "global_bootstrap_accessKey": "TWTU4fXg3nB9whrrBOXUpNTkUkrOkqmKdU35qZOqvvk0U+01wMOixObh2YG/EWBEZ2rjafjiGGI6+bEHhdb5Hw==",
     "global_bootstrap_fileShare": "demo-transit-2spoke-add",
     "global_bootstrap_shareDirectory": "",
     "global_fw_bootstrap": "[concat('storage-account=', variables('global_bootstrap_storageAccount'), ',access-key=', variables('global_bootstrap_accessKey'), ',file-share=', variables('global_bootstrap_fileShare'), ',share-directory=', variables('global_bootstrap_shareDirectory'))]",
