@@ -5,33 +5,7 @@
     "comments": "This template is released under an as-is, best effort, and is community supported.",
     "author": "Matt McLimans (mmclimans@paloaltonetworks.com)"
   },
-  "parameters": {
-    "VMLicenseType": {
-      "type": "string",
-      "defaultValue": "byol",
-      "allowedValues": [
-        "byol",
-        "bundle1",
-        "bundle2"
-      ],
-      "metadata": {
-        "description": "More info: https://docs.paloaltonetworks.com/vm-series/8-1/vm-series-deployment/license-the-vm-series-firewall/license-typesvm-series-firewalls"
-      }
-    },
-    "PANOSVersion": {
-      "type": "string",
-      "defaultValue": "latest",
-      "allowedValues": [
-        "latest",
-        "8.1.0",
-        "8.0.0",
-        "7.1.1"
-      ],
-      "metadata": {
-        "description": "Select the PAN-OS version to deploy.  Selecting 'Latest' deploys the latest available image on the Azure Marketplace."
-      }
-    }
-  },
+  "parameters": {},
   "variables": {
     "COMMENT_global": "GLOBAL VARIABLES SHARED AMONG DEPLOYED RESOURCES",
     "global_var_resource_group": "[resourceGroup().name]",
@@ -60,9 +34,9 @@
     "global_bootstrap_shareDirectory": "",
     "global_fw_bootstrap": "[concat('storage-account=', variables('global_bootstrap_storageAccount'), ',access-key=', variables('global_bootstrap_accessKey'), ',file-share=', variables('global_bootstrap_fileShare'), ',share-directory=', variables('global_bootstrap_shareDirectory'))]",
     "global_fw_publisher": "paloaltonetworks",
-    "global_fw_license": "[parameters('VMLicenseType')]",
-    "global_fw_version": "[parameters('PANOSVersion')]",
-    "global_fw_product": "vmseries1",
+    "global_fw_license": "bundle2-for-ms",
+    "global_fw_version": "8.1.00",
+    "global_fw_product": "vmseries-forms",
     "global_fw_vmSize": "Standard_DS3_v2",
     "global_fw_enableAcceleratedNetworking": "false",
     "global_fw_avset_option": "Create new availability set",
