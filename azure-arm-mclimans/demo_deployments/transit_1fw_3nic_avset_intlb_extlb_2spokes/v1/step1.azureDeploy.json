@@ -12,7 +12,8 @@
       "allowedValues": [
         "byol",
         "bundle1",
-        "bundle2"
+        "bundle2",
+        "bundle2-ms"
       ],
       "metadata": {
         "description": "More info: https://docs.paloaltonetworks.com/vm-series/8-1/vm-series-deployment/license-the-vm-series-firewall/license-typesvm-series-firewalls"
@@ -25,7 +26,8 @@
         "latest",
         "8.1.0",
         "8.0.0",
-        "7.1.1"
+        "7.1.1",
+        "8.0.00"
       ],
       "metadata": {
         "description": "Select the PAN-OS version to deploy.  Selecting 'Latest' deploys the latest available image on the Azure Marketplace."
@@ -64,7 +66,7 @@
     "global_fw_publisher": "paloaltonetworks",
     "global_fw_license": "[parameters('VMLicenseType')]",
     "global_fw_version": "[parameters('PANOSVersion')]",
-    "global_fw_product": "vmseries1",
+    "global_fw_product": "vmseries-forms",
     "global_fw_vmSize": "Standard_DS3_v2",
     "global_fw_enableAcceleratedNetworking": "false",
     "global_fw_avset_option": "Create new availability set",
