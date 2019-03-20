@@ -5,21 +5,7 @@
     "comments": "This template is released under an as-is, best effort, and is community supported.",
     "author": "Matt McLimans (mmclimans@paloaltonetworks.com)"
   },
-  "parameters": {
-      "VMLicenseType": {
-      "type": "string",
-      "defaultValue": "byol",
-      "allowedValues": [
-        "byol",
-        "bundle1",
-        "bundle2",
-        "bundle2-for-ms"
-      ],
-      "metadata": {
-        "description": "More info: https://docs.paloaltonetworks.com/vm-series/8-1/vm-series-deployment/license-the-vm-series-firewall/license-typesvm-series-firewalls"
-      }
-    }
-  },
+  "parameters": {},
   "variables": {
     "COMMENT_global": "GLOBAL VARIABLES SHARED AMONG DEPLOYED RESOURCES",
     "global_var_resource_group": "[resourceGroup().name]",
@@ -50,7 +36,7 @@
     "global_bootstrap_shareDirectory": "",
     "global_fw_bootstrap": "[concat('storage-account=', variables('global_bootstrap_storageAccount'), ',access-key=', variables('global_bootstrap_accessKey'), ',file-share=', variables('global_bootstrap_fileShare'), ',share-directory=', variables('global_bootstrap_shareDirectory'))]",
     "global_fw_publisher": "paloaltonetworks",
-    "global_fw_license": "[parameters('VMLicenseType')]",
+    "global_fw_license": "bundle2-for-ms",
     "global_fw_version": "8.1.00",
     "global_fw_product": "vmseries-forms",
     "global_fw_vmSize": "Standard_DS3_v2",
