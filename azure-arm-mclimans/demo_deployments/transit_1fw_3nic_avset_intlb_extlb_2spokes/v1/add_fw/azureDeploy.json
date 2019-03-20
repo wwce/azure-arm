@@ -7,13 +7,21 @@
   },
   "parameters": {
     "addedVMSeriesName": {
-      "defaultValue": "vmseries-fw2",
+      "defaultValue": "vmseries-vm2",
       "type": "string"
+    },
+    "(opt.) AppendStringToResources": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "If the NAME and CONFIGURATION of the created LBs/NSGs/VMs/AVSET/VNET match an existing LBs/NSGs/VMs/AVSET/VNET in the SAME resource group, the template will its skip creation.  If the new resource NAME matches, but the resource CONFIGURATION does not, the template will fail or will overwrite the existing resource."
+      }
     }
   },
   "variables": {
     "COMMENT_global": "GLOBAL VARIABLES SHARED AMONG DEPLOYED RESOURCES",
     "global_var_resource_group": "[resourceGroup().name]",
+    "global_var_appendedString": "[if(equals(parameters('(opt.) AppendStringToResources'), ''), '', parameters('(opt.) AppendStringToResources'))]",
     "global_var_idleTimeoutInMinutes": 4,
     "global_var_allocationMethod": "Dynamic",
     "global_var_networkVersion": "IPv4",
