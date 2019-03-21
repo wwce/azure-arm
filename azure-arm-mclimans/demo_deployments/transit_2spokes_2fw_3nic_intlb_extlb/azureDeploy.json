@@ -5,7 +5,21 @@
     "comments": "This template is released under an as-is, best effort, and is community supported.",
     "author": "Matt McLimans (mmclimans@paloaltonetworks.com)"
   },
-  "parameters": {},
+  "parameters": {
+    "licenseType": {
+      "type": "string",
+      "defaultValue": "byol",
+      "allowedValues": [
+        "byol",
+        "bundle1",
+        "bundle2",
+        "bundle2-for-ms"
+      ],
+      "metadata": {
+        "description": "More info: https://docs.paloaltonetworks.com/vm-series/8-1/vm-series-deployment/license-the-vm-series-firewall/license-typesvm-series-firewalls"
+      }
+    }
+  },
   "variables": {
     "COMMENT_global": "GLOBAL VARIABLES SHARED AMONG DEPLOYED RESOURCES",
     "global_var_resource_group": "[resourceGroup().name]",
@@ -34,9 +48,9 @@
     "global_bootstrap_accessKey": "ufOuiDH0cpTV0swolczL10RVBYVikDPvPwb7LtJHB0soPmFzuNgrSM427ckwUQmuGvM0lIjur6QhAKqysa3P/Q==",
     "global_bootstrap_shareDirectory": "",
     "global_fw_publisher": "paloaltonetworks",
-    "global_fw_license": "bundle2-for-ms",
-    "global_fw_version": "8.1.00",
-    "global_fw_product": "vmseries-forms",
+    "global_fw_license": "[parameters('licenseType')]",
+    "global_fw_version": "[if(equals(variables('global_fw_license'), 'bundle2-for-ms'), '8.1.00', '8.1.0')]",
+    "global_fw_product": "[if(equals(variables('global_fw_license'), 'bundle2-for-ms'), 'vmseries-forms', 'vmseries1')]",
     "global_fw_vmSize": "Standard_DS3_v2",
     "global_fw_enableAcceleratedNetworking": "false",
     "global_fw_avset_option": "Create new availability set",
