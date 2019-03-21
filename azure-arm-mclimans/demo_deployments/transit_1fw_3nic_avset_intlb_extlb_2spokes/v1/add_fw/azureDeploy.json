@@ -41,11 +41,9 @@
     "global_fw_adminUsername": "paloalto",
     "global_fw_adminPassword": "PanPassword123!",
     "global_fw_diskSizeGB": 60,
-    "global_bootstrap_storageAccount": "vmseriespublicbootstrap",
-    "global_bootstrap_accessKey": "TWTU4fXg3nB9whrrBOXUpNTkUkrOkqmKdU35qZOqvvk0U+01wMOixObh2YG/EWBEZ2rjafjiGGI6+bEHhdb5Hw==",
-    "global_bootstrap_fileShare": "demo-transit-2spoke-add",
+    "global_bootstrap_storageAccount": "mrmdemo01",
+    "global_bootstrap_accessKey": "ufOuiDH0cpTV0swolczL10RVBYVikDPvPwb7LtJHB0soPmFzuNgrSM427ckwUQmuGvM0lIjur6QhAKqysa3P/Q==",
     "global_bootstrap_shareDirectory": "",
-    "global_fw_bootstrap": "[concat('storage-account=', variables('global_bootstrap_storageAccount'), ',access-key=', variables('global_bootstrap_accessKey'), ',file-share=', variables('global_bootstrap_fileShare'), ',share-directory=', variables('global_bootstrap_shareDirectory'))]",
     "global_fw_publisher": "paloaltonetworks",
     "global_fw_license": "bundle2-for-ms",
     "global_fw_version": "8.1.00",
@@ -86,7 +84,9 @@
     "fw2_interface0_pip_name": "[take(replace(concat(parameters('addedVMSeriesName'),'-nic0-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
     "fw2_interface1_pip_name": "[take(replace(concat(parameters('addedVMSeriesName'),'-nic1-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
     "fw2_interface0_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw2_interface0_pip_name'))]" },
-    "fw2_interface1_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw2_interface1_pip_name'))]" }
+    "fw2_interface1_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw2_interface1_pip_name'))]" },
+    "fw2_bootstrap_fileShare": "transit-2fw-3nic-avset-intlb-extlb-2spokes",
+    "fw2_bootstrap": "[concat('storage-account=', variables('global_bootstrap_storageAccount'), ',access-key=', variables('global_bootstrap_accessKey'), ',file-share=', variables('fw2_bootstrap_fileShare'), ',share-directory=', variables('global_bootstrap_shareDirectory'))]"
   },
   "resources": [
     {
@@ -356,7 +356,7 @@
                   "computerName": "[variables('fw2_computerName')]",
                   "adminUsername": "[variables('global_fw_adminUsername')]",
                   "adminPassword": "[variables('global_fw_adminPassword')]",
-                  "customData": "[base64(variables('global_fw_bootstrap'))]"
+                  "customData": "[base64(variables('fw2_bootstrap'))]"
                 },
                 "networkProfile": {
                   "networkInterfaces": [
