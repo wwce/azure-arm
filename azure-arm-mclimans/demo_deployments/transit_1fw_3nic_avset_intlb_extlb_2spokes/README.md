@@ -1,4 +1,4 @@
-## Transit VNET: 1 x VM-Series (3 NIC) with Public & Internal Load Balancers (Standard SKU)
+## Transit VNET: 1 x VM-Series (3 NIC) with Public & Internal Load Balancers
 
 Deploy 1 VM-Series firewall with 2 Spoke VNETs. Includes Public and Internal Load Balancer.
 
