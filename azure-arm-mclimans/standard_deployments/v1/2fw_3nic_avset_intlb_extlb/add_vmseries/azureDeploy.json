@@ -48,6 +48,13 @@
         "description": "Enter the subnet name for the internal load balancer."
       }
     },
+    "publicLBResourceGroup": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Enter the public load balancer's resource group if it is different than the deployment resource group.  Otherwise leave it blank."
+      }
+    },
     "publicLBName": {
       "type": "string",
       "defaultValue": "vmseries-public-lb",
@@ -62,7 +69,7 @@
         "description": "In a comma separated list, enter the ports you want to allow in the public load balancer's rule base.  Every port entered will create an additional rule (i.e. 4 ports = 4 rules)."
       }
     },
-    "publicLBResourceGroup": {
+    "internalLBResourceGroup": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
@@ -76,13 +83,6 @@
         "description": "Enter a name for the internal load balancer."
       }
     },
-    "internalLBResourceGroup": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "Enter the public load balancer's resource group if it is different than the deployment resource group.  Otherwise leave it blank."
-      }
-    },
     "internalLBBackendPoolName": {
       "type": "string",
       "defaultValue": "LoadBalancerBackendPool",
@@ -90,7 +90,7 @@
         "description": "Enter the frontend private IP of the internal load balancer.  The address must be within the load balancer subnet prefix."
       }
     },
-    "FW1-Name": {
+    "AddedFWName": {
       "type": "string",
       "defaultValue": "vmseries-fw-vm3",
       "metadata": {
@@ -257,8 +257,8 @@
     "global_vnet_subnet1_name": "[take(replace(parameters('subnetName-Dataplane1'), ' ', ''), 80)]",
     "global_vnet_subnet2_name": "[take(replace(parameters('subnetName-Dataplane2'), ' ', ''), 80)]",
     "global_vnet_subnet3_name": "[take(replace(parameters('subnetName-InternalLB'), ' ', ''), 80)]",
-    "global_fw_mgmtnsg_name": "[take(replace(concat(parameters('FW1-Name'), '-mgmt', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "global_fw_dataNsg_name": "[take(replace(concat(parameters('FW1-Name'), '-data', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "global_fw_mgmtnsg_name": "[take(replace(concat(parameters('AddedFWName'), '-mgmt', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "global_fw_dataNsg_name": "[take(replace(concat(parameters('AddedFWName'), '-data', variables('global_var_appendedString')), ' ', ''), 80)]",
     "global_fw_interface0_pip_option": "[parameters('applyPublicIPToManagement')]",
     "global_fw_interface1_pip_option": "[parameters('applyPublicIPToDataplane1')]",
     "global_fw_storageAccountType": "[parameters('OSDiskType')]",
@@ -291,12 +291,12 @@
     "internalLb_pool_name": "[parameters('internalLBBackendPoolName')]",
 
     "COMMENT_fw1": "FW1 TEMPLATE VARIABLES",
-    "fw1_computerName": "[take(replace(replace(concat(parameters('FW1-Name'), variables('global_var_appendedString')), ' ', ''), '_', ''), 64)]",
-    "fw1_interface0_name": "[take(replace(concat(parameters('FW1-Name'), '-nic0', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "fw1_interface1_name": "[take(replace(concat(parameters('FW1-Name'), '-nic1', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "fw1_interface2_name": "[take(replace(concat(parameters('FW1-Name'), '-nic2', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "fw1_interface0_pip_name": "[take(replace(concat(parameters('FW1-Name'), '-nic0-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "fw1_interface1_pip_name": "[take(replace(concat(parameters('FW1-Name'), '-nic1-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "fw1_computerName": "[take(replace(replace(concat(parameters('AddedFWName'), variables('global_var_appendedString')), ' ', ''), '_', ''), 64)]",
+    "fw1_interface0_name": "[take(replace(concat(parameters('AddedFWName'), '-nic0', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "fw1_interface1_name": "[take(replace(concat(parameters('AddedFWName'), '-nic1', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "fw1_interface2_name": "[take(replace(concat(parameters('AddedFWName'), '-nic2', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "fw1_interface0_pip_name": "[take(replace(concat(parameters('AddedFWName'), '-nic0-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "fw1_interface1_pip_name": "[take(replace(concat(parameters('AddedFWName'), '-nic1-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
     "fw1_interface0_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw1_interface0_pip_name'))]" },
     "fw1_interface1_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw1_interface1_pip_name'))]" }
   },
