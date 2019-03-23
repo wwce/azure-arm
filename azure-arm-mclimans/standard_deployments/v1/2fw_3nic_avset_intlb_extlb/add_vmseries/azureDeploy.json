@@ -73,7 +73,7 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Enter the public load balancer's resource group if it is different than the deployment resource group.  Otherwise leave it blank."
+        "description": "Enter the internal load balancer's resource group if it is different than the deployment resource group.  Otherwise leave it blank."
       }
     },
     "internalLBName": {
