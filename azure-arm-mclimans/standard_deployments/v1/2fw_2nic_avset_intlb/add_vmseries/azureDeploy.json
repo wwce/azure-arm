@@ -29,7 +29,7 @@
     },
     "subnetName-Dataplane1": {
       "type": "string",
-      "defaultValue": "untrust-subnet",
+      "defaultValue": "data-subnet",
       "metadata": {
         "description": "Enter a subnet name for the firewall's first dataplane interface."
       }
