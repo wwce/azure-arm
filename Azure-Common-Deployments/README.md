@@ -17,23 +17,23 @@ Below is a high level overview of Common ARM Deployment templates (v1).
       * loadbalancer-subnet (optional)
    * New/Existing VNET can be in different Resource Group (must exist before deployment!)
 #### Virtual Machine Settings
-* VM-Series VM Settings (1-2 VMs)
-   * Managed Disk
-   * Interfaces (1-3)
-      * management (public address optional)
-      * dataplane1 (public address optional)
-      * dataplane2 
-   * New/Existing Availability Set (aligned SKU)
+* VM-Series VM (1-2)
+* Managed Disk
+* Interfaces (1-3)
+   * management (public address optional)
+   * dataplane1 (public address optional)
+   * dataplane2 
+* New/Existing Availability Set (aligned SKU)
 #### Load Balancer Settings
 * Internal Load Balancer (standard SKU)
    * Configured with HA Ports
 * Public Load Balancer (standard SKU)
    * Configured with 1 frontend address and various load balancing ports (defined at deployment)
 #### VM-Series PAN-OS Settings
-   * Selectable PAN-OS Version
-   * Selectable PAN-OS License (BYOL/BUNDLE1/BUNDLE2)
-   * Accelerated Networking (optional)
-   * Bootstrapping (optional)
+* Selectable PAN-OS Version
+* Selectable PAN-OS License (BYOL/BUNDLE1/BUNDLE2)
+* Accelerated Networking (optional)
+* Bootstrapping (optional)
 
 ## Support Policy
 This solution is released under an as-is, best effort, support policy. These scripts should be seen as community supported and Palo Alto Networks will contribute our expertise as and when possible. We do not provide technical support or help in using or troubleshooting the components of the project through our normal support options such as Palo Alto Networks support teams, or ASC (Authorized Support Centers) partners and backline support options. The underlying product used (the VM-Series firewall) by the scripts or templates are still supported, but the support is only for the product functionality and not for help in deploying or using the template or script itself.
