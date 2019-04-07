@@ -15,7 +15,7 @@ Below is a high level overview of Common ARM Deployment templates (v1).
       * dataplane1-subnet (optional)
       * dataplane2-subnet (optional)
       * loadbalancer-subnet (optional)
-   * New/Existing VNET can be in different Resource Group (must exist before deployment!)
+* The VNET Resource Group can be different than main deployments, however the VNET Resource Group must exist before deployment.
 #### Virtual Machine Settings
 * VM-Series VM (1-2)
 * Managed Disk
