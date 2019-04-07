@@ -40,4 +40,4 @@ This solution is released under an as-is, best effort, support policy. These scr
 
 ## Version History
 | Version | Comments | Date |
-| v1.0    | Initial upload | 04/07/19
+| v1.0    | Initial upload | 04/07/19 |
