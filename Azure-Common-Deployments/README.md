@@ -42,5 +42,5 @@ This solution is released under an as-is, best effort, support policy. These scr
 
 | Version  | Comments | Date |
 | ------------- | ------------- | ------------- |
-| Content Cell  | Content Cell  | Content Cell  |
+| v1  | Initial upload to azure-arm repo.  | 04/07/19  |
 
