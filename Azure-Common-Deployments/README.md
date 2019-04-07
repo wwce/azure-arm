@@ -9,22 +9,28 @@
 The purpose of the of the ARM templates is to cover the most frequently used deployments for the VM-Series in Microsoft Azure.  The templates can be deployed in a manner to meet Palo Alto Networks Azure Reference Architectures and/or be deployed to meet specific deployment requirements. 
 
 More information on the Palo Alto Networks supported Azure deployments can be found [here](https://live.paloaltonetworks.com/t5/Microsoft-Azure/ct-p/Azure).
-* New/Existing VNET
-   * Subnets 1-4 (mgmt, dataplane1, dataplane2, load balancer)
-   * New/Existing VNET can be in different Resource Group
+### VNET Settings
+* New or Existing VNET
+   * Subnets (1-4)
+      * management-subnet
+      * dataplane1-subnet (optional)
+      * dataplane2-subnet (optional)
+      * loadbalancer-subnet (optional)
+   * New/Existing VNET can be in different Resource Group (must exist before deployment!)
+### Virtual Machine Settings
 * VM-Series VM Settings (1-2 VMs)
    * Managed Disk
    * Interfaces (1-3)
-      * mgmt (public address optional)
+      * management (public address optional)
       * dataplane1 (public address optional)
       * dataplane2 
    * New/Existing Availability Set (aligned SKU)
-* Load Balancers
-   * Internal Load Balancer (standard SKU)
-      * Configured with HA Ports
-   * Public Load Balancer (standard SKU)
-      * Configured with 1 frontend address and various load balancing ports (defined at deployment)
-* PAN-OS Settings
+### Load Balancer Settings
+* Internal Load Balancer (standard SKU)
+   * Configured with HA Ports
+* Public Load Balancer (standard SKU)
+   * Configured with 1 frontend address and various load balancing ports (defined at deployment)
+### VM-Series PAN-OS Settings
    * Selectable PAN-OS Version
    * Selectable PAN-OS License (BYOL/BUNDLE1/BUNDLE2)
    * Accelerated Networking (optional)
