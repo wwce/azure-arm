@@ -1,10 +1,9 @@
 # Azure Common Deployment Templates
 
-## Version Overview
+## Version Overview (v1)
 
-### v1
-* Author: mmclimans@paloaltonetworks.com
-* Date: 04/01/19
+**Author: mmclimans@paloaltonetworks.com**
+**Date: 04/01/19**
 
 The purpose of the of the ARM templates is to cover the most frequently used deployments for the VM-Series in Microsoft Azure.  The templates can be deployed in a manner to meet Palo Alto Networks Azure Reference Architectures and/or be deployed to meet specific deployment requirements. 
 
