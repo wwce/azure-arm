@@ -146,20 +146,6 @@
         "description": "Specify the instance count of the application gateway.  A minimum instance count of 2 is recommended for production workloads."
       }
     },
-    "publicLBName": {
-      "type": "string",
-      "defaultValue": "vmseries-public-lb",
-      "metadata": {
-        "description": "Enter a name for the public load balancer."
-      }
-    },
-    "publicLBAllowedPorts": {
-      "type": "string",
-      "defaultValue": "80, 443, 22, 3389",
-      "metadata": {
-        "description": "In a comma separated list, enter the ports you want to allow in the public load balancer's rule base.  Every port entered will create an additional rule (i.e. 4 ports = 4 rules)."
-      }
-    },
     "internalLBName": {
       "type": "string",
       "defaultValue": "vmseries-internal-lb",
@@ -464,26 +450,6 @@
     "vnet_subnet3_cidr": "[parameters('subnetPrefix-InternalLB')]",
     "vnet_subnet4_cidr": "[parameters('subnetPrefix-AppGateway')]",
     
-    "COMMENT_publicLb": "PUBLIC LB TEMPLATE VARIABLES",
-    "publicLb_name": "[take(replace(concat(parameters('publicLBName'), variables('global_var_appendedString')), ' ', ''), 80)]",
-    "publicLb_resource_group": "[resourceGroup().name]",
-    "publicLb_frontend_name": "LoadBalancerFrontEnd",
-    "publicLb_pool_name": "LoadBalancerBackendPool",
-    "publicLb_rule_name": "rule-",
-    "publicLb_rule_delimiters": [ ",", ";" ],
-    "publicLb_rule_port": "[split(parameters('publicLBAllowedPorts'),variables('publicLb_rule_delimiters'))]",
-    "publicLb_rule_protocol": "Tcp",
-    "publicLb_rule_enableTcpReset": "false",
-    "publicLb_rule_loadDistribution": "Default",
-    "publicLb_rule_enableFloatingIP": true,
-    "publicLb_rule_disableOutboundSnat": "false",
-    "publicLb_probe_name": "HealthProbe",
-    "publicLb_probe_port": "[parameters('healthProbePort')]",
-    "publicLb_probe_protocol": "Tcp",
-    "publicLb_probe_intervalInSeconds": 5,
-    "publicLb_probe_numberOfProbes": 2,
-    "publicLb_pip_name": "[take(replace(concat(parameters('publicLBName'), '-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
-    
     "COMMENT_internalLb": "INTERNAL LB TEMPLATE VARIABLES",
     "internalLb_name": "[take(replace(concat(parameters('internalLBName'), variables('global_var_appendedString')), ' ', ''), 80)]",
     "internalLb_resource_group": "[resourceGroup().name]",
@@ -703,105 +669,6 @@
                   }
                 ]
               }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "comments": "CREATE FIREWALL PUBLIC LOAD BALANCER",
-      "type": "Microsoft.Resources/deployments",
-      "name": "CREATE_PUBLICLB",
-      "apiVersion": "[variables('global_var_apiVersion')]",
-      "resourceGroup": "[variables('publicLb_resource_group')]",
-      "properties": {
-        "mode": "Incremental",
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "resources": [
-            {
-              "type": "Microsoft.Network/publicIPAddresses",
-              "sku": {
-                "name": "[variables('global_var_sku')]",
-                "tier": "[variables('global_var_tier')]"
-              },
-              "name": "[variables('publicLb_pip_name')]",
-              "apiVersion": "[variables('global_var_apiVersion')]",
-              "location": "[resourceGroup().location]",
-              "properties": {
-                "publicIPAddressVersion": "[variables('global_var_networkVersion')]",
-                "publicIPAllocationMethod": "[variables('global_var_allocationMethod')]",
-                "idleTimeoutInMinutes": "[variables('global_var_idleTimeoutInMinutes')]"
-              }
-            },
-            {
-              "type": "Microsoft.Network/loadBalancers",
-              "sku": {
-                "name": "[variables('global_var_sku')]"
-              },
-              "name": "[variables('publicLb_name')]",
-              "apiVersion": "[variables('global_var_apiVersion')]",
-              "location": "[resourceGroup().location]",
-              "properties": {
-                "frontendIPConfigurations": [
-                  {
-                    "name": "[variables('publicLb_frontend_name')]",
-                    "properties": {
-                      "publicIPAddress": {
-                        "id": "[resourceId(variables('publicLb_resource_group'), 'Microsoft.Network/publicIPAddresses', variables('publicLb_pip_name'))]"
-                      }
-                    }
-                  }
-                ],
-                "backendAddressPools": [
-                  {
-                    "name": "[variables('publicLb_pool_name')]"
-                  }
-                ],
-                "copy": [
-                  {
-                    "name": "loadBalancingRules",
-                    "count": "[length(variables('publicLb_rule_port'))]",
-                    "input": {
-                      "name": "[concat(variables('publicLb_rule_name'), copyIndex('loadBalancingRules'))]",
-                      "properties": {
-                        "frontendIPConfiguration": {
-                          "id": "[concat(resourceId(variables('publicLb_resource_group'), 'Microsoft.Network/loadBalancers', variables('publicLb_name')), '/frontendIPConfigurations/', variables('publicLb_frontend_name'))]"
-                        },
-                        "frontendPort": "[variables('publicLb_rule_port')[copyIndex('loadBalancingRules')]]",
-                        "backendPort": "[variables('publicLb_rule_port')[copyIndex('loadBalancingRules')]]",
-                        "enableFloatingIP": "[variables('publicLb_rule_enableFloatingIP')]",
-                        "idleTimeoutInMinutes": "[variables('global_var_idleTimeoutInMinutes')]",
-                        "protocol": "[variables('publicLb_rule_protocol')]",
-                        "enableTcpReset": "[variables('publicLb_rule_enableTcpReset')]",
-                        "loadDistribution": "[variables('publicLb_rule_loadDistribution')]",
-                        "disableOutboundSnat": "[variables('publicLb_rule_disableOutboundSnat')]",
-                        "backendAddressPool": {
-                          "id": "[concat(resourceId(variables('publicLb_resource_group'), 'Microsoft.Network/loadBalancers', variables('publicLb_name')), '/backendAddressPools/', variables('publicLb_pool_name'))]"
-                        },
-                        "probe": {
-                          "id": "[concat(resourceId(variables('publicLb_resource_group'), 'Microsoft.Network/loadBalancers', variables('publicLb_name')), '/probes/', variables('publicLb_probe_name'))]"
-                        }
-                      }
-                    }
-                  }
-                ],
-                "probes": [
-                  {
-                    "name": "[variables('publicLb_probe_name')]",
-                    "properties": {
-                      "protocol": "[variables('publicLb_probe_protocol')]",
-                      "port": "[variables('publicLb_probe_port')]",
-                      "intervalInSeconds": "[variables('publicLb_probe_intervalInSeconds')]",
-                      "numberOfProbes": "[variables('publicLb_probe_numberOfProbes')]"
-                    }
-                  }
-                ]
-              },
-              "dependsOn": [
-                "[resourceId(variables('publicLb_resource_group'), 'Microsoft.Network/publicIPAddresses', variables('publicLb_pip_name'))]"
-              ]
             }
           ]
         }
@@ -1051,8 +918,7 @@
         "CREATE_AVSET",
         "CREATE_NSGS",
         "CREATE_INTERNALLB",
-        "CREATE_APPGW",
-        "CREATE_PUBLICLB"
+        "CREATE_APPGW"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1142,11 +1008,6 @@
                       },
                       "primary": true,
                       "privateIPAddressVersion": "[variables('global_var_networkVersion')]",
-                      "loadBalancerBackendAddressPools": [
-                        {
-                          "id": "[concat(resourceId(variables('publicLb_resource_group'), 'Microsoft.Network/loadBalancers', variables('publicLb_name')), '/backendAddressPools/', variables('publicLb_pool_name'))]"
-                        }
-                      ],
                       "applicationGatewayBackendAddressPools": [
                     	{
                       	  "id": "[concat(variables('appgw_id'), '/backendAddressPools/', variables('appgw_pool_name'))]"
@@ -1281,8 +1142,7 @@
         "CREATE_AVSET",
         "CREATE_NSGS",
         "CREATE_INTERNALLB",
-        "CREATE_APPGW",
-        "CREATE_PUBLICLB"
+        "CREATE_APPGW"
       ],
       "properties": {
         "mode": "Incremental",
@@ -1372,11 +1232,6 @@
                       },
                       "primary": true,
                       "privateIPAddressVersion": "[variables('global_var_networkVersion')]",
-                      "loadBalancerBackendAddressPools": [
-                        {
-                          "id": "[concat(resourceId(variables('publicLb_resource_group'), 'Microsoft.Network/loadBalancers', variables('publicLb_name')), '/backendAddressPools/', variables('publicLb_pool_name'))]"
-                        }
-                      ],
                       "applicationGatewayBackendAddressPools": [
                     	{
                       	  "id": "[concat(variables('appgw_id'), '/backendAddressPools/', variables('appgw_pool_name'))]"
