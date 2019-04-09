@@ -24,6 +24,9 @@ This template deploys the following into a new or existing VNET with 4 subnets:
 * 1 x Availability Set
 * 1 x Standard SKU Internal Load Balancer with HA Ports
     *  Backend Pool: `<fw1_name>-nic2` & `<fw2_name>-nic2`
+* 1 x Application Gateway
+    *  Backend Pool: `<fw1_name>-nic1` & `<fw2_name>-nic1` 
+    *  HTTP Protocol/Port: http/80
 
 ### Important Considerations
 
