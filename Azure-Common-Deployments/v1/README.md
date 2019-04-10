@@ -1,6 +1,6 @@
 # ARM: VM-Series Standard Deployment Templates
 
-All templates in this repository use Manage Disks and Standard SKU resources.  Optional features include: Accelerated Networking, Bootstrapping, & Managed Scale.
+All templates in this repository use Manage Disks and Standard SKU resources.  Optional features include: Accelerated Networking, Bootstrapping, & Managed Scale. 
 
 ## Support Policy
 
