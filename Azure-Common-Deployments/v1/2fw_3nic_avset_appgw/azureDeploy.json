@@ -59,7 +59,7 @@
         "description": "Enter a subnet name for the firewall's second dataplane interface."
       }
     },
-    "subnetName-AppGateway": {
+    "subnetName-AppGW": {
       "type": "string",
       "defaultValue": "appgw-subnet",
       "metadata": {
@@ -87,9 +87,9 @@
         "description": "Enter a subnet prefix for the firewall's second dataplane interface."
       }
     },
-    "subnetPrefix-AppGateway": {
+    "subnetPrefix-AppGW": {
       "type": "string",
-      "defaultValue": "10.0.4.0/24",
+      "defaultValue": "10.0.3.0/24",
       "metadata": {
         "description": "Enter a subnet prefix for the App Gateway."
       }
@@ -101,26 +101,18 @@
         "description": "Enter a name for the Application Gateway."
       }
     },
-    "appGWTier": {
-      "type": "string",
-      "defaultValue": "Standard",
-      "allowedValues": [
-        "Standard",
-        "WAF"
-      ],
-      "metadata": {
-        "description": "Choosing the WAF tier allows you to enable a web application firewall.  Changing from the WAF tier to the Standard tier is not supported."
-      }
-    },
     "appGWSize": {
       "type": "string",
-      "defaultValue": "Standard_Medium",
+      "defaultValue": "Standard_Small",
       "allowedValues": [
+        "Standard_Small",
         "Standard_Medium",
-        "Standard_Large"
+        "Standard_Large",
+        "WAF_Medium",
+        "WAF_Large"
       ],
       "metadata": {
-        "description": "Choosing the WAF tier allows you to enable a web application firewall.  Changing from the WAF tier to the Standard tier is not supported."
+        "description": "Select size and tier of the Application Gateway.  The WAF_Medium and WAF_Large deploy an unconfigured WAF.  Changing from WAF to Standard tier after deployment is not supported."
       }
     },
     "appGWCapacity": {
@@ -374,7 +366,7 @@
     "global_vnet_subnet0_name": "[take(replace(parameters('subnetName-Management'), ' ', ''), 80)]",
     "global_vnet_subnet1_name": "[take(replace(parameters('subnetName-Dataplane1'), ' ', ''), 80)]",
     "global_vnet_subnet2_name": "[take(replace(parameters('subnetName-Dataplane2'), ' ', ''), 80)]",
-    "global_vnet_subnet3_name": "[take(replace(parameters('subnetName-AppGateway'), ' ', ''), 80)]",
+    "global_vnet_subnet3_name": "[take(replace(parameters('subnetName-AppGW'), ' ', ''), 80)]",
     "global_fw_mgmtnsg_name": "[take(replace(concat(parameters('NSGName'), '-mgmt', variables('global_var_appendedString')), ' ', ''), 80)]",
     "global_fw_dataNsg_name": "[take(replace(concat(parameters('NSGName'), '-data', variables('global_var_appendedString')), ' ', ''), 80)]",
     "global_fw_interface0_pip_option": "[parameters('applyPublicIPToManagement')]",
@@ -400,19 +392,20 @@
     "nsg_mgmt_inbound_rule_ports": [ "22", "443" ],
     "nsg_data_inbound_rule_name": "allow-all-inbound",
     "nsg_data_outbound_rule_name": "allow-all-outbound",
-    
+
     "COMMENT_vnet": "NEW VNET TEMPLATE VARIABLES",
     "vnet_cidr": "[parameters('VNETPrefix')]",
     "vnet_subnet0_cidr": "[parameters('subnetPrefix-Management')]",
     "vnet_subnet1_cidr": "[parameters('subnetPrefix-Dataplane1')]",
     "vnet_subnet2_cidr": "[parameters('subnetPrefix-Dataplane2')]",
-    "vnet_subnet3_cidr": "[parameters('subnetPrefix-AppGateway')]",
-    
+    "vnet_subnet3_cidr": "[parameters('subnetPrefix-AppGW')]",
+
     "COMMENT_appgw": "APP-GW VARIABLES",
     "appgw_name": "[take(replace(concat(parameters('appGWName'), variables('global_var_appendedString')), ' ', ''), 80)]",
     "appgw_id": "[resourceId('Microsoft.Network/applicationGateways',variables('appgw_name'))]",
-    "appgw_sku": "[parameters('appGWSize')]",
-    "appgw_tier": "[parameters('appGWTier')]",
+
+    "appgw_size": "[parameters('appGWSize')]",
+    "appgw_tier": "[if(contains(parameters('appGWSize'), 'WAF'), 'WAF', 'Standard')]",
     "appgw_capacity": "[parameters('appGWCapacity')]",
     "appgw_pool_name": "appGatewayBackendPool",
     "appgw_frontend_name": "appGatewayFrontEnd",
@@ -429,7 +422,7 @@
     "avset_sku": "Aligned",
     "avset_platformUpdateDomainCount": 5,
     "avset_platformFaultDomainCount": 2,
-    
+
     "COMMENT_fw1": "FW1 TEMPLATE VARIABLES",
     "fw1_computerName": "[take(replace(replace(concat(parameters('FW1-Name'), variables('global_var_appendedString')), ' ', ''), '_', ''), 64)]",
     "fw1_interface0_name": "[take(replace(concat(parameters('FW1-Name'), '-nic0', variables('global_var_appendedString')), ' ', ''), 80)]",
@@ -446,7 +439,7 @@
     "fw1_interface1_pip_id": {
       "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw1_interface1_pip_name'))]"
     },
-    
+
     "COMMENT_fw2": "FW2 TEMPLATE VARIABLES",
     "fw2_computerName": "[take(replace(replace(concat(parameters('FW2-Name'), variables('global_var_appendedString')), ' ', ''), '_', ''), 64)]",
     "fw2_interface0_name": "[take(replace(concat(parameters('FW2-Name'), '-nic0', variables('global_var_appendedString')), ' ', ''), 80)]",
@@ -638,7 +631,7 @@
               "type": "Microsoft.Network/applicationGateways",
               "properties": {
                 "sku": {
-                  "name": "[variables('appgw_sku')]",
+                  "name": "[variables('appgw_size')]",
                   "tier": "[variables('appgw_tier')]",
                   "capacity": "[variables('appgw_capacity')]"
                 },
@@ -647,7 +640,7 @@
                     "name": "ipconfig1",
                     "properties": {
                       "subnet": {
-                        "id": "[concat(resourceId(variables('global_vnet_resource_group'), 'Microsoft.Network/virtualNetworks', variables('global_vnet_name')), '/subnets/', variables('global_vnet_subnet4_name'))]"
+                        "id": "[concat(resourceId(variables('global_vnet_resource_group'), 'Microsoft.Network/virtualNetworks', variables('global_vnet_name')), '/subnets/', variables('global_vnet_subnet3_name'))]"
                       }
                     }
                   }
