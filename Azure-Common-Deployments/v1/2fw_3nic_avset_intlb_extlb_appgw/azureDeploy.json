@@ -115,27 +115,18 @@
         "description": "Enter a name for the Application Gateway."
       }
     },
-    "appGWTier": {
-      "type": "string",
-      "defaultValue": "Standard",
-      "allowedValues": [
-        "Standard",
-        "WAF"
-      ],
-      "metadata": {
-        "description": "Choosing the WAF tier allows you to enable a web application firewall. WAF tier will force Standard_Large for the application gateway's size.  Changing from the WAF tier to the Standard tier is not supported. "
-      }
-    },
     "appGWSize": {
       "type": "string",
       "defaultValue": "Standard_Small",
       "allowedValues": [
         "Standard_Small",
         "Standard_Medium",
-        "Standard_Large"
+        "Standard_Large",
+        "WAF_Medium",
+        "WAF_Large"
       ],
       "metadata": {
-        "description": "Choosing the WAF tier allows you to enable a web application firewall.  Changing from the WAF tier to the Standard tier is not supported."
+        "description": "Select size and tier of the Application Gateway.  The WAF_Medium and WAF_Large deploy an unconfigured WAF.  Changing from WAF to Standard tier after deployment is not supported."
       }
     },
     "appGWCapacity": {
@@ -507,8 +498,9 @@
     "COMMENT_appgw": "APP-GW VARIABLES",
     "appgw_name": "[take(replace(concat(parameters('appGWName'), variables('global_var_appendedString')), ' ', ''), 80)]",
     "appgw_id": "[resourceId('Microsoft.Network/applicationGateways',variables('appgw_name'))]",
-    "appgw_sku": "[if(equals(parameters('appGWTier'), 'WAF'), 'Standard_Large', parameters('appGWSize'))]",
-    "appgw_tier": "[parameters('appGWTier')]",
+
+    "appgw_size": "[parameters('appGWSize')]",
+    "appgw_tier": "[if(contains(parameters('appGWSize'), 'WAF'), 'WAF', 'Standard')]",
     "appgw_capacity": "[parameters('appGWCapacity')]",
     "appgw_pool_name": "appGatewayBackendPool",
     "appgw_frontend_name": "appGatewayFrontEnd",
@@ -922,7 +914,7 @@
               "type": "Microsoft.Network/applicationGateways",
               "properties": {
                 "sku": {
-                  "name": "[variables('appgw_sku')]",
+                  "name": "[variables('appgw_size')]",
                   "tier": "[variables('appgw_tier')]",
                   "capacity": "[variables('appgw_capacity')]"
                 },
