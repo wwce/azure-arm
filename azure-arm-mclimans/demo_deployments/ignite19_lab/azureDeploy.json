@@ -7,7 +7,7 @@
     },
     "parameters": {
         "BootstrapStorageAccount": {
-            "type": "string",,
+            "type": "string",
             "metadata": {
               "description": "To bootstrap the firewalls, enter the Azure storage account name that contains the bootstrap file share."
             }
