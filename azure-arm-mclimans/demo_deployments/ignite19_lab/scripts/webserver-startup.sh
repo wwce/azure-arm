@@ -8,7 +8,7 @@ while true
         if [[ $resp == *"[CDATA[yes"* ]] ; then
             break
         fi
-        sleep 10s
+        sleep 5s
     done
 apt-get update
 apt-get install -y apache2 wordpress
