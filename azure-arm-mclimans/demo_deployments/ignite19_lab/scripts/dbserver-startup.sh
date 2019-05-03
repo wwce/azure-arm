@@ -7,7 +7,7 @@ while true
         if [[ $resp == *"[CDATA[yes"* ]] ; then
             break
         fi
-        sleep 10s
+        sleep 5s
     done
 sudo apt-get update
 sudo apt-get -y install debconf-utils 
