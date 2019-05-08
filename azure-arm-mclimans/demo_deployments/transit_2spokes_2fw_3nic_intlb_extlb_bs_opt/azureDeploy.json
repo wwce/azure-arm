@@ -18,7 +18,20 @@
         "metadata": {
           "description": "More info: https://docs.paloaltonetworks.com/vm-series/8-1/vm-series-deployment/license-the-vm-series-firewall/license-typesvm-series-firewalls"
         }
-      },
+    },
+    "PANOSVersion": {
+      "type": "string",
+      "defaultValue": "latest",
+      "allowedValues": [
+        "latest",
+        "8.1.0",
+        "8.0.0",
+        "7.1.1"
+      ],
+      "metadata": {
+        "description": "Select the PAN-OS version to deploy.  Selecting 'Latest' deploys the latest available image on the Azure Marketplace."
+      }
+    },
       "(opt.) BootstrapStorageAccount": {
         "type": "string",
         "defaultValue": "",
@@ -75,7 +88,7 @@
       "global_fw_bootstrap": "[concat('storage-account=', parameters('(opt.) BootstrapStorageAccount'), ',access-key=', parameters('(opt.) BootstrapAccessKey'), ',file-share=', parameters('(opt.) BootstrapFileShareName'), ',share-directory=', parameters('(opt.) BootstrapShareDirectory'))]",
       "global_fw_publisher": "paloaltonetworks",
       "global_fw_license": "[parameters('licenseType')]",
-      "global_fw_version": "[if(equals(variables('global_fw_license'), 'bundle2-for-ms'), '8.1.00', '8.1.0')]",
+      "global_fw_version": "[if(equals(variables('global_fw_license'), 'bundle2-for-ms'), '8.1.00', parameters('PANOSVersion'))]",
       "global_fw_product": "[if(equals(variables('global_fw_license'), 'bundle2-for-ms'), 'vmseries-forms', 'vmseries1')]",
       "global_fw_vmSize": "Standard_DS3_v2",
       "global_fw_enableAcceleratedNetworking": "false",
@@ -200,8 +213,7 @@
       "fw2_interface0_pip_name": "vmseries-vm2-nic0-pip",
       "fw2_interface1_pip_name": "vmseries-vm2-nic1-pip",
       "fw2_interface0_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw2_interface0_pip_name'))]" },
-      "fw2_interface1_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw2_interface1_pip_name'))]" },
-  
+      "fw2_interface1_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw2_interface1_pip_name'))]" }
     },
     "resources": [
       {
