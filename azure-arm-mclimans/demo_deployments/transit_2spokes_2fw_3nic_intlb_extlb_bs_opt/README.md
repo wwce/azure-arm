@@ -7,5 +7,5 @@ Deploy 2xVM-Series firewall with 2 Spoke VNETs. Includes Public and Internal Loa
 <img src="https://raw.githubusercontent.com/wwce/azure-arm/master/azure-arm-mclimans/demo_deployments/images/transit_2spokes_2fw_3nic_intlb_extlb.png">
 </p>
 
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2Fazure-arm-mclimans%2Fdemo_deployments%2Ftransit_2spokes_2fw_3nic_intlb_extlb_nobootstrap_bs_opt%2FazureDeploy.json)
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2Fazure-arm-mclimans%2Fdemo_deployments%2Ftransit_2spokes_2fw_3nic_intlb_extlb_bs_opt%2FazureDeploy.json)
   
