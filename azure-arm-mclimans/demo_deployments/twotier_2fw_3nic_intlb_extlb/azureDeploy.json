@@ -1055,22 +1055,23 @@
                 {
                   "type": "Microsoft.Network/publicIPAddresses",
                   "sku": {
-                    "name": "[variables('global_var_sku')]",
-                    "tier": "[variables('global_var_tier')]"
+                    "name": "Standard",
+                    "tier": "Regional"
                   },
                   "name": "[variables('publicLb_pip_name')]",
                   "apiVersion": "[variables('var_apiVersion')]",
                   "location": "[resourceGroup().location]",
                   "properties": {
-                    "publicIPAddressVersion": "[variables('global_var_networkVersion')]",
-                    "publicIPAllocationMethod": "[variables('global_var_allocationMethod')]",
-                    "idleTimeoutInMinutes": "[variables('global_var_idleTimeoutInMinutes')]"
+                    "publicIPAddressVersion": "IPv4",
+                    "publicIPAllocationMethod": "Static",
+                    "idleTimeoutInMinutes": "[variables('var_idleTimeoutInMinutes')]"
                   }
                 },
                 {
                   "type": "Microsoft.Network/loadBalancers",
                   "sku": {
-                    "name": "[variables('global_var_sku')]"
+                    "name": "Standard",
+                    "tier": "Regional"
                   },
                   "name": "[variables('publicLb_name')]",
                   "apiVersion": "[variables('var_apiVersion')]",
