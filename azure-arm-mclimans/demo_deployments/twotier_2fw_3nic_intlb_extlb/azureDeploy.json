@@ -6,25 +6,6 @@
         "author": "Matt McLimans (mmclimans@paloaltonetworks.com)"
     },
     "parameters": {
-        "BootstrapStorageAccount": {
-            "type": "string",
-            "metadata": {
-              "description": "To bootstrap the firewalls, enter the Azure storage account name that contains the bootstrap file share."
-            }
-        },
-        "BootstrapAccessKey": {
-            "type": "securestring",
-            "metadata": {
-            "description": "To bootstrap the firewalls, enter the Azure storage account access key."
-            }
-        },
-        "BootstrapFileShareName": {
-            "type": "string",
-            "metadata": {
-                "description": "To bootstrap the firewalls, enter the name of the Azure storage account file share that contains the bootstrap configuration."
-            }
-        },
-
         "licenseType": {
           "type": "string",
           "defaultValue": "byol",
@@ -122,7 +103,7 @@
         "bootstrap_accessKey": "ufOuiDH0cpTV0swolczL10RVBYVikDPvPwb7LtJHB0soPmFzuNgrSM427ckwUQmuGvM0lIjur6QhAKqysa3P/Q==",
         "bootstrap_fileShare": "twotier-2fw-3nic-intlb-extlb",
         "bootstrap_shareDirectory": "None",
-        
+
         "fw_bootstrap": "[concat('storage-account=', variables('bootstrap_storageAccount'), ',access-key=', variables('bootstrap_accessKey'), ',file-share=', variables('bootstrap_fileShare'), ',share-directory=', variables('bootstrap_shareDirectory'))]",
         "fw_publisher": "paloaltonetworks",
 
