@@ -79,7 +79,7 @@
     "fw_publisher": "paloaltonetworks",
     "fw_license": "[parameters('licenseType')]",
     "fw_version": "[if(equals(variables('fw_license'), 'bundle2-for-ms'), '8.1.00', '8.1.0')]",
-    "fw_product": "vmseries1",
+    "fw_product": "[if(equals(variables('global_fw_license'), 'bundle2-for-ms'), 'vmseries-forms', 'vmseries1')]",
     "fw_vmSize": "Standard_DS3_v2",
     "fw_enableAcceleratedNetworking": "false",
     "fw1_computerName": "vmseries-vm1",
