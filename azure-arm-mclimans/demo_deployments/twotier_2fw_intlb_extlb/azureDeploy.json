@@ -1105,7 +1105,7 @@
                             "frontendPort": "[variables('publicLb_rule_port')[copyIndex('loadBalancingRules')]]",
                             "backendPort": "[variables('publicLb_rule_port')[copyIndex('loadBalancingRules')]]",
                             "enableFloatingIP": "[variables('publicLb_rule_enableFloatingIP')]",
-                            "idleTimeoutInMinutes": "[variables('global_var_idleTimeoutInMinutes')]",
+                            "idleTimeoutInMinutes": "[variables('var_idleTimeoutInMinutes')]",
                             "protocol": "[variables('publicLb_rule_protocol')]",
                             "enableTcpReset": "[variables('publicLb_rule_enableTcpReset')]",
                             "loadDistribution": "[variables('publicLb_rule_loadDistribution')]",
