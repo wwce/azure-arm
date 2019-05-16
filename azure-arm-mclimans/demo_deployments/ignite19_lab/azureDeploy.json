@@ -85,7 +85,7 @@
         "fw_bootstrap": "[concat('storage-account=', parameters('BootstrapStorageAccount'), ',access-key=', parameters('BootstrapAccessKey'), ',file-share=', parameters('BootstrapFileShareName'), ',share-directory=', variables('fw_bootstrap_share_dir'))]",
         "fw_publisher": "paloaltonetworks",
         "fw_license": "bundle2",
-        "fw_version": "8.1",
+        "fw_version": "8.1.0",
         "fw_product": "vmseries1",
         "fw_vmSize": "Standard_DS3_v2",
         "fw_enableAcceleratedNetworking": "false",
