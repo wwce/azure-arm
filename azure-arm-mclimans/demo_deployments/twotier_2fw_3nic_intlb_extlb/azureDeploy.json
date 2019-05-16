@@ -57,7 +57,7 @@
         "publicLb_pool_name": "LoadBalancerBackendPool",
         "publicLb_rule_name": "rule-",
         "publicLb_rule_delimiters": [",", ";" ],
-        "publicLb_rule_ports": "80, 22",
+        "publicLb_rule_ports": "80, 22, 443",
         "publicLb_rule_port": "[split(variables('publicLb_rule_ports'),variables('publicLb_rule_delimiters'))]",
         "publicLb_rule_protocol": "Tcp",
         "publicLb_rule_enableTcpReset": "false",
