@@ -23,6 +23,20 @@
             "metadata": {
                 "description": "To bootstrap the firewalls, enter the name of the Azure storage account file share that contains the bootstrap configuration."
             }
+        },
+
+        "licenseType": {
+          "type": "string",
+          "defaultValue": "byol",
+          "allowedValues": [
+            "byol",
+            "bundle1",
+            "bundle2",
+            "bundle2-for-ms"
+          ],
+          "metadata": {
+            "description": "More info: https://docs.paloaltonetworks.com/vm-series/8-1/vm-series-deployment/license-the-vm-series-firewall/license-typesvm-series-firewalls"
+          }
         }
     },
     "variables": {
@@ -102,12 +116,21 @@
         "fw_adminUsername": "paloalto",
         "fw_adminPassword": "Pal0Alt0@123",
         "fw_diskSizeGB": 60,
-        "fw_bootstrap_share_dir": "None",
-        "fw_bootstrap": "[concat('storage-account=', parameters('BootstrapStorageAccount'), ',access-key=', parameters('BootstrapAccessKey'), ',file-share=', parameters('BootstrapFileShareName'), ',share-directory=', variables('fw_bootstrap_share_dir'))]",
+
+
+        "bootstrap_storageAccount": "mrmdemo01",
+        "bootstrap_accessKey": "ufOuiDH0cpTV0swolczL10RVBYVikDPvPwb7LtJHB0soPmFzuNgrSM427ckwUQmuGvM0lIjur6QhAKqysa3P/Q==",
+        "bootstrap_fileShare": "twotier-2fw-3nic-intlb-extlb",
+        "bootstrap_shareDirectory": "None",
+        
+        "fw_bootstrap": "[concat('storage-account=', variables('bootstrap_storageAccount'), ',access-key=', variables('bootstrap_accessKey'), ',file-share=', variables('bootstrap_fileShare'), ',share-directory=', variables('bootstrap_shareDirectory'))]",
         "fw_publisher": "paloaltonetworks",
-        "fw_license": "bundle2",
-        "fw_version": "8.1",
-        "fw_product": "vmseries1",
+
+        "fw_license": "[parameters('licenseType')]",
+        "fw_version": "[if(equals(variables('fw_license'), 'bundle2-for-ms'), '8.1.00', '8.1.0')]",
+
+
+        "fw_product": "[if(equals(variables('fw_license'), 'bundle2-for-ms'), 'vmseries-forms', 'vmseries1')]",
         "fw_vmSize": "Standard_DS3_v2",
         "fw_enableAcceleratedNetworking": "false",
         "fw1_computerName": "vmseries-vm1",
@@ -926,7 +949,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/wwce/azure-arm/master/azure-arm-mclimans/demo_deployments/ignite19_lab/scripts/webserver-startup.sh"
+                        "https://raw.githubusercontent.com/wwce/azure-arm/master/azure-arm-mclimans/demo_deployments/twotier_2fw_3nic_intlb_extlb/scripts/webserver-startup.sh"
                     ],
                     "commandToExecute": "[concat('sudo bash ./webserver-startup.sh')]"
                 }
@@ -1032,7 +1055,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/wwce/azure-arm/master/azure-arm-mclimans/demo_deployments/ignite19_lab/scripts/dbserver-startup.sh"
+                        "https://raw.githubusercontent.com/wwce/azure-arm/master/azure-arm-mclimans/demo_deployments/twotier_2fw_3nic_intlb_extlb/scripts/dbserver-startup.sh"
                     ],
                     "commandToExecute": "[concat('sudo bash ./dbserver-startup.sh')]"
                 }
