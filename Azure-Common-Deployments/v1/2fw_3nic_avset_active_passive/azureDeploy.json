@@ -136,7 +136,7 @@
                 "description": "Enter a private IP address for firewall-1's dataplane2 floating IP."
             }
         },
-        "FW1-IPHA2": {
+        "FW1-IP-HA2": {
             "type": "string",
             "defaultValue": "10.9.5.5",
             "metadata": {
@@ -171,7 +171,7 @@
                 "description": "Enter a private IP address for firewall-2's second dataplane interface."
             }
         },
-        "FW2-IPHA2": {
+        "FW2-IP-HA2": {
             "type": "string",
             "defaultValue": "10.9.5.4",
             "metadata": {
@@ -428,7 +428,7 @@
         "fw1_interface1_ip_floating": "[parameters('FW1-IPDataplane1-Floating')]",
         "fw1_interface2_ip": "[parameters('FW1-IPDataplane2')]",
         "fw1_interface2_ip_floating": "[parameters('FW1-IPDataplane2-Floating')]",
-        "fw1_interface3_ip": "[parameters('FW1-IPHA2')]",
+        "fw1_interface3_ip": "[parameters('FW1-IP-HA2')]",
         "fw1_interface0_pip_name": "[take(replace(concat(parameters('FW1-Name'), '-nic0-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
         "fw1_interface1_pip_name": "[take(replace(concat(parameters('FW1-Name'), '-nic1-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
         "fw1_interface0_pip_id": {
@@ -446,7 +446,7 @@
         "fw2_interface0_ip": "[parameters('FW2-IPManagement')]",
         "fw2_interface1_ip": "[parameters('FW2-IPDataplane1')]",
         "fw2_interface2_ip": "[parameters('FW2-IPDataplane2')]",
-        "fw2_interface3_ip": "[parameters('FW2-IPHA2')]",
+        "fw2_interface3_ip": "[parameters('FW2-IP-HA2')]",
         "fw2_interface0_pip_name": "[take(replace(concat(parameters('FW2-Name'),'-nic0-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
         "fw2_interface0_pip_id": {
             "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw2_interface0_pip_name'))]"
