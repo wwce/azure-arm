@@ -180,7 +180,6 @@
         },
         "licenseType": {
             "type": "string",
-            "defaultValue": "bundle2",
             "allowedValues": [
                 "byol",
                 "bundle1",
@@ -300,7 +299,6 @@
         },
         "username": {
             "type": "string",
-            "defaultValue": "paloalto",
             "metadata": {
                 "description": "Enter the firewall's administrator username. DO NOT USE ADMIN OR ROOT."
             }
