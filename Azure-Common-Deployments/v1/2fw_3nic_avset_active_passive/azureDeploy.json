@@ -184,7 +184,8 @@
             "allowedValues": [
                 "byol",
                 "bundle1",
-                "bundle2"
+                "bundle2",
+                "bundle2-for-ms"
             ],
             "metadata": {
                 "description": "More info: https://docs.paloaltonetworks.com/vm-series/8-1/vm-series-deployment/license-the-vm-series-firewall/license-typesvm-series-firewalls"
