@@ -299,6 +299,7 @@
         },
         "username": {
             "type": "string",
+            "defaultValue": "paloalto"
             "metadata": {
                 "description": "Enter the firewall's administrator username. DO NOT USE ADMIN OR ROOT."
             }
