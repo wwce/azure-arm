@@ -535,9 +535,6 @@
             "apiVersion": "[variables('global_var_apiVersion')]",
             "resourceGroup": "[variables('global_vnet_resource_group')]",
             "condition": "[equals(variables('global_vnet_option'), 'Create new VNET')]",
-            "dependsOn": [
-                "CREATE_ROUTE_TABLE"
-            ],
             "properties": {
                 "mode": "Incremental",
                 "template": {
@@ -571,10 +568,7 @@
                                     {
                                         "name": "[variables('global_vnet_subnet2_name')]",
                                         "properties": {
-                                            "addressPrefix": "[variables('vnet_subnet2_cidr')]",
-                                            "routeTable": {
-                                                "id": "[resourceId('Microsoft.Network/routeTables', variables('global_routetable_name'))]"
-                                            }
+                                            "addressPrefix": "[variables('vnet_subnet2_cidr')]"
                                         }
                                     },
                                     {
