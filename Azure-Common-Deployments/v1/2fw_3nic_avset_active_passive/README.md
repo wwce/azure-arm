@@ -1,10 +1,12 @@
 ## 2 x VM-Series (4 NIC) for traditional Active/Passive
-
+</br>
 <p align="center">
 <img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_avset_active_passive.png">
 </p>
 
 ### Overview
+Please review Set up [Active/Passive HA on Microsoft Azure before proceeding](https://docs.paloaltonetworks.com/vm-series/9-0/vm-series-deployment/set-up-the-vm-series-firewall-on-azure/configure-activepassive-ha-for-vm-series-firewall-on-azure.html).  
+
 This template deploys the following into a new or existing VNET with 4 subnets:
 * 2 x VM-Series firewalls
     * 3 x Interfaces
