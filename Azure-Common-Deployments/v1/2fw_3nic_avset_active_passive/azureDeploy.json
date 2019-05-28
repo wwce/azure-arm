@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "metadata": {
         "comments": "This template is released under an as-is, best effort, and is community supported.",
-        "author": "Matt McLimans (mmclimans@paloaltonetworks.com)"
+        "author": "Matt McLimans  (mmclimans@paloaltonetworks.com)"
     },
     "parameters": {
         "VNETOption": {
