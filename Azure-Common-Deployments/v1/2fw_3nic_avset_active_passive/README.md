@@ -1,5 +1,6 @@
 ## 2 x VM-Series (4 NIC) for traditional Active/Passive
 </br>
+</br>
 <p align="center">
 <img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_avset_active_passive.png">
 </p>
