@@ -346,17 +346,6 @@
             "metadata": {
                 "description": "If the NAME and CONFIGURATION of the created LBs/NSGs/VMs/AVSET/VNET match an existing LBs/NSGs/VMs/AVSET/VNET in the SAME resource group, the template will its skip creation.  If the new resource NAME matches, but the resource CONFIGURATION does not, the template will fail or will overwrite the existing resource."
             }
-        },
-        "deployTestUbuntuVM": {
-            "type": "string",
-            "defaultValue": "Yes",
-            "allowedValues": [
-                "Yes",
-                "No"
-            ],
-            "metadata": {
-                "description": "Select 'Yes' to deploy a test Ubuntu image.  The Username & Password match will match the firewall's credentials."
-            }
         }
     },
     "variables": {
@@ -450,20 +439,7 @@
         "fw2_interface0_pip_name": "[take(replace(concat(parameters('FW2-Name'),'-nic0-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
         "fw2_interface0_pip_id": {
             "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw2_interface0_pip_name'))]"
-        },
-        "COMMENT_vm": "TEST VM VARIABLES",
-        "vm_create_option": "[parameters('deployTestUbuntuVM')]",
-        "vm_name": "ubuntu-vm1",
-        "vm_nic_name": "ubuntu-vm1-nic0",
-        "vm_nic_ip": "10.9.2.20",
-        "vm_vmSize": "Standard_B1s",
-        "vm_publisher": "Canonical",
-        "vm_offer": "UbuntuServer",
-        "vm_sku": "18.04-LTS",
-        "vm_version": "latest",
-        "vm_osType": "Linux",
-        "vm_diskSizeGB": "30",
-        "vm_diskType": "Standard_LRS"
+        }
     },
     "resources": [
         {
@@ -1135,138 +1111,6 @@
                                 "[resourceId('Microsoft.Network/networkInterfaces', variables('fw2_interface2_name'))]",
                                 "[resourceId('Microsoft.Network/networkInterfaces', variables('fw2_interface3_name'))]"
                             ]
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "comments": "CREATE TEST VM WITH NIC",
-            "type": "Microsoft.Resources/deployments",
-            "name": "CREATE_VM",
-            "apiVersion": "[variables('global_var_apiVersion')]",
-            "resourceGroup": "[resourceGroup().name]",
-            "dependsOn": [
-                "CREATE_VNET"
-            ],
-            "condition": "[equals(variables('vm_create_option'), 'Yes')]",
-            "properties": {
-                "mode": "Incremental",
-                "template": {
-                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-                    "contentVersion": "1.0.0.0",
-                    "resources": [
-                        {
-                            "comments": "CREATE_VM_NIC",
-                            "type": "Microsoft.Network/networkInterfaces",
-                            "name": "[variables('vm_nic_name')]",
-                            "apiVersion": "[variables('global_var_apiVersion')]",
-                            "location": "[resourceGroup().location]",
-                            "properties": {
-                                "ipConfigurations": [
-                                    {
-                                        "name": "ipconfig1",
-                                        "properties": {
-                                            "privateIpAddress": "[variables('vm_nic_ip')]",
-                                            "privateIPAllocationMethod": "[variables('global_var_nic_allocationMethod')]",
-                                            "subnet": {
-                                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', variables('global_vnet_name')), '/subnets/', variables('global_vnet_subnet2_name'))]"
-                                            },
-                                            "primary": true,
-                                            "privateIPAddressVersion": "[variables('global_var_networkVersion')]"
-                                        }
-                                    }
-                                ],
-                                "enableAcceleratedNetworking": "[variables('global_fw_enableAcceleratedNetworking')]",
-                                "enableIPForwarding": false
-                            }
-                        },
-                        {
-                            "comments": "CREATE_VM",
-                            "type": "Microsoft.Compute/virtualMachines",
-                            "name": "[variables('vm_name')]",
-                            "apiVersion": "[variables('global_var_apiVersion')]",
-                            "location": "[resourceGroup().location]",
-                            "properties": {
-                                "hardwareProfile": {
-                                    "vmSize": "[variables('vm_vmSize')]"
-                                },
-                                "storageProfile": {
-                                    "imageReference": {
-                                        "publisher": "[variables('vm_publisher')]",
-                                        "offer": "[variables('vm_offer')]",
-                                        "sku": "[variables('vm_sku')]",
-                                        "version": "[variables('vm_version')]"
-                                    },
-                                    "osDisk": {
-                                        "osType": "[variables('vm_osType')]",
-                                        "createOption": "FromImage",
-                                        "caching": "ReadWrite",
-                                        "managedDisk": {
-                                            "storageAccountType": "[variables('vm_diskType')]"
-                                        },
-                                        "diskSizeGB": "[variables('vm_diskSizeGB')]"
-                                    }
-                                },
-                                "osProfile": {
-                                    "computerName": "[variables('vm_name')]",
-                                    "adminUsername": "[variables('global_fw_adminUsername')]",
-                                    "adminPassword": "[variables('global_fw_adminPassword')]",
-                                    "linuxConfiguration": {
-                                        "disablePasswordAuthentication": false,
-                                        "provisionVMAgent": true
-                                    },
-                                    "allowExtensionOperations": true
-                                },
-                                "networkProfile": {
-                                    "networkInterfaces": [
-                                        {
-                                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('vm_nic_name'))]",
-                                            "properties": {
-                                                "primary": true
-                                            }
-                                        }
-                                    ]
-                                }
-                            },
-                            "dependsOn": [
-                                "[resourceId('Microsoft.Network/networkInterfaces', variables('vm_nic_name'))]"
-                            ]
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "comments": "CREATE ROUTE TABLE FOR TRUST SUBNET",
-            "type": "Microsoft.Resources/deployments",
-            "name": "CREATE_ROUTE_TABLE",
-            "apiVersion": "[variables('global_var_apiVersion')]",
-            "resourceGroup": "[variables('global_var_resource_group')]",
-            "properties": {
-                "mode": "Incremental",
-                "template": {
-                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-                    "contentVersion": "1.0.0.0",
-                    "resources": [
-                        {
-                            "type": "Microsoft.Network/routeTables",
-                            "name": "[variables('global_routetable_name')]",
-                            "apiVersion": "[variables('global_var_apiVersion')]",
-                            "location": "[resourceGroup().location]",
-                            "properties": {
-                                "disableBgpRoutePropagation": true,
-                                "routes": [
-                                    {
-                                        "name": "default-udr",
-                                        "properties": {
-                                            "addressPrefix": "0.0.0.0/0",
-                                            "nextHopType": "VirtualAppliance",
-                                            "nextHopIpAddress": "[variables('fw1_interface2_ip_floating')]"
-                                        }
-                                    }
-                                ]
-                            }
                         }
                     ]
                 }
