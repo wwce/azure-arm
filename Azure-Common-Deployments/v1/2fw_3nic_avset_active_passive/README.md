@@ -5,7 +5,7 @@
 </p>
 
 ### Overview
-Please review Set up [Active/Passive HA on Microsoft Azure before proceeding](https://docs.paloaltonetworks.com/vm-series/9-0/vm-series-deployment/set-up-the-vm-series-firewall-on-azure/configure-activepassive-ha-for-vm-series-firewall-on-azure.html).  
+Please review [Set up Active/Passive HA on Microsoft Azure](https://docs.paloaltonetworks.com/vm-series/9-0/vm-series-deployment/set-up-the-vm-series-firewall-on-azure/configure-activepassive-ha-for-vm-series-firewall-on-azure.html) before proceeding.  
 
 This template deploys the following into a new or existing VNET with 4 subnets:
 * 2 x VM-Series firewalls
