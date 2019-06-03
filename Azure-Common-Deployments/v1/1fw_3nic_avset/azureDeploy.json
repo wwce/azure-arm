@@ -114,7 +114,8 @@
       "allowedValues": [
         "byol",
         "bundle1",
-        "bundle2"
+        "bundle2",
+        "bundle2-for-ms"
       ],
       "metadata": {
         "description": "More info: https://docs.paloaltonetworks.com/vm-series/8-1/vm-series-deployment/license-the-vm-series-firewall/license-typesvm-series-firewalls"
@@ -304,9 +305,10 @@
     "global_fw_diskSizeGB": 60,
     "global_fw_bootstrap": "[concat('storage-account=', parameters('(opt.) BootstrapStorageAccount'), ',access-key=', parameters('(opt.) BootstrapAccessKey'), ',file-share=', parameters('(opt.) BootstrapFileShareName'), ',share-directory=', parameters('(opt.) BootstrapShareDirectory'))]",
     "global_fw_publisher": "paloaltonetworks",
+
     "global_fw_license": "[parameters('licenseType')]",
-    "global_fw_version": "[parameters('PANOSVersion')]",
-    "global_fw_product": "vmseries1",
+    "global_fw_version": "[if(equals(variables('global_fw_license'), 'bundle2-for-ms'), '8.1.00', parameters('PANOSVersion'))]",
+    "global_fw_product": "[if(equals(variables('global_fw_license'), 'bundle2-for-ms'), 'vmseries-forms', 'vmseries1')]",
     "global_fw_vmSize": "[parameters('VMSize')]",
     "global_fw_enableAcceleratedNetworking": "[if(equals(parameters('acceleratedNetworking'), 'enable (Only supported on PAN-OS 9.0 or greater)'), 'true', 'false')]",
     "global_fw_avset_option": "[parameters('availabilitySetOption')]",
