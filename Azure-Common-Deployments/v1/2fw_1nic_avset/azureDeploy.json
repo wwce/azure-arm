@@ -296,7 +296,7 @@
     "fw2_interface0_name": "[take(replace(concat(parameters('FW2-Name'), '-nic0', variables('global_var_appendedString')), ' ', ''), 80)]",
     "fw2_interface0_ip": "[parameters('FW2-IPManagement')]",
     "fw2_interface0_pip_name": "[take(replace(concat(parameters('FW2-Name'),'-nic0-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "fw2_interface0_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw2_interface0_pip_name'))]" },
+    "fw2_interface0_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw2_interface0_pip_name'))]" }
   },
   "resources": [
     {
