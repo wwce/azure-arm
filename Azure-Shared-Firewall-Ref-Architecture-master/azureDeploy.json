@@ -13,6 +13,7 @@
                 "description": "Identify whether to use a new or existing vnet"
             }
         },
+
         "virtualNetworkName": {
             "defaultValue": "hub-vnet",
             "type": "String",
