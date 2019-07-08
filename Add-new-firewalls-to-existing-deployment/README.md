@@ -6,10 +6,10 @@ Select the template that matches your requirements
 
 This template was created to support the deployment of a 3 interface Palo Alto Networks firewall into an existing Microsoft Azure environment that has the following items already deployed:
 The following are required
-                    -Firewalls into existing VNET in another RG
-                    -VNET - with 3 subnets (Management + Untrust + Trust) in a region supporting AZs
-                    -Resource Group for Firewall (Select the Firewall RG when deploying)
-                    -Resource Group for VNET
+### Firewalls into existing VNET in another RG
+### VNET - with 3 subnets (Management + Untrust + Trust) in a region supporting AZs
+### Resource Group for Firewall (Select the Firewall RG when deploying)
+### Resource Group for VNET
                     
 
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAdd-New-Firewalls-to-Existing-VNET-Zone-AzureDeploy.json)
