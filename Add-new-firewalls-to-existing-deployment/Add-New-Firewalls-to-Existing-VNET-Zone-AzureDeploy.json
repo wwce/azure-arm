@@ -29,39 +29,41 @@
         },
         "BootstrapStorageAccount": {
             "defaultValue": "",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Storage account hosting the bootstrap files"
             }
         },
         "StorageAccountAccessKey": {
             "defaultValue": "",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Authentication key to access the storage account"
             }
         },
         "StorageAccountFileShare": {
             "defaultValue": "",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "The file share in the storage account where the bootstrap files are located"
             }
         },
         "StorageAccountFileShareDirectory": {
             "defaultValue": "",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share"
             }
         },
-        "numberOfVms": {
-            "type": "int",
+        "availabilityZone": {
+            "type": "string",
             "defaultValue": 1,
-            "minValue": 1,
-            "maxValue": 10,
+            "allowedValues": [
+                "1",
+                "2"
+            ],
             "metadata": {
-                "description": "Number of VMs to provision"
+                "description": "Add firewall to Availability Zone [1,2]"
             }
         },
         "vmName": {
@@ -166,9 +168,10 @@
         "subnet0Ref": "[concat(variables('vnetID'),'/subnets/',parameters('managementSubnetName'))]",
         "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',parameters('untrustSubnetName'))]",
         "subnet2Ref": "[concat(variables('vnetID'),'/subnets/',parameters('trustSubnetName'))]",
-        "fwManagementNic": "[concat(parameters('vmName'), 'Management')]",
-        "fwUntrustNic": "[concat('INT-',parameters('vmName'), '-Untrust')]",
-        "fwTrustNic": "[concat('INT-',parameters('vmName'), '-Trust')]"
+        "vmName" : "[concat(parameters('vmName'),'-Az',prameters(availabilityZone)]",
+        "fwManagementNic": "[concat(variables('vmName'), 'Management')]",
+        "fwUntrustNic": "[concat('INT-',variables('vmName'), '-Untrust')]",
+        "fwTrustNic": "[concat('INT-',variables('vmName'), '-Trust')]"
     },
     "resources": [
         {
@@ -187,13 +190,10 @@
             "dependsOn": []
         },
         {
-            "name": "[concat(variables('fwManagementNic'), copyindex())]",
+            "name": "[variables('fwManagementNic')]",
             "type": "Microsoft.Network/networkInterfaces",
             "location": "[resourceGroup().location]",
-            "copy": {
-                "name": "nicLoop",
-                "count": "[parameters('numberOfVms')]"
-            },
+
             "apiVersion": "2015-06-15",
             "dependsOn": [
                 "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIPAddressName'))]"
@@ -216,13 +216,10 @@
             }
         },
         {
-            "name": "[concat(variables('fwUntrustNic'), copyindex())]",
+            "name": "[variables('fwUntrustNic')]",
             "type": "Microsoft.Network/networkInterfaces",
             "location": "[resourceGroup().location]",
-            "copy": {
-                "name": "nicLoop",
-                "count": "[parameters('numberOfVms')]"
-            },
+
             "dependsOn": [],
             "apiVersion": "2015-06-15",
             "properties": {
@@ -241,13 +238,10 @@
             }
         },
         {
-            "name": "[concat(variables('fwTrustNic'), copyindex())]",
+            "name": "[variables('fwTrustNic')]",
             "type": "Microsoft.Network/networkInterfaces",
             "location": "[resourceGroup().location]",
-            "copy": {
-                "name": "nicLoop",
-                "count": "[parameters('numberOfVms')]"
-            },
+
             "apiVersion": "2015-06-15",
             "properties": {
                 "enableIPForwarding": true,
@@ -267,12 +261,8 @@
         {
             "apiVersion": "2016-04-30-preview",
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[concat(parameters('vmName'), copyindex())]",
-            "zones": "[split(string(add(mod(copyIndex(),3),1)), ',')]",
-            "copy": {
-                "name": "virtualMachineLoop",
-                "count": "[parameters('numberOfVms')]"
-            },
+            "name": "[variables('vmName')]",
+            "zones": "[paraeters(availabilityZone)]",
             "location": "[resourceGroup().location]",
             "plan": {
                 "name": "[parameters('imageSku')]",
@@ -284,7 +274,7 @@
                     "vmSize": "[parameters('vmSize')]"
                 },
                 "osProfile": {
-                    "computerName": "[concat(parameters('vmName'), copyIndex())]",
+                    "computerName": "[parameters('vmName')]",
                     "adminUsername": "[parameters('Username')]",
                     "adminPassword": "[parameters('Password')]",
                     "customData": "[if(equals(parameters('bootstrapFirewall'), bool('false')), json('null'), base64(variables('customDataField')))]"
@@ -307,19 +297,19 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('fwManagementNic'),copyindex()))]",
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fwManagementNic')]",
                             "properties": {
                                 "primary": true
                             }
                         },
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('fwUntrustNic'),copyindex()))]",
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fwUntrustNic')]",
                             "properties": {
                                 "primary": false
                             }
                         },
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('fwTrustNic'),copyindex()))]",
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fwTrustNic')]",
                             "properties": {
                                 "primary": false
                             }
@@ -328,7 +318,7 @@
                 }
             },
             "dependsOn": [
-                "nicLoop"
+                
             ]
         }
     ]
