@@ -168,7 +168,7 @@
         "subnet0Ref": "[concat(variables('vnetID'),'/subnets/',parameters('managementSubnetName'))]",
         "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',parameters('untrustSubnetName'))]",
         "subnet2Ref": "[concat(variables('vnetID'),'/subnets/',parameters('trustSubnetName'))]",
-        "vmName" : "[concat(parameters('vmName'),'-Az',prameters(availabilityZone)]",
+        "vmName" : "[concat(parameters('vmName'),'-Az',parameters('availabilityZone'))]",
         "fwManagementNic": "[concat(variables('vmName'), 'Management')]",
         "fwUntrustNic": "[concat('INT-',variables('vmName'), '-Untrust')]",
         "fwTrustNic": "[concat('INT-',variables('vmName'), '-Trust')]"
