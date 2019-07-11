@@ -3,78 +3,74 @@
     "contentVersion": "1.0.0.13",
     "parameters": {
         "virtualNetworkExistingRGName": {
-            "type": "string",
             "defaultValue": "",
+            "type": "String",
             "metadata": {
                 "description": "Name of resource group of EXISTING VNET"
             }
         },
         "virtualNetworkName": {
-            "type": "string",
+            "defaultValue": "",
+            "type": "String",
             "metadata": {
                 "description": "Name of the EXISTING Virtual Network (VNET)"
-            },
-            "defaultValue": ""
+            }
         },
         "bootstrapFirewall": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies if bootstrap storage account will be used"
-            },
+            "defaultValue": "False",
             "allowedValues": [
                 "True",
                 "False"
             ],
-            "defaultValue": "False"
+            "type": "String",
+            "metadata": {
+                "description": "Specifies if bootstrap storage account will be used"
+            }
         },
         "BootstrapStorageAccount": {
             "defaultValue": "",
-            "type": "string",
+            "type": "String",
             "metadata": {
                 "description": "Storage account hosting the bootstrap files"
             }
         },
         "StorageAccountAccessKey": {
             "defaultValue": "",
-            "type": "string",
+            "type": "String",
             "metadata": {
                 "description": "Authentication key to access the storage account"
             }
         },
         "StorageAccountFileShare": {
             "defaultValue": "",
-            "type": "string",
+            "type": "String",
             "metadata": {
                 "description": "The file share in the storage account where the bootstrap files are located"
             }
         },
         "StorageAccountFileShareDirectory": {
             "defaultValue": "",
-            "type": "string",
+            "type": "String",
             "metadata": {
                 "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share"
             }
         },
         "availabilityZone": {
-            "type": "string",
-            "defaultValue": "1",
-            "allowedValues": [
-                "1",
-                "2"
-            ],
+            "defaultValue": "",
+            "type": "String",
             "metadata": {
                 "description": "Add firewall to Availability Zone [1,2]"
             }
         },
         "vmName": {
-            "type": "string",
+            "defaultValue": "",
+            "type": "String",
             "metadata": {
                 "description": "Name of VM-Series FW in the Azure portal"
-            },
-            "defaultValue": ""
+            }
         },
         "vmSize": {
-            "type": "string",
+            "defaultValue": "Standard_DS3_v2",
             "allowedValues": [
                 "Standard_DS3_v2",
                 "Standard_DS4_v2",
@@ -83,80 +79,79 @@
                 "Standard_D4_v2",
                 "Standard_D5_v2"
             ],
+            "type": "String",
             "metadata": {
                 "description": "Azure VM size for VM-Series"
-            },
-            "defaultValue": "Standard_DS3_v2"
+            }
         },
         "imageVersion": {
-            "type": "string",
+            "defaultValue": "latest",
             "allowedValues": [
                 "8.0.0",
                 "8.1.0",
                 "latest"
             ],
+            "type": "String",
             "metadata": {
                 "description": "PAN OS Version"
-            },
-            "defaultValue": "latest"
+            }
         },
         "imageSku": {
-            "type": "string",
+            "defaultValue": "bundle2",
             "allowedValues": [
                 "byol",
                 "bundle1",
                 "bundle2"
             ],
+            "type": "String",
             "metadata": {
                 "description": "Firewall License Model"
-            },
-            "defaultValue": "bundle2"
+            }
         },
         "disktype": {
-            "type": "string",
+            "defaultValue": "",
             "allowedValues": [
                 "Standard_LRS",
                 "Premium_LRS"
             ],
-            "defaultValue": ""
+            "type": "String"
         },
-
         "managementSubnetName": {
-            "type": "string",
             "defaultValue": "Management",
+            "type": "String",
             "metadata": {
                 "description": "EXISTING Subnet for Management"
             }
         },
         "untrustSubnetName": {
-            "type": "string",
             "defaultValue": "Untrust",
+            "type": "String",
             "metadata": {
                 "description": "EXISTING Subnet for Untrust"
             }
         },
         "trustSubnetName": {
-            "type": "string",
             "defaultValue": "Trust",
+            "type": "String",
             "metadata": {
                 "description": "EXISTING Subnet for Trust"
             }
         },
         "Username": {
-            "type": "string",
+            "type": "String",
             "metadata": {
                 "description": "Username of the administrator account of VM-Series"
             }
         },
         "Password": {
-            "type": "securestring",
             "defaultValue": "",
+            "type": "SecureString",
             "metadata": {
                 "description": "Password for the administrator account of VM-Series"
             }
         },
         "publicIPAddressName": {
-            "type": "string",
+            "type": "String",
             "metadata": {
                 "description": "Name of FW1 MGMT Public Address"
             }
@@ -168,7 +163,7 @@
         "subnet0Ref": "[concat(variables('vnetID'),'/subnets/',parameters('managementSubnetName'))]",
         "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',parameters('untrustSubnetName'))]",
         "subnet2Ref": "[concat(variables('vnetID'),'/subnets/',parameters('trustSubnetName'))]",
-        "vmName" : "[concat(parameters('vmName'),'-Az',parameters('availabilityZone'))]",
+        "vmName": "[concat(parameters('vmName'),'-Az',parameters('availabilityZone'))]",
         "fwManagementNic": "[concat(variables('vmName'), 'Management')]",
         "fwUntrustNic": "[concat('INT-',variables('vmName'), '-Untrust')]",
         "fwTrustNic": "[concat('INT-',variables('vmName'), '-Trust')]"
@@ -176,9 +171,10 @@
     "resources": [
         {
             "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[parameters('publicIPAddressName')]",
             "apiVersion": "2017-08-01",
+            "name": "[parameters('publicIPAddressName')]",
             "location": "[resourceGroup().location]",
+            "dependsOn": [],
             "sku": {
                 "name": "Standard"
             },
@@ -186,15 +182,13 @@
                 "publicIPAllocationMethod": "Static",
                 "idleTimeoutInMinutes": 4
             },
-            "resources": [],
-            "dependsOn": []
+            "resources": []
         },
         {
-            "name": "[variables('fwManagementNic')]",
             "type": "Microsoft.Network/networkInterfaces",
-            "location": "[resourceGroup().location]",
-
             "apiVersion": "2015-06-15",
+            "name": "[variables('fwManagementNic')]",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIPAddressName'))]"
             ],
@@ -216,12 +210,11 @@
             }
         },
         {
-            "name": "[variables('fwUntrustNic')]",
             "type": "Microsoft.Network/networkInterfaces",
-            "location": "[resourceGroup().location]",
-
-            "dependsOn": [],
             "apiVersion": "2015-06-15",
+            "name": "[variables('fwUntrustNic')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
             "properties": {
                 "enableIPForwarding": true,
                 "ipConfigurations": [
@@ -238,11 +231,10 @@
             }
         },
         {
-            "name": "[variables('fwTrustNic')]",
             "type": "Microsoft.Network/networkInterfaces",
-            "location": "[resourceGroup().location]",
-
             "apiVersion": "2015-06-15",
+            "name": "[variables('fwTrustNic')]",
+            "location": "[resourceGroup().location]",
             "properties": {
                 "enableIPForwarding": true,
                 "ipConfigurations": [
@@ -259,11 +251,16 @@
             }
         },
         {
-            "apiVersion": "2016-04-30-preview",
             "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2016-04-30-preview",
             "name": "[variables('vmName')]",
-            "zones": "[paraeters(availabilityZone)]",
             "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[variables('fwManagementNic')]",
+                "[variables('fwUntrustNic')]",
+                "[variables('fwTrustNic')]"
+            ],
+            "zones": "[array(parameters('availabilityZone'))]",
             "plan": {
                 "name": "[parameters('imageSku')]",
                 "product": "vmseries1",
@@ -297,29 +294,26 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fwManagementNic')]",
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fwManagementNic'))]",
                             "properties": {
                                 "primary": true
                             }
                         },
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fwUntrustNic')]",
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fwUntrustNic'))]",
                             "properties": {
                                 "primary": false
                             }
                         },
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fwTrustNic')]",
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fwTrustNic'))]",
                             "properties": {
                                 "primary": false
                             }
                         }
                     ]
                 }
-            },
-            "dependsOn": [
-                
-            ]
+            }
         }
     ]
 }
