@@ -1,4 +1,4 @@
-## 2 x VM-Series (3 NIC)
+## 2 x VM-Series in Zones (3 NIC)
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_zone.png">
