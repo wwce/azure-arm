@@ -177,7 +177,7 @@
     "fw2_interface0_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw2_interface0_pip_name'))]" },
     "fw2_interface1_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw2_interface1_pip_name'))]" },
     "fw2_bootstrap_fileShare": "transit-2fw-3nic-avset-intlb-extlb-2spokes",
-    "fw2_bootstrap": "[concat('storage-account=', variables('global_bootstrap_storageAccount'), ',access-key=', variables('global_bootstrap_accessKey'), ',file-share=', variables('fw2_bootstrap_fileShare'), ',share-directory=', variables('global_bootstrap_shareDirectory'))]",
+    "fw2_bootstrap": "[concat('storage-account=', variables('global_bootstrap_storageAccount'), ',access-key=', variables('global_bootstrap_accessKey'), ',file-share=', variables('fw2_bootstrap_fileShare'), ',share-directory=', variables('global_bootstrap_shareDirectory'))]"
 
   },
   "resources": [
