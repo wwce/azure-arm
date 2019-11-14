@@ -237,7 +237,7 @@
                         "properties": {
                             "addressPrefix": "0.0.0.0/0",
                             "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[variables('fw1_interface2_ip')]"
+                            "nextHopIpAddress": "[variables('internalLb_frontend_ip')]"
                         }
                     },
                     {
@@ -245,7 +245,7 @@
                         "properties": {
                             "addressPrefix": "[variables('vnet_subnet3_cidr')]",
                             "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[variables('fw1_interface2_ip')]"
+                            "nextHopIpAddress": "[variables('internalLb_frontend_ip')]"
                         }
                     },
                     {
@@ -253,7 +253,7 @@
                         "properties": {
                             "addressPrefix": "[variables('vnet_subnet4_cidr')]",
                             "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[variables('fw1_interface2_ip')]"
+                            "nextHopIpAddress": "[variables('internalLb_frontend_ip')]"
                         }
                     }
                 ]
