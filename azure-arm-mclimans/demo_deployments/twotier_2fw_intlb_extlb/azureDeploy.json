@@ -1160,7 +1160,7 @@
             "type": "string"
         },
         "ssh-web-vm": {
-            "value" : "[concat('ssh paloalto@', reference(variables('fw1_interface1_pip_name')).ipAddress, ' -p 221')]",
+            "value" : "[concat('ssh paloalto@', reference(variables('fw1_interface1_pip_name')).ipAddress)]",
             "type": "string"
         }
     }
