@@ -1156,11 +1156,11 @@
             "type": "string"
         },
         "web-server-url": {
-            "value" : "[concat('http://', reference(variables('fw1_interface0_pip_name')).ipAddress, '/sql-attack.html')]",
+            "value" : "[concat('http://', reference(variables('publicLb_pip_name')).ipAddress, '/sql-attack.html')]",
             "type": "string"
         },
         "ssh-web-vm": {
-            "value" : "[concat('ssh paloalto@', reference(variables('fw1_interface1_pip_name')).ipAddress)]",
+            "value" : "[concat('ssh paloalto@', reference(variables('publicLb_pip_name')).ipAddress)]",
             "type": "string"
         }
     }
