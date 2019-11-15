@@ -930,7 +930,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/wwce/azure-arm/master/azure-arm-mclimans/demo_deployments/twotier_2fw_3nic_intlb_extlb/scripts/webserver-startup.sh"
+                        "https://raw.githubusercontent.com/wwce/azure-arm/master/azure-arm-mclimans/demo_deployments/twotier_2fw_intlb_extlb/scripts/webserver-startup.sh"
                     ],
                     "commandToExecute": "[concat('sudo bash ./webserver-startup.sh')]"
                 }
@@ -1036,7 +1036,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/wwce/azure-arm/master/azure-arm-mclimans/demo_deployments/twotier_2fw_3nic_intlb_extlb/scripts/dbserver-startup.sh"
+                        "https://raw.githubusercontent.com/wwce/azure-arm/master/azure-arm-mclimans/demo_deployments/twotier_2fw_intlb_extlb/scripts/dbserver-startup.sh"
                     ],
                     "commandToExecute": "[concat('sudo bash ./dbserver-startup.sh')]"
                 }
