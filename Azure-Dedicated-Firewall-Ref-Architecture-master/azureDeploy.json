@@ -134,9 +134,9 @@
             "defaultValue": "latest",
             "allowedValues": [
                 "latest",
-                "8.1.0",
-                "8.0.0",
-                "7.1.1"
+                "8.1.9",
+                "8.0.17",
+                "9.0.3"
             ],
             "type": "String",
             "metadata": {
