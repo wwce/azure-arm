@@ -111,7 +111,7 @@
         "vm_vmSize": "Standard_B1s",
         "vm_publisher": "Canonical",
         "vm_offer": "UbuntuServer",
-        "vm_sku": "16.04-LTS",
+        "vm_sku": "18.04-LTS",
         "vm_version": "latest",
         "vm_osType": "Linux",
         "vm_diskSizeGB": "30",
