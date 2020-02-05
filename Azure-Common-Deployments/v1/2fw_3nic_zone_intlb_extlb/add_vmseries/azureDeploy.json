@@ -311,7 +311,7 @@
     "fw1_interface1_pip_name": "[take(replace(concat(parameters('AddedFWName'), '-nic1-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
     "fw1_interface0_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw1_interface0_pip_name'))]" },
     "fw1_interface1_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw1_interface1_pip_name'))]" },
-    "fw1_zone": "[parameters('FW1-Zone')]"
+    "fw1_zone": "[parameters('AddedFWZone')]"
   },
   "resources": [
     {
