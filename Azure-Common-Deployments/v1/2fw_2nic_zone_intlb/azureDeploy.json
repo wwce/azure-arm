@@ -148,7 +148,7 @@
     },
     "FW2-Zone": {
       "type": "string",
-      "defaultValue": "1",
+      "defaultValue": "2",
       "allowedValues": [
           "1",
           "2",
