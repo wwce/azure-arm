@@ -69,6 +69,18 @@
         "description": "Enter a name for the first firewall."
       }
     },
+    "AddedFWZone": {
+      "type": "string",
+      "defaultValue": "1",
+      "allowedValues": [
+        "1",
+        "2",
+        "3"
+      ],
+      "metadata": {
+        "description": "Select the availability zone for the firewall."
+        }
+    },
     "licenseType": {
       "type": "string",
       "defaultValue": "byol",
@@ -262,7 +274,8 @@
     "fw1_interface0_pip_name": "[take(replace(concat(parameters('AddedFWName'), '-nic0-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
     "fw1_interface1_pip_name": "[take(replace(concat(parameters('AddedFWName'), '-nic1-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
     "fw1_interface0_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw1_interface0_pip_name'))]" },
-    "fw1_interface1_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw1_interface1_pip_name'))]" }
+    "fw1_interface1_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw1_interface1_pip_name'))]" },
+    "fw1_zone": "[parameters('AddedFWZone')]"
   },
   "resources": [
     {
@@ -518,6 +531,9 @@
                   ]
                 }
               },
+              "zones": [
+                "[variables('fw1_zone')]"
+              ],
               "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces', variables('fw1_interface0_name'))]",
                 "[resourceId('Microsoft.Network/networkInterfaces', variables('fw1_interface1_name'))]"
