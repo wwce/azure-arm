@@ -98,17 +98,17 @@
       }
     },
     "AddedFWZone": {
-        "type": "string",
-        "defaultValue": "1",
-        "allowedValues": [
-            "1",
-            "2",
-            "3"
-        ],
-        "metadata": {
-          "description": "Select the availability zone for the firewall."
-        }
-      },
+      "type": "string",
+      "defaultValue": "1",
+      "allowedValues": [
+        "1",
+        "2",
+        "3"
+       ],
+      "metadata": {
+        "description": "Select the availability zone for the firewall."
+      }
+    },
     "licenseType": {
       "type": "string",
       "defaultValue": "byol",
