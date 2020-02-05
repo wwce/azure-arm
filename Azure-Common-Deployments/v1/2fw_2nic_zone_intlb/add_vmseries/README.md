@@ -1,6 +1,6 @@
 ## Add 1 x VM-Series (3 NIC) to existing Public & Internal Load Balancer's Backend Pool
 <p align="center">
-<img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_avset_intlb_extlb.png">
+<img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_2nic_zone_intlb.png">
 </p>
 
 ### Overview
@@ -21,4 +21,4 @@ This template deploys the following into a new or existing VNET with 4 subnets:
     *  dataplane: `<fw_name>-data`
 
 
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_2nic_avset_intlb%2F%2Fadd_vmseries%2FazureDeploy.json)
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_2nic_zone_intlb%2F%2Fadd_vmseries%2FazureDeploy.json)
