@@ -6,17 +6,6 @@
     "author": "Matt McLimans (mmclimans@paloaltonetworks.com)"
   },
   "parameters": {
-    "VNETOption": {
-      "type": "string",
-      "defaultValue": "Create new VNET",
-      "allowedValues": [
-        "Create new VNET",
-        "Use existing VNET"
-      ],
-      "metadata": {
-        "description": "If creating a new VNET, anything not specified in the template will be deleted."
-      }
-    },
     "VNETResourceGroup": {
       "type": "string",
       "defaultValue": "",
@@ -29,13 +18,6 @@
       "defaultValue": "vmseries-vnet",
       "metadata": {
         "description": "Enter a name for the virtual network."
-      }
-    },
-    "VNETPrefix": {
-      "type": "string",
-      "defaultValue": "10.0.0.0/16",
-      "metadata": {
-        "description": "Enter a prefix for the virtual network."
       }
     },
     "subnetName-Management": {
@@ -66,32 +48,11 @@
         "description": "Enter the subnet name for the internal load balancer."
       }
     },
-    "subnetPrefix-Management": {
+    "publicLBResourceGroup": {
       "type": "string",
-      "defaultValue": "10.0.0.0/24",
+      "defaultValue": "",
       "metadata": {
-        "description": "Enter a subnet prefix for the firewall's management interface."
-      }
-    },
-    "subnetPrefix-Dataplane1": {
-      "type": "string",
-      "defaultValue": "10.0.1.0/24",
-      "metadata": {
-        "description": "Enter a subnet prefix for the firewall's first dataplane interface."
-      }
-    },
-    "subnetPrefix-Dataplane2": {
-      "type": "string",
-      "defaultValue": "10.0.2.0/24",
-      "metadata": {
-        "description": "Enter a subnet prefix for the firewall's second dataplane interface."
-      }
-    },
-    "subnetPrefix-InternalLB": {
-      "type": "string",
-      "defaultValue": "10.0.3.0/24",
-      "metadata": {
-        "description": "Enter a subnet prefix for the internal load balancer."
+        "description": "Enter the public load balancer's resource group if it is different than the deployment resource group.  Otherwise leave it blank."
       }
     },
     "publicLBName": {
@@ -101,11 +62,18 @@
         "description": "Enter a name for the public load balancer."
       }
     },
-    "publicLBAllowedPorts": {
+    "publicLBBackendPoolName": {
       "type": "string",
-      "defaultValue": "80, 443, 22, 3389",
+      "defaultValue": "LoadBalancerBackendPool",
       "metadata": {
         "description": "In a comma separated list, enter the ports you want to allow in the public load balancer's rule base.  Every port entered will create an additional rule (i.e. 4 ports = 4 rules)."
+      }
+    },
+    "internalLBResourceGroup": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Enter the internal load balancer's resource group if it is different than the deployment resource group.  Otherwise leave it blank."
       }
     },
     "internalLBName": {
@@ -115,108 +83,35 @@
         "description": "Enter a name for the internal load balancer."
       }
     },
-    "internalLBAddress": {
+    "internalLBBackendPoolName": {
       "type": "string",
-      "defaultValue": "10.0.3.100",
+      "defaultValue": "LoadBalancerBackendPool",
       "metadata": {
         "description": "Enter the frontend private IP of the internal load balancer.  The address must be within the load balancer subnet prefix."
       }
     },
-    "healthProbePort": {
+    "AddedFWName": {
       "type": "string",
-      "defaultValue": "22",
-      "allowedValues": [
-        "22",
-        "80",
-        "443"
-      ],
+      "defaultValue": "vmseries-fw",
       "metadata": {
-        "description": "Select a TCP port for the load balancer's health monitoring."
+        "description": "Enter a name for the new firewall."
       }
     },
-    "FW1-Name": {
-      "type": "string",
-      "defaultValue": "vmseries-fw-vm1",
-      "metadata": {
-        "description": "Enter a name for the first firewall."
-      }
-    },
-    "FW1-Zone": {
+    "AddedFWZone": {
       "type": "string",
       "defaultValue": "1",
       "allowedValues": [
-          "1",
-          "2",
-          "3"
-      ],
+        "1",
+        "2",
+        "3"
+       ],
       "metadata": {
-        "description": "Select the availability zone for the first firewall."
-      }
-    },
-    "FW1-IPManagement": {
-      "type": "string",
-      "defaultValue": "10.0.0.4",
-      "metadata": {
-        "description": "Enter a private IP address for firewall-1's management interface."
-      }
-    },
-    "FW1-IPDataplane1": {
-      "type": "string",
-      "defaultValue": "10.0.1.4",
-      "metadata": {
-        "description": "Enter a private IP address for firewall-1's first dataplane interface."
-      }
-    },
-    "FW1-IPDataplane2": {
-      "type": "string",
-      "defaultValue": "10.0.2.4",
-      "metadata": {
-        "description": "Enter a private IP address for firewall-1's second dataplane interface."
-      }
-    },
-    "FW2-Name": {
-      "type": "string",
-      "defaultValue": "vmseries-fw-vm2",
-      "metadata": {
-        "description": "Enter a name for the second firewall."
-      }
-    },
-    "FW2-Zone": {
-      "type": "string",
-      "defaultValue": "2",
-      "allowedValues": [
-          "1",
-          "2",
-          "3"
-      ],
-      "metadata": {
-        "description": "Select the availability zone for the second firewall."
-      }
-    },
-    "FW2-IPManagement": {
-      "type": "string",
-      "defaultValue": "10.0.0.5",
-      "metadata": {
-        "description": "Enter a private IP address for firewall-2's management interface."
-      }
-    },
-    "FW2-IPDataplane1": {
-      "type": "string",
-      "defaultValue": "10.0.1.5",
-      "metadata": {
-        "description": "Enter a private IP address for firewall-2's first dataplane interface."
-      }
-    },
-    "FW2-IPDataplane2": {
-      "type": "string",
-      "defaultValue": "10.0.2.5",
-      "metadata": {
-        "description": "Enter a private IP address for firewall-2's second dataplane interface."
+        "description": "Select the availability zone for the firewall."
       }
     },
     "licenseType": {
       "type": "string",
-      "defaultValue": "bundle1",
+      "defaultValue": "byol",
       "allowedValues": [
         "byol",
         "bundle1",
@@ -228,7 +123,7 @@
     },
     "PANOSVersion": {
       "type": "string",
-      "defaultValue": "8.1.0",
+      "defaultValue": "latest",
       "allowedValues": [
         "latest",
         "8.1.0",
@@ -300,13 +195,6 @@
         "description": "Select 'Yes' to add a public IP to the firewall's first dataplane interface (i.e. untrust-interface)."
       }
     },
-    "NSGName": {
-      "type": "string",
-      "defaultValue": "vmseries-nsg",
-      "metadata": {
-        "description": "Enter a name for firewall NSG.  The name entered will have '-mgmt' appended for the mangement NSG and '-data' for the dataplane NSG."
-      }
-    },
     "NSGSourcePrefix": {
       "type": "string",
       "defaultValue": "0.0.0.0/0",
@@ -326,7 +214,7 @@
       "minLength": 12,
       "maxLength": 72,
       "metadata": {
-        "description": "Enter the firewall's administrator password. Password must be 12-72 characters and must have 3 of the following: 1 lower case character, 1 upper case character, 1 number, and 1 special character that is not slash or hyphen."
+        "description": "Enter the firewall's administrator password. Password must be 12-72 characters and must have 3 of the following: 1 lower case character, 1 upper case character, 1 number, and 1 special character that is not a slash or hypen."
       }
     },
     "(opt.) BootstrapStorageAccount": {
@@ -359,7 +247,7 @@
     },
     "(opt.) AppendStringToResources": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "-scaled",
       "metadata": {
         "description": "If the NAME and CONFIGURATION of the created LBs/NSGs/VMs/VNET match an existing LBs/NSGs/VMs/VNET in the SAME resource group, the template will its skip creation.  If the new resource NAME matches, but the resource CONFIGURATION does not, the template will fail or will overwrite the existing resource."
       }
@@ -370,20 +258,19 @@
     "global_var_resource_group": "[resourceGroup().name]",
     "global_var_appendedString": "[if(equals(parameters('(opt.) AppendStringToResources'), ''), '', parameters('(opt.) AppendStringToResources'))]",
     "global_var_idleTimeoutInMinutes": 4,
-    "global_var_allocationMethod": "Static",
+    "global_var_allocationMethod": "Dynamic",
     "global_var_networkVersion": "IPv4",
     "global_var_apiVersion": "2018-06-01",
     "global_var_tier": "Regional",
     "global_var_sku": "Standard",
-    "global_vnet_name": "[if(equals(parameters('VNETOption'), 'Use existing VNET'), parameters('VNETName'), take(replace(concat(parameters('VNETName'), variables('global_var_appendedString')), ' ', ''), 64))]",
+    "global_vnet_name": "[take(replace(parameters('VNETName'), ' ', ''), 64)]",
     "global_vnet_resource_group": "[if(equals(parameters('VNETResourceGroup'), ''), variables('global_var_resource_group'), parameters('VNETResourceGroup'))]",
-    "global_vnet_option": "[parameters('VNETOption')]",
     "global_vnet_subnet0_name": "[take(replace(parameters('subnetName-Management'), ' ', ''), 80)]",
     "global_vnet_subnet1_name": "[take(replace(parameters('subnetName-Dataplane1'), ' ', ''), 80)]",
     "global_vnet_subnet2_name": "[take(replace(parameters('subnetName-Dataplane2'), ' ', ''), 80)]",
     "global_vnet_subnet3_name": "[take(replace(parameters('subnetName-InternalLB'), ' ', ''), 80)]",
-    "global_fw_mgmtnsg_name": "[take(replace(concat(parameters('NSGName'), '-mgmt', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "global_fw_dataNsg_name": "[take(replace(concat(parameters('NSGName'), '-data', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "global_fw_mgmtnsg_name": "[take(replace(concat(parameters('AddedFWName'), '-mgmt', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "global_fw_dataNsg_name": "[take(replace(concat(parameters('AddedFWName'), '-data', variables('global_var_appendedString')), ' ', ''), 80)]",
     "global_fw_interface0_pip_option": "[parameters('applyPublicIPToManagement')]",
     "global_fw_interface1_pip_option": "[parameters('applyPublicIPToDataplane1')]",
     "global_fw_storageAccountType": "[parameters('OSDiskType')]",
@@ -397,7 +284,7 @@
     "global_fw_product": "vmseries1",
     "global_fw_vmSize": "[parameters('VMSize')]",
     "global_fw_enableAcceleratedNetworking": "[if(equals(parameters('acceleratedNetworking'), 'enable (Only supported on PAN-OS 9.0 or greater)'), 'true', 'false')]",
-  
+
     "COMMENT_nsg": "NSG TEMPLATE VARIABLES",
     "nsg_mgmt_inbound_rule_name": "allow-inbound-https-ssh",
     "nsg_mgmt_inbound_rule_sourceAddress": "[parameters('NSGSourcePrefix')]",
@@ -405,79 +292,26 @@
     "nsg_data_inbound_rule_name": "allow-all-inbound",
     "nsg_data_outbound_rule_name": "allow-all-outbound",
 
-    "COMMENT_vnet": "NEW VNET TEMPLATE VARIABLES",
-    "vnet_cidr": "[parameters('VNETPrefix')]",
-    "vnet_subnet0_cidr": "[parameters('subnetPrefix-Management')]",
-    "vnet_subnet1_cidr": "[parameters('subnetPrefix-Dataplane1')]",
-    "vnet_subnet2_cidr": "[parameters('subnetPrefix-Dataplane2')]",
-    "vnet_subnet3_cidr": "[parameters('subnetPrefix-InternalLB')]",
-
     "COMMENT_publicLb": "PUBLIC LB TEMPLATE VARIABLES",
-    "publicLb_name": "[take(replace(concat(parameters('publicLBName'), variables('global_var_appendedString')), ' ', ''), 80)]",
-    "publicLb_resource_group": "[resourceGroup().name]",
-    "publicLb_frontend_name": "LoadBalancerFrontEnd",
-    "publicLb_pool_name": "LoadBalancerBackendPool",
-    "publicLb_rule_name": "rule-",
-    "publicLb_rule_delimiters": [",", ";" ],
-    "publicLb_rule_port": "[split(parameters('publicLBAllowedPorts'),variables('publicLb_rule_delimiters'))]",
-    "publicLb_rule_protocol": "Tcp",
-    "publicLb_rule_enableTcpReset": "false",
-    "publicLb_rule_loadDistribution": "Default",
-    "publicLb_rule_enableFloatingIP": true,
-    "publicLb_rule_disableOutboundSnat": "false",
-    "publicLb_probe_name": "HealthProbe",
-    "publicLb_probe_port": "[parameters('healthProbePort')]",
-    "publicLb_probe_protocol": "Tcp",
-    "publicLb_probe_intervalInSeconds": 5,
-    "publicLb_probe_numberOfProbes": 2,
-    "publicLb_pip_name": "[take(replace(concat(parameters('publicLBName'), '-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "publicLb_name": "[parameters('publicLBName')]",
+    "publicLb_resource_group": "[if(equals(parameters('publicLBResourceGroup'), ''), variables('global_var_resource_group'), parameters('publicLBResourceGroup'))]",
+    "publicLb_pool_name": "[parameters('publicLBBackendPoolName')]",
 
     "COMMENT_internalLb": "INTERNAL LB TEMPLATE VARIABLES",
-    "internalLb_name": "[take(replace(concat(parameters('internalLBName'), variables('global_var_appendedString')), ' ', ''), 80)]",
-    "internalLb_resource_group": "[resourceGroup().name]",
-    "internalLb_frontend_name": "LoadBalancerFrontEnd",
-    "internalLb_frontend_ip": "[parameters('internalLBAddress')]",
-    "internalLb_pool_name": "LoadBalancerBackendPool",
-    "internalLb_rule_name": "ha-ports",
-    "internalLb_rule_port": 0,
-    "internalLb_rule_protocol": "All",
-    "internalLb_rule_enableTcpReset": "false",
-    "internalLb_rule_loadDistribution": "Default",
-    "internalLb_rule_enableFloatingIP": true,
-    "internalLb_rule_disableOutboundSnat": "false",
-    "internalLb_probe_name": "HealthProbe",
-    "internalLb_probe_port": "[parameters('healthProbePort')]",
-    "internalLb_probe_protocol": "Tcp",
-    "internalLb_probe_intervalInSeconds": 5,
-    "internalLb_probe_numberOfProbes": 2,
+    "internalLb_name": "[parameters('internalLBName')]",
+    "internalLb_resource_group": "[if(equals(parameters('internalLBResourceGroup'), ''), variables('global_var_resource_group'), parameters('internalLBResourceGroup'))]",
+    "internalLb_pool_name": "[parameters('internalLBBackendPoolName')]",
 
     "COMMENT_fw1": "FW1 TEMPLATE VARIABLES",
-    "fw1_computerName": "[take(replace(replace(concat(parameters('FW1-Name'), variables('global_var_appendedString')), ' ', ''), '_', ''), 64)]",
-    "fw1_interface0_name": "[take(replace(concat(parameters('FW1-Name'), '-nic0', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "fw1_interface1_name": "[take(replace(concat(parameters('FW1-Name'), '-nic1', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "fw1_interface2_name": "[take(replace(concat(parameters('FW1-Name'), '-nic2', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "fw1_interface0_ip": "[parameters('FW1-IPManagement')]",
-    "fw1_interface1_ip": "[parameters('FW1-IPDataplane1')]",
-    "fw1_interface2_ip": "[parameters('FW1-IPDataplane2')]",
-    "fw1_interface0_pip_name": "[take(replace(concat(parameters('FW1-Name'), '-nic0-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "fw1_interface1_pip_name": "[take(replace(concat(parameters('FW1-Name'), '-nic1-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "fw1_computerName": "[take(replace(replace(concat(parameters('AddedFWName'), variables('global_var_appendedString')), ' ', ''), '_', ''), 64)]",
+    "fw1_interface0_name": "[take(replace(concat(parameters('AddedFWName'), '-nic0', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "fw1_interface1_name": "[take(replace(concat(parameters('AddedFWName'), '-nic1', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "fw1_interface2_name": "[take(replace(concat(parameters('AddedFWName'), '-nic2', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "fw1_interface0_pip_name": "[take(replace(concat(parameters('AddedFWName'), '-nic0-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "fw1_interface1_pip_name": "[take(replace(concat(parameters('AddedFWName'), '-nic1-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
     "fw1_interface0_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw1_interface0_pip_name'))]" },
     "fw1_interface1_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw1_interface1_pip_name'))]" },
-    "fw1_zone": "[parameters('FW1-Zone')]",
-
-    "COMMENT_fw2": "FW2 TEMPLATE VARIABLES",
-    "fw2_computerName": "[take(replace(replace(concat(parameters('FW2-Name'), variables('global_var_appendedString')), ' ', ''), '_', ''), 64)]",
-    "fw2_interface0_name": "[take(replace(concat(parameters('FW2-Name'), '-nic0', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "fw2_interface1_name": "[take(replace(concat(parameters('FW2-Name'), '-nic1', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "fw2_interface2_name": "[take(replace(concat(parameters('FW2-Name'), '-nic2', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "fw2_interface0_ip": "[parameters('FW2-IPManagement')]",
-    "fw2_interface1_ip": "[parameters('FW2-IPDataplane1')]",
-    "fw2_interface2_ip": "[parameters('FW2-IPDataplane2')]",
-    "fw2_interface0_pip_name": "[take(replace(concat(parameters('FW2-Name'),'-nic0-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "fw2_interface1_pip_name": "[take(replace(concat(parameters('FW2-Name'),'-nic1-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
-    "fw2_interface0_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw2_interface0_pip_name'))]" },
-    "fw2_interface1_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw2_interface1_pip_name'))]" },
-    "fw2_zone": "[parameters('FW2-Zone')]"
+    "fw1_zone": "[parameters('AddedFWZone')]"
   },
   "resources": [
     {
@@ -567,254 +401,13 @@
       }
     },
     {
-      "comments": "CREATE VIRTUAL NETWORK WITH 4 SUBNETS",
-      "type": "Microsoft.Resources/deployments",
-      "name": "CREATE_VNET",
-      "apiVersion": "[variables('global_var_apiVersion')]",
-      "resourceGroup": "[variables('global_vnet_resource_group')]",
-      "condition": "[equals(variables('global_vnet_option'), 'Create new VNET')]",
-      "properties": {
-        "mode": "Incremental",
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "resources": [
-            {
-              "type": "Microsoft.Network/virtualNetworks",
-              "name": "[variables('global_vnet_name')]",
-              "apiVersion": "[variables('global_var_apiVersion')]",
-              "location": "[resourceGroup().location]",
-              "properties": {
-                "addressSpace": {
-                  "addressPrefixes": [
-                    "[variables('vnet_cidr')]"
-                  ]
-                },
-                "subnets": [
-                  {
-                    "name": "[variables('global_vnet_subnet0_name')]",
-                    "properties": {
-                      "addressPrefix": "[variables('vnet_subnet0_cidr')]"
-                    }
-                  },
-                  {
-                    "name": "[variables('global_vnet_subnet1_name')]",
-                    "properties": {
-                      "addressPrefix": "[variables('vnet_subnet1_cidr')]"
-                    }
-                  },
-                  {
-                    "name": "[variables('global_vnet_subnet2_name')]",
-                    "properties": {
-                      "addressPrefix": "[variables('vnet_subnet2_cidr')]"
-                    }
-                  },
-                  {
-                    "name": "[variables('global_vnet_subnet3_name')]",
-                    "properties": {
-                      "addressPrefix": "[variables('vnet_subnet3_cidr')]"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "comments": "CREATE FIREWALL PUBLIC LOAD BALANCER",
-      "type": "Microsoft.Resources/deployments",
-      "name": "CREATE_PUBLICLB",
-      "apiVersion": "[variables('global_var_apiVersion')]",
-      "resourceGroup": "[variables('publicLb_resource_group')]",
-      "properties": {
-        "mode": "Incremental",
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "resources": [
-            {
-              "type": "Microsoft.Network/publicIPAddresses",
-              "sku": {
-                "name": "[variables('global_var_sku')]",
-                "tier": "[variables('global_var_tier')]"
-              },
-              "name": "[variables('publicLb_pip_name')]",
-              "apiVersion": "[variables('global_var_apiVersion')]",
-              "location": "[resourceGroup().location]",
-              "properties": {
-                "publicIPAddressVersion": "[variables('global_var_networkVersion')]",
-                "publicIPAllocationMethod": "[variables('global_var_allocationMethod')]",
-                "idleTimeoutInMinutes": "[variables('global_var_idleTimeoutInMinutes')]"
-              }
-            },
-            {
-              "type": "Microsoft.Network/loadBalancers",
-              "sku": {
-                "name": "[variables('global_var_sku')]"
-              },
-              "name": "[variables('publicLb_name')]",
-              "apiVersion": "[variables('global_var_apiVersion')]",
-              "location": "[resourceGroup().location]",
-              "properties": {
-                "frontendIPConfigurations": [
-                  {
-                    "name": "[variables('publicLb_frontend_name')]",
-                    "properties": {
-                      "publicIPAddress": {
-                        "id": "[resourceId(variables('publicLb_resource_group'), 'Microsoft.Network/publicIPAddresses', variables('publicLb_pip_name'))]"
-                      }
-                    }
-                  }
-                ],
-                "backendAddressPools": [
-                  {
-                    "name": "[variables('publicLb_pool_name')]"
-                  }
-                ],
-                "copy": [
-                  {
-                    "name": "loadBalancingRules",
-                    "count": "[length(variables('publicLb_rule_port'))]",
-                    "input": {
-                      "name": "[concat(variables('publicLb_rule_name'), copyIndex('loadBalancingRules'))]",
-                      "properties": {
-                        "frontendIPConfiguration": {
-                          "id": "[concat(resourceId(variables('publicLb_resource_group'), 'Microsoft.Network/loadBalancers', variables('publicLb_name')), '/frontendIPConfigurations/', variables('publicLb_frontend_name'))]"
-                        },
-                        "frontendPort": "[variables('publicLb_rule_port')[copyIndex('loadBalancingRules')]]",
-                        "backendPort": "[variables('publicLb_rule_port')[copyIndex('loadBalancingRules')]]",
-                        "enableFloatingIP": "[variables('publicLb_rule_enableFloatingIP')]",
-                        "idleTimeoutInMinutes": "[variables('global_var_idleTimeoutInMinutes')]",
-                        "protocol": "[variables('publicLb_rule_protocol')]",
-                        "enableTcpReset": "[variables('publicLb_rule_enableTcpReset')]",
-                        "loadDistribution": "[variables('publicLb_rule_loadDistribution')]",
-                        "disableOutboundSnat": "[variables('publicLb_rule_disableOutboundSnat')]",
-                        "backendAddressPool": {
-                          "id": "[concat(resourceId(variables('publicLb_resource_group'), 'Microsoft.Network/loadBalancers', variables('publicLb_name')), '/backendAddressPools/', variables('publicLb_pool_name'))]"
-                        },
-                        "probe": {
-                          "id": "[concat(resourceId(variables('publicLb_resource_group'), 'Microsoft.Network/loadBalancers', variables('publicLb_name')), '/probes/', variables('publicLb_probe_name'))]"
-                        }
-                      }
-                    }
-                  }
-                ],
-                "probes": [
-                  {
-                    "name": "[variables('publicLb_probe_name')]",
-                    "properties": {
-                      "protocol": "[variables('publicLb_probe_protocol')]",
-                      "port": "[variables('publicLb_probe_port')]",
-                      "intervalInSeconds": "[variables('publicLb_probe_intervalInSeconds')]",
-                      "numberOfProbes": "[variables('publicLb_probe_numberOfProbes')]"
-                    }
-                  }
-                ]
-              },
-              "dependsOn": [
-                "[resourceId(variables('publicLb_resource_group'), 'Microsoft.Network/publicIPAddresses', variables('publicLb_pip_name'))]"
-              ]
-            }
-          ]
-        }
-      }
-    },
-    {
-      "comments": "CREATE FIREWALL INTERNAL LOAD BALANCER WITH HA PORTS",
-      "type": "Microsoft.Resources/deployments",
-      "name": "CREATE_INTERNALLB",
-      "apiVersion": "[variables('global_var_apiVersion')]",
-      "resourceGroup": "[variables('internalLb_resource_group')]",
-      "dependsOn": [
-        "CREATE_VNET"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "resources": [
-            {
-              "type": "Microsoft.Network/loadBalancers",
-              "sku": {
-                "name": "[variables('global_var_sku')]",
-                "tier": "[variables('global_var_tier')]"
-              },
-              "name": "[variables('internalLb_name')]",
-              "apiVersion": "[variables('global_var_apiVersion')]",
-              "location": "[resourceGroup().location]",
-              "properties": {
-                "frontendIPConfigurations": [
-                  {
-                    "name": "[variables('internalLb_frontend_name')]",
-                    "properties": {
-                      "privateIPAddress": "[variables('internalLb_frontend_ip')]",
-                      "privateIPAllocationMethod": "[variables('global_var_allocationMethod')]",
-                      "subnet": {
-                        "id": "[concat(resourceId(variables('global_vnet_resource_group'), 'Microsoft.Network/virtualNetworks', variables('global_vnet_name')), '/subnets/', variables('global_vnet_subnet3_name'))]"
-                      }
-                    }
-                  }
-                ],
-                "backendAddressPools": [
-                  {
-                    "name": "[variables('internalLb_pool_name')]"
-                  }
-                ],
-                "loadBalancingRules": [
-                  {
-                    "name": "[variables('internalLb_rule_name')]",
-                    "properties": {
-                      "frontendIPConfiguration": {
-                        "id": "[concat(resourceId(variables('internalLb_resource_group'), 'Microsoft.Network/loadBalancers', variables('internalLb_name')), '/frontendIPConfigurations/', variables('internalLb_frontend_name'))]"
-                      },
-                      "frontendPort": "[variables('internalLb_rule_port')]",
-                      "backendPort": "[variables('internalLb_rule_port')]",
-                      "enableFloatingIP": "[variables('internalLb_rule_enableFloatingIP')]",
-                      "idleTimeoutInMinutes": "[variables('global_var_idleTimeoutInMinutes')]",
-                      "protocol": "[variables('internalLb_rule_protocol')]",
-                      "enableTcpReset": "[variables('internalLb_rule_enableTcpReset')]",
-                      "loadDistribution": "[variables('internalLb_rule_loadDistribution')]",
-                      "disableOutboundSnat": "[variables('internalLb_rule_disableOutboundSnat')]",
-                      "backendAddressPool": {
-                        "id": "[concat(resourceId(variables('internalLb_resource_group'), 'Microsoft.Network/loadBalancers', variables('internalLb_name')), '/backendAddressPools/', variables('internalLb_pool_name'))]"
-                      },
-                      "probe": {
-                        "id": "[concat(resourceId(variables('internalLb_resource_group'), 'Microsoft.Network/loadBalancers', variables('internalLb_name')), '/probes/', variables('internalLb_probe_name'))]"
-                      }
-                    }
-                  }
-                ],
-                "probes": [
-                  {
-                    "name": "[variables('internalLb_probe_name')]",
-                    "properties": {
-                      "protocol": "[variables('internalLb_probe_protocol')]",
-                      "port": "[variables('internalLb_probe_port')]",
-                      "intervalInSeconds": "[variables('internalLb_probe_intervalInSeconds')]",
-                      "numberOfProbes": "[variables('internalLb_probe_numberOfProbes')]"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
       "comments": "CREATE FW1 WITH INTERFACES",
       "type": "Microsoft.Resources/deployments",
       "name": "CREATE_FW1",
       "apiVersion": "[variables('global_var_apiVersion')]",
       "resourceGroup": "[resourceGroup().name]",
       "dependsOn": [
-        "CREATE_VNET",
-        "CREATE_NSGS",
-        "CREATE_INTERNALLB",
-        "CREATE_PUBLICLB"
+        "CREATE_NSGS"
       ],
       "properties": {
         "mode": "Incremental",
@@ -834,7 +427,7 @@
               "location": "[resourceGroup().location]",
               "properties": {
                 "publicIPAddressVersion": "[variables('global_var_networkVersion')]",
-                "publicIPAllocationMethod": "[variables('global_var_allocationMethod')]",
+                "publicIPAllocationMethod": "Static",
                 "idleTimeoutInMinutes": "[variables('global_var_idleTimeoutInMinutes')]"
               }
             },
@@ -850,7 +443,7 @@
               "location": "[resourceGroup().location]",
               "properties": {
                 "publicIPAddressVersion": "[variables('global_var_networkVersion')]",
-                "publicIPAllocationMethod": "[variables('global_var_allocationMethod')]",
+                "publicIPAllocationMethod": "Static",
                 "idleTimeoutInMinutes": "[variables('global_var_idleTimeoutInMinutes')]"
               }
             },
@@ -864,7 +457,6 @@
                   {
                     "name": "ipconfig1",
                     "properties": {
-                      "privateIpAddress": "[variables('fw1_interface0_ip')]",
                       "privateIPAllocationMethod": "[variables('global_var_allocationMethod')]",
                       "publicIpAddress": "[if(equals(variables('global_fw_interface0_pip_option'), 'Yes'), variables('fw1_interface0_pip_id'), json('null'))]",
                       "subnet": {
@@ -896,7 +488,6 @@
                   {
                     "name": "ipconfig1",
                     "properties": {
-                      "privateIpAddress": "[variables('fw1_interface1_ip')]",
                       "privateIPAllocationMethod": "[variables('global_var_allocationMethod')]",
                       "publicIpAddress": "[if(equals(variables('global_fw_interface1_pip_option'), 'Yes'), variables('fw1_interface1_pip_id'), json('null'))]",
                       "subnet": {
@@ -933,7 +524,6 @@
                   {
                     "name": "ipconfig1",
                     "properties": {
-                      "privateIpAddress": "[variables('fw1_interface2_ip')]",
                       "privateIPAllocationMethod": "[variables('global_var_allocationMethod')]",
                       "subnet": {
                         "id": "[concat(resourceId(variables('global_vnet_resource_group'), 'Microsoft.Network/virtualNetworks', variables('global_vnet_name')), '/subnets/', variables('global_vnet_subnet2_name'))]"
@@ -1022,230 +612,6 @@
                 "[resourceId('Microsoft.Network/networkInterfaces', variables('fw1_interface0_name'))]",
                 "[resourceId('Microsoft.Network/networkInterfaces', variables('fw1_interface1_name'))]",
                 "[resourceId('Microsoft.Network/networkInterfaces', variables('fw1_interface2_name'))]"
-              ]
-            }
-          ]
-        }
-      }
-    },
-    {
-      "comments": "CREATE FW2 WITH INTERFACES",
-      "type": "Microsoft.Resources/deployments",
-      "name": "CREATE_FW2",
-      "apiVersion": "[variables('global_var_apiVersion')]",
-      "resourceGroup": "[resourceGroup().name]",
-      "dependsOn": [
-        "CREATE_VNET",
-        "CREATE_NSGS",
-        "CREATE_INTERNALLB",
-        "CREATE_PUBLICLB"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "resources": [
-            {
-              "condition": "[equals(variables('global_fw_interface0_pip_option'), 'Yes')]",
-              "type": "Microsoft.Network/publicIPAddresses",
-              "sku": {
-                "name": "[variables('global_var_sku')]",
-                "tier": "[variables('global_var_tier')]"
-              },
-              "name": "[variables('fw2_interface0_pip_name')]",
-              "apiVersion": "[variables('global_var_apiVersion')]",
-              "location": "[resourceGroup().location]",
-              "properties": {
-                "publicIPAddressVersion": "[variables('global_var_networkVersion')]",
-                "publicIPAllocationMethod": "[variables('global_var_allocationMethod')]",
-                "idleTimeoutInMinutes": "[variables('global_var_idleTimeoutInMinutes')]"
-              }
-            },
-            {
-              "condition": "[equals(variables('global_fw_interface1_pip_option'), 'Yes')]",
-              "type": "Microsoft.Network/publicIPAddresses",
-              "sku": {
-                "name": "[variables('global_var_sku')]",
-                "tier": "[variables('global_var_tier')]"
-              },
-              "name": "[variables('fw2_interface1_pip_name')]",
-              "apiVersion": "[variables('global_var_apiVersion')]",
-              "location": "[resourceGroup().location]",
-              "properties": {
-                "publicIPAddressVersion": "[variables('global_var_networkVersion')]",
-                "publicIPAllocationMethod": "[variables('global_var_allocationMethod')]",
-                "idleTimeoutInMinutes": "[variables('global_var_idleTimeoutInMinutes')]"
-              }
-            },
-            {
-              "type": "Microsoft.Network/networkInterfaces",
-              "name": "[variables('fw2_interface0_name')]",
-              "apiVersion": "[variables('global_var_apiVersion')]",
-              "location": "[resourceGroup().location]",
-              "properties": {
-                "ipConfigurations": [
-                  {
-                    "name": "ipconfig1",
-                    "properties": {
-                      "privateIpAddress": "[variables('fw2_interface0_ip')]",
-                      "privateIPAllocationMethod": "[variables('global_var_allocationMethod')]",
-                      "publicIpAddress": "[if(equals(variables('global_fw_interface0_pip_option'),'Yes'), variables('fw2_interface0_pip_id'), json('null'))]",
-                      "subnet": {
-                        "id": "[concat(resourceId(variables('global_vnet_resource_group'), 'Microsoft.Network/virtualNetworks', variables('global_vnet_name')), '/subnets/', variables('global_vnet_subnet0_name'))]"
-                      },
-                      "primary": true,
-                      "privateIPAddressVersion": "[variables('global_var_networkVersion')]"
-                    }
-                  }
-                ],
-                "enableAcceleratedNetworking": "[variables('global_fw_enableAcceleratedNetworking')]",
-                "enableIPForwarding": false,
-                "networkSecurityGroup": {
-                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('global_fw_mgmtnsg_name'))]"
-                },
-                "tapConfigurations": []
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses/', variables('fw2_interface0_pip_name'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Network/networkInterfaces",
-              "name": "[variables('fw2_interface1_name')]",
-              "apiVersion": "[variables('global_var_apiVersion')]",
-              "location": "[resourceGroup().location]",
-              "properties": {
-                "ipConfigurations": [
-                  {
-                    "name": "ipconfig1",
-                    "properties": {
-                      "privateIpAddress": "[variables('fw2_interface1_ip')]",
-                      "privateIPAllocationMethod": "[variables('global_var_allocationMethod')]",
-                      "publicIpAddress": "[if(equals(variables('global_fw_interface1_pip_option'),'Yes'), variables('fw2_interface1_pip_id'), json('null'))]",
-                      "subnet": {
-                        "id": "[concat(resourceId(variables('global_vnet_resource_group'), 'Microsoft.Network/virtualNetworks', variables('global_vnet_name')), '/subnets/', variables('global_vnet_subnet1_name'))]"
-                      },
-                      "primary": true,
-                      "privateIPAddressVersion": "[variables('global_var_networkVersion')]",
-                      "loadBalancerBackendAddressPools": [
-                        {
-                          "id": "[concat(resourceId(variables('publicLb_resource_group'), 'Microsoft.Network/loadBalancers', variables('publicLb_name')), '/backendAddressPools/', variables('publicLb_pool_name'))]"
-                        }
-                      ]
-                    }
-                  }
-                ],
-                "enableAcceleratedNetworking": "[variables('global_fw_enableAcceleratedNetworking')]",
-                "enableIPForwarding": true,
-                "networkSecurityGroup": {
-                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('global_fw_dataNsg_name'))]"
-                },
-                "tapConfigurations": []
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses/', variables('fw2_interface1_pip_name'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Network/networkInterfaces",
-              "name": "[variables('fw2_interface2_name')]",
-              "apiVersion": "[variables('global_var_apiVersion')]",
-              "location": "[resourceGroup().location]",
-              "properties": {
-                "ipConfigurations": [
-                  {
-                    "name": "ipconfig1",
-                    "properties": {
-                      "privateIpAddress": "[variables('fw2_interface2_ip')]",
-                      "privateIPAllocationMethod": "[variables('global_var_allocationMethod')]",
-                      "subnet": {
-                        "id": "[concat(resourceId(variables('global_vnet_resource_group'), 'Microsoft.Network/virtualNetworks', variables('global_vnet_name')), '/subnets/', variables('global_vnet_subnet2_name'))]"
-                      },
-                      "primary": true,
-                      "privateIPAddressVersion": "[variables('global_var_networkVersion')]",
-                      "loadBalancerBackendAddressPools": [
-                        {
-                          "id": "[concat(resourceId(variables('internalLb_resource_group'), 'Microsoft.Network/loadBalancers', variables('internalLb_name')), '/backendAddressPools/', variables('internalLb_pool_name'))]"
-                        }
-                      ]
-                    }
-                  }
-                ],
-                "enableAcceleratedNetworking": "[variables('global_fw_enableAcceleratedNetworking')]",
-                "enableIPForwarding": true,
-                "networkSecurityGroup": {
-                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('global_fw_dataNsg_name'))]"
-                },
-                "tapConfigurations": []
-              }
-            },
-            {
-              "type": "Microsoft.Compute/virtualMachines",
-              "name": "[variables('fw2_computerName')]",
-              "apiVersion": "[variables('global_var_apiVersion')]",
-              "location": "[resourceGroup().location]",
-              "plan": {
-                "name": "[variables('global_fw_license')]",
-                "product": "[variables('global_fw_product')]",
-                "publisher": "[variables('global_fw_publisher')]"
-              },
-              "properties": {
-                "hardwareProfile": {
-                  "vmSize": "[variables('global_fw_vmSize')]"
-                },
-                "storageProfile": {
-                  "imageReference": {
-                    "publisher": "[variables('global_fw_publisher')]",
-                    "offer": "[variables('global_fw_product')]",
-                    "sku": "[variables('global_fw_license')]",
-                    "version": "[variables('global_fw_version')]"
-                  },
-                  "osDisk": {
-                    "createOption": "FromImage",
-                    "caching": "ReadWrite",
-                    "managedDisk": {
-                      "storageAccountType": "[variables('global_fw_storageAccountType')]"
-                    },
-                    "diskSizeGB": "[variables('global_fw_diskSizeGB')]"
-                  }
-                },
-                "osProfile": {
-                  "computerName": "[variables('fw2_computerName')]",
-                  "adminUsername": "[variables('global_fw_adminUsername')]",
-                  "adminPassword": "[variables('global_fw_adminPassword')]",
-                  "customData": "[base64(variables('global_fw_bootstrap'))]"
-                },
-                "networkProfile": {
-                  "networkInterfaces": [
-                    {
-                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fw2_interface0_name'))]",
-                      "properties": {
-                        "primary": true
-                      }
-                    },
-                    {
-                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fw2_interface1_name'))]",
-                      "properties": {
-                        "primary": false
-                      }
-                    },
-                    {
-                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fw2_interface2_name'))]",
-                      "properties": {
-                        "primary": false
-                      }
-                    }
-                  ]
-                }
-              },
-              "zones": [
-                "[variables('fw2_zone')]"
-              ],
-              "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', variables('fw2_interface0_name'))]",
-                "[resourceId('Microsoft.Network/networkInterfaces', variables('fw2_interface1_name'))]",
-                "[resourceId('Microsoft.Network/networkInterfaces', variables('fw2_interface2_name'))]"
               ]
             }
           ]
