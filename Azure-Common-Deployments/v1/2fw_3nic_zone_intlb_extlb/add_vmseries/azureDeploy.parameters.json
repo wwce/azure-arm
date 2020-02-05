@@ -1,0 +1,93 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnetResourceGroup": {
+            "value": ""
+        },
+        "vnetName": {
+            "value": "vmseries-vnet"
+        },
+        "subnetName-Management": {
+            "value": "mgmt-subnet"
+        },
+        "subnetName-Dataplane1": {
+            "value": "untrust-subnet"
+        },
+        "subnetName-Dataplane2": {
+            "value": "trust-subnet"
+        },
+        "subnetName-InternalLB": {
+            "value": "lb-subnet"
+        },
+        "publicLBResourceGroup": {
+            "value": ""
+        },
+        "publicLBName": {
+            "value": "vmseries-public-lb"
+        },
+        "publicLBBackendPoolName": {
+            "value": "LoadBalancerBackendPool"
+        },
+        "internalLBResourceGroup": {
+            "value": ""
+        },
+        "internalLBName": {
+            "value": "vmseries-internal-lb"
+        },
+        "internalLBBackendPoolName": {
+            "value": "LoadBalancerBackendPool"
+        },
+        "addedFWName": {
+            "value": "vmseries-fw"
+        },
+        "addedFWZone": {
+            "value": "1"
+        },
+        "licenseType": {
+            "value": "byol"
+        },
+        "panosVersion": {
+            "value": "latest"
+        },
+        "vmSize": {
+            "value": "Standard_DS3_v2"
+        },
+        "osDiskType": {
+            "value": "Standard_LRS"
+        },
+        "acceleratedNetworking": {
+            "value": "disable"
+        },
+        "applyPublicIPToManagement": {
+            "value": "Yes"
+        },
+        "applyPublicIPToDataplane1": {
+            "value": "Yes"
+        },
+        "nsgSourcePrefix": {
+            "value": "0.0.0.0/0"
+        },
+        "username": {
+            "value": "paloalto"
+        },
+        "password": {
+            "value": null
+        },
+        "(opt.) BootstrapStorageAccount": {
+            "value": ""
+        },
+        "(opt.) BootstrapAccessKey": {
+            "value": null
+        },
+        "(opt.) BootstrapFileShareName": {
+            "value": ""
+        },
+        "(opt.) BootstrapShareDirectory": {
+            "value": ""
+        },
+        "(opt.) AppendStringToResources": {
+            "value": "-scaled"
+        }
+    }
+}
