@@ -64,7 +64,7 @@
     },
     "AddedFWName": {
       "type": "string",
-      "defaultValue": "vmseries-fw-vm3",
+      "defaultValue": "vmseries-fw",
       "metadata": {
         "description": "Enter a name for the first firewall."
       }
@@ -219,7 +219,7 @@
     },
     "(opt.) AppendStringToResources": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "-scaled",
       "metadata": {
         "description": "If the NAME and CONFIGURATION of the created LBs/NSGs/VMs/VNET match an existing LBs/NSGs/VMs/VNET in the SAME resource group, the template will its skip creation.  If the new resource NAME matches, but the resource CONFIGURATION does not, the template will fail or will overwrite the existing resource."
       }
@@ -263,7 +263,7 @@
     "nsg_data_outbound_rule_name": "allow-all-outbound",
 
     "COMMENT_internalLb": "INTERNAL LB TEMPLATE VARIABLES",
-    "internalLb_name": "[take(replace(concat(parameters('internalLBName'), variables('global_var_appendedString')), ' ', ''), 80)]",
+    "internalLb_name": "[parameters('internalLBName')]",
     "internalLb_resource_group": "[if(equals(parameters('internalLBResourceGroup'), ''), variables('global_var_resource_group'), parameters('internalLBResourceGroup'))]",
     "internalLb_pool_name": "[parameters('internalLBBackendPoolName')]",
 
