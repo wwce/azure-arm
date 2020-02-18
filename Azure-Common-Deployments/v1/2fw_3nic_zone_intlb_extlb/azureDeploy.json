@@ -361,7 +361,7 @@
         "type": "string",
         "defaultValue": "",
         "metadata": {
-          "description": "If the NAME and CONFIGURATION of the created LBs/NSGs/VMs/AVSET/VNET match an existing LBs/NSGs/VMs/AVSET/VNET in the SAME resource group, the template will its skip creation.  If the new resource NAME matches, but the resource CONFIGURATION does not, the template will fail or will overwrite the existing resource."
+          "description": "If the NAME and CONFIGURATION of the created LBs/NSGs/VMs/VNET match an existing LBs/NSGs/VMs/VNET in the SAME resource group, the template will its skip creation.  If the new resource NAME matches, but the resource CONFIGURATION does not, the template will fail or will overwrite the existing resource."
         }
       }
     },
@@ -450,11 +450,7 @@
       "internalLb_probe_protocol": "Tcp",
       "internalLb_probe_intervalInSeconds": 5,
       "internalLb_probe_numberOfProbes": 2,
-  
-      "COMMENT_avset": "AV SET NESTED TEMPLATE VARIABLES (L. 805-834)",
-      "avset_sku": "Aligned",
-      "avset_platformUpdateDomainCount": 5,
-      "avset_platformFaultDomainCount": 2,
+
   
       "COMMENT_fw1": "FW1 TEMPLATE VARIABLES",
       "fw1_computerName": "[take(replace(replace(concat(parameters('FW1-Name'), variables('global_var_appendedString')), ' ', ''), '_', ''), 64)]",
@@ -817,7 +813,6 @@
         "resourceGroup": "[resourceGroup().name]",
         "dependsOn": [
           "CREATE_VNET",
-          "CREATE_AVSET",
           "CREATE_NSGS",
           "CREATE_INTERNALLB",
           "CREATE_PUBLICLB"
@@ -1042,7 +1037,6 @@
         "resourceGroup": "[resourceGroup().name]",
         "dependsOn": [
           "CREATE_VNET",
-          "CREATE_AVSET",
           "CREATE_NSGS",
           "CREATE_INTERNALLB",
           "CREATE_PUBLICLB"
