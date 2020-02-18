@@ -293,13 +293,13 @@
     "nsg_data_outbound_rule_name": "allow-all-outbound",
 
     "COMMENT_publicLb": "PUBLIC LB TEMPLATE VARIABLES",
-    "publicLb_name": "[take(replace(concat(parameters('publicLBName'), variables('global_var_appendedString')), ' ', ''), 80)]",
-    "publicLb_resource_group": "[if(equals(parameters('publicLBResourceGroup'), ''), variables('global_var_resource_group'), parameters('publicLBResourceGroup'))]",
+    "publicLb_name": "[parameters('publicLBName')]",
+    "publicLb_resource_group": "[parameters('publicLBResourceGroup')]",
     "publicLb_pool_name": "[parameters('publicLBBackendPoolName')]",
 
     "COMMENT_internalLb": "INTERNAL LB TEMPLATE VARIABLES",
-    "internalLb_name": "[take(replace(concat(parameters('internalLBName'), variables('global_var_appendedString')), ' ', ''), 80)]",
-    "internalLb_resource_group": "[if(equals(parameters('internalLBResourceGroup'), ''), variables('global_var_resource_group'), parameters('internalLBResourceGroup'))]",
+    "internalLb_name": "[parameters('internalLBName')]",
+    "internalLb_resource_group": "[parameters('internalLBResourceGroup')]",
     "internalLb_pool_name": "[parameters('internalLBBackendPoolName')]",
 
     "COMMENT_fw1": "FW1 TEMPLATE VARIABLES",
