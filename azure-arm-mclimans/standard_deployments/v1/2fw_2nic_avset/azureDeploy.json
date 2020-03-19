@@ -239,7 +239,7 @@
       "minLength": 12,
       "maxLength": 72,
       "metadata": {
-        "description": "Enter the firewall's administrator password. Password must be 12-72 characters and must have 3 of the following: 1 lower case character, 1 upper case character, 1 number, and 1 special character that is not '\' or '-'."
+        "description": "Enter the firewall's administrator password. Password must be 12-72 characters and must have 3 of the following: 1 lower case character, 1 upper case character, 1 number, and 1 special character that is not '\\' or '-'."
       }
     },
     "(opt.) BootstrapStorageAccount": {
