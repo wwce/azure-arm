@@ -5,7 +5,7 @@
 </p>
 
 ### Overview
-This template builds on the work already deon by Matt Mclimans which deploys the following into a new or existing VNET with 3 subnets:
+This template builds on the work by Matt Mclimans which deploys the following into a new or existing VNET with 3 subnets:
 * 1 x VM-Series firewalls
     * 3 x Interfaces
         * management: `<fw_name>-nic0`
@@ -37,4 +37,4 @@ Everything resource in the template is built strictly with variables.  The varia
 Most deployment failures are due to conflicts with existing resources.  If this is your first time running the template, it is recommended to launch the template into a **new** resource group.  If you cannot deploy to a new resource group, it is highly recommended to use the `(opt.) Append String To Resources` parameter to append a string to all newly created resources.  This will avoid potential naming conflicts among any existing resources.
 
 
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F1fw_3nic_avset%2FazureDeploy.json)
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-panorama-1fw-3nic-avse%2FazureDeploy.json)
