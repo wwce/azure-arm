@@ -1,0 +1,117 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vnetOption": {
+      "value": "Create new VNET"
+    },
+    "vnetResourceGroup": {
+      "value": ""
+    },
+    "vnetName": {
+      "value": "vmseries-vnet"
+    },
+    "vnetPrefix": {
+      "value": "10.0.0.0/16"
+    },
+    "ManagementSubnetName": {
+      "value": "mgmt-subnet"
+    },
+    "UntrustSubnetName": {
+      "value": "untrust-subnet"
+    },
+    "TrustSubnetName": {
+      "value": "trust-subnet"
+    },
+    "ManagementSubnetPrefix": {
+      "value": "10.0.0.0/24"
+    },
+    "UntrustSubnetPrefix": {
+      "value": "10.0.1.0/24"
+    },
+    "TrustSubnetPrefix": {
+      "value": "10.0.2.0/24"
+    },
+    "FWName": {
+      "value": "firewall"
+    },
+    "PanoramaName": {
+      "value": "panorama"
+    },
+    "FWManagementIP": {
+      "value": "10.0.0.4"
+    },
+    "FWUntrustIP": {
+      "value": "10.0.1.4"
+    },
+    "FWTrustIP": {
+      "value": "10.0.2.4"
+    },
+    "PanoramaManagementIP": {
+      "value": "10.0.0.5"
+    },
+    "FWlicenseType": {
+      "value": "byol"
+    },
+    "panoramaLicenseType": {
+      "value": "byol"
+    },
+    "FWVersion": {
+      "value": "9.0.4"
+    },
+    "FWSize": {
+      "value": "Standard_DS3_v2"
+    },
+    "PanoramaSize": {
+      "value": "Standard_DS3_v2"
+    },
+    "PanoramaVersion": {
+      "value": "9.0.5"
+    },
+    "osDiskType": {
+      "value": "Standard_LRS"
+    },
+    "availabilitySetOption": {
+      "value": "Create new availability set"
+    },
+    "availabilitySetName": {
+      "value": "panw-as"
+    },
+    "applyPublicIPToFWManagement": {
+      "value": "Yes"
+    },
+    "applyPublicIPToFWUntrust": {
+      "value": "Yes"
+    },
+    "applyPublicIPToPanorama": {
+      "value": "No"
+    },
+    "nsgName": {
+      "value": "panw-nsg"
+    },
+    "nsgSourcePrefix": {
+      "value": "0.0.0.0/0"
+    },
+    "username": {
+      "value": "paloalto"
+    },
+    "password": {
+      "value": null
+    },
+    "(opt.) BootstrapStorageAccount": {
+      "value": ""
+    },
+    "(opt.) BootstrapAccessKey": {
+      "value": null
+    },
+    "(opt.) BootstrapFileShareName": {
+      "value": ""
+    },
+    "(opt.) BootstrapShareDirectory": {
+      "value": ""
+    },
+    "(opt.) AppendStringToResources": {
+      "value": ""
+    }
+  }
+}
