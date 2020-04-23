@@ -78,7 +78,7 @@
       },
       "site-SharedKey": {
         "type": "string",
-        "defaultValue": "matthewmclimanspaloalto012345",
+        "defaultValue": "panwdemo0123456789vwan",
         "metadata": {
           "description": "The bgp peer IP address of a vpnsite."
         }
