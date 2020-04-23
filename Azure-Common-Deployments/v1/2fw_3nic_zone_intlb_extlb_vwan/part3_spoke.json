@@ -1,0 +1,284 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "location": {
+        "type": "string",
+        "defaultValue": "[resourceGroup().location]",
+        "metadata": {
+          "description": "Location where all resources will be created."
+        }
+      },
+      "WAN-Name": {
+        "type": "string",
+        "defaultValue": "virtual-wan",
+        "metadata": {
+          "description": "Name of the Virtual Wan."
+        }
+      },
+      "hub-Name": {
+        "type": "string",
+        "defaultValue": "hub01",
+        "metadata": {
+          "description": "Name of the Virtual Hub. A virtual hub is created inside a virtual wan."
+        }
+      },
+      "hub-AddressPrefix": {
+        "type": "string",
+        "defaultValue": "10.10.0.0/24",
+        "metadata": {
+          "description": "The hub address prefix. This address prefix will be used as the address prefix for the hub vnet"
+        }
+      },
+      "hub-GatewayName": {
+        "type": "string",
+        "defaultValue": "vpn-gateway",
+        "metadata": {
+          "description": "Name of the Vpn Gateway. A vpn gateway is created inside a virtual hub."
+        }
+      },
+      "spokeVNET-Name": {
+        "type": "string",
+        "metadata": {
+          "description": "Enter a name for the virtual network."
+        }
+      },
+      "spokeVNET-Prefix": {
+        "type": "string",
+        "defaultValue": "192.168.1.0/24",
+        "metadata": {
+          "description": "Enter a prefix for the virtual network."
+        }
+      },
+      "spokeVNET-SubnetName": {
+        "type": "string",
+        "defaultValue": "subnet1",
+        "metadata": {
+          "description": "Enter a name for the virtual network."
+        }
+      },
+      "spokeVNET-SubnetPrefix": {
+        "type": "string",
+        "defaultValue": "192.168.1.0/24",
+        "metadata": {
+          "description": "Enter a name for the virtual network."
+        }
+      }
+      
+    },
+    "variables": {
+
+
+
+        "global_resource_group": "[resourceGroup().name]",
+        "global_apiVersion": "2019-09-01",
+        "global_location": "[resourceGroup().location]",
+
+        "wan_name": "[parameters('WAN-Name')]", 
+        "wan_hub_name": "[parameters('hub-Name')]",
+        "wan_hub_address_prefix": "[parameters('hub-AddressPrefix')]",
+        "wan_hub_gateway_name": "[parameters('hub-GatewayName')]",
+
+        "vnet_cidr": "[parameters('spokeVNET-Prefix')]",
+        "vnet_name": "[parameters('spokeVNET-Name')]",
+        "vnet_subnet0_name": "[parameters('spokeVNET-SubnetName')]",
+        "vnet_subnet0_cidr": "[parameters('spokeVNET-SubnetPrefix')]",
+
+        "vm_apiVersion": "2018-06-01",
+        "vm_user": "paloalto",
+        "vm_password": "Pal0Alt0@123",
+        "vm_vmSize": "Standard_B1s",
+        "vm_publisher": "Canonical",
+        "vm_offer": "UbuntuServer",
+        "vm_sku": "18.04-LTS",
+        "vm_version": "latest",
+        "vm_osType": "Linux",
+        "vm_diskSizeGB": "30",
+        "vm_diskType": "Standard_LRS",
+        "vm1_name": "test-vm",
+        "vm1_nic_name": "[concat(variables('vm1_name'), '-nic0')]"
+
+    },
+    "resources": [
+      {
+        "comments": "CREATE VIRTUAL NETWORK WITH 4 SUBNETS",
+        "type": "Microsoft.Resources/deployments",
+        "name": "CREATE_VNET",
+        "apiVersion": "[variables('global_apiVersion')]",
+        "resourceGroup": "[variables('global_resource_group')]",
+        "properties": {
+          "mode": "Incremental",
+          "template": {
+            "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+            "contentVersion": "1.0.0.0",
+            "resources": [
+              {
+                "type": "Microsoft.Network/virtualNetworks",
+                "name": "[variables('vnet_name')]",
+                "apiVersion": "[variables('global_apiVersion')]",
+                "location": "[variables('global_location')]",
+                "properties": {
+                  "addressSpace": {
+                    "addressPrefixes": [
+                      "[variables('vnet_cidr')]"
+                    ]
+                  },
+                  "subnets": [
+                    {
+                      "name": "[variables('vnet_subnet0_name')]",
+                      "properties": {
+                        "addressPrefix": "[variables('vnet_subnet0_cidr')]"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "apiVersion": "[variables('global_apiVersion')]",
+        "type": "Microsoft.Resources/deployments",
+        "name": "updateHub",
+        "dependsOn": [
+            "CREATE_VNET"
+        ],
+        "properties": {
+          "mode": "Incremental",
+          "parameters": {},
+          "template": {
+            "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+            "contentVersion": "1.0.0.0",
+            "parameters": {},
+            "variables": {},
+            "resources": [
+                {
+                    "apiVersion": "[variables('global_apiVersion')]",
+                    "name": "[variables('wan_hub_name')]",
+                    "location":"[variables('global_location')]",
+                    "type": "Microsoft.Network/virtualHubs",
+                    "properties": {
+                        "addressPrefix": "[variables('wan_hub_address_prefix')]",
+                        "virtualWan": {
+                          "id": "[resourceId('Microsoft.Network/virtualWans', variables('wan_name'))]"
+                        },
+                        "vpnGateway": {
+                            "id": "[resourceId('Microsoft.Network/vpnGateways', variables('wan_hub_gateway_name'))]"
+                          },
+                        "virtualNetworkConnections": [
+                            {
+                              "properties": {
+                                "remoteVirtualNetwork": {
+                                  "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnet_name'))]"
+                                },
+                                "allowHubToRemoteVnetTransit": true,
+                                "allowRemoteVnetToUseHubVnetGateways": true,
+                                "enableInternetSecurity": true
+                              },
+                              "name": "vnetconnection1"
+                            }
+                          ]
+                    }
+                }
+            ],
+            "outputs": {}
+            }
+          }
+        },
+        {
+            "comments": "CREATE VM",
+            "type": "Microsoft.Resources/deployments",
+            "name": "CREATE_VM",
+            "apiVersion": "[variables('vm_apiVersion')]",
+            "resourceGroup": "[variables('global_resource_group')]",
+            "dependsOn": [
+                "CREATE_VNET"
+            ],
+            "properties": {
+              "mode": "Incremental",
+              "template": {
+                "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                "contentVersion": "1.0.0.0",
+                "resources": [
+                    {
+                        "comments": "CREATE_vm1_NIC",
+                        "type": "Microsoft.Network/networkInterfaces",
+                        "name": "[variables('vm1_nic_name')]",
+                        "apiVersion": "[variables('vm_apiVersion')]",
+                        "location": "[variables('global_location')]",
+                        "properties": {
+                            "ipConfigurations": [
+                                {
+                                    "name": "ipconfig1",
+                                    "properties": {
+                                        "privateIPAllocationMethod": "Dynamic",
+                                        "subnet": {
+                                            "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', variables('vnet_name')), '/subnets/', variables('vnet_subnet0_name'))]"
+                                        },
+                                        "primary": true,
+                                        "privateIPAddressVersion": "IPv4"
+                                    }
+                                }
+                            ],
+                            "enableIPForwarding": false
+                        }
+                    },
+                    {
+                        "comments": "CREATE_WEB_VM",
+                        "type": "Microsoft.Compute/virtualMachines",
+                        "name": "[variables('vm1_name')]",
+                        "apiVersion": "[variables('vm_apiVersion')]",
+                        "location": "[variables('global_location')]",
+                        "properties": {
+                            "hardwareProfile": {
+                                "vmSize": "[variables('vm_vmSize')]"
+                            },
+                            "storageProfile": {
+                                "imageReference": {
+                                    "publisher": "[variables('vm_publisher')]",
+                                    "offer": "[variables('vm_offer')]",
+                                    "sku": "[variables('vm_sku')]",
+                                    "version": "[variables('vm_version')]"
+                                },
+                                "osDisk": {
+                                    "osType": "[variables('vm_osType')]",
+                                    "createOption": "FromImage",
+                                    "caching": "ReadWrite",
+                                    "managedDisk": {
+                                        "storageAccountType": "[variables('vm_diskType')]"
+                                    },
+                                    "diskSizeGB": "[variables('vm_diskSizeGB')]"
+                                }
+                            },
+                            "osProfile": {
+                                "computerName": "[variables('vm1_name')]",
+                                "adminUsername": "[variables('vm_user')]",
+                                "adminPassword": "[variables('vm_password')]",
+                                "linuxConfiguration": {
+                                    "disablePasswordAuthentication": false,
+                                    "provisionVMAgent": true
+                                },
+                                "allowExtensionOperations": true
+                            },
+                            "networkProfile": {
+                                "networkInterfaces": [
+                                    {
+                                        "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('vm1_nic_name'))]",
+                                        "properties": {
+                                            "primary": true
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "dependsOn": [
+                            "[resourceId('Microsoft.Network/networkInterfaces', variables('vm1_nic_name'))]"
+                        ]
+                    }
+                ]
+              }
+            }
+          }
+    ]
+  }
