@@ -101,6 +101,13 @@
           "description": "Enter the frontend private IP of the internal load balancer.  The address must be within the load balancer subnet prefix."
         }
       },
+      "namingPrefix": {
+        "type": "string",
+        "defaultValue": "vmseries-",
+        "metadata": {
+          "description": "If the NAME and CONFIGURATION of the created LBs/NSGs/VMs/VNET match an existing LBs/NSGs/VMs/VNET in the SAME resource group, the template will its skip creation.  If the new resource NAME matches, but the resource CONFIGURATION does not, the template will fail or will overwrite the existing resource."
+        }
+      },
       "FW1-Zone": {
         "type": "string",
         "defaultValue": "1",
@@ -127,7 +134,6 @@
       },
       "licenseType": {
         "type": "string",
-        "defaultValue": "bundle1",
         "allowedValues": [
           "byol",
           "bundle1",
@@ -244,14 +250,14 @@
         }
       },
       "hubPeerAddress": {
-        "type": "securestring",
+        "type": "string",
         "defaultValue": "52.188.30.26",
         "metadata": {
           "description": "Enter the vWAN Hub's VPN Gateway Address.  If no VPN Gateway exist, use dummy IP."
         }
       },
       "hubBGPAddress": {
-        "type": "securestring",
+        "type": "string",
         "defaultValue": "10.10.0.12",
         "metadata": {
           "description": "Enter the vWAN Hub's VPN Gateway Address.  If no VPN Gateway exist, use dummy IP."
@@ -259,51 +265,43 @@
       },
       "hubSharedKey": {
         "type": "securestring",
-        "defaultValue": "matthewmclimanspaloalto012345",
         "metadata": {
           "description": "Enter the vWAN Hub's VPN Gateway Address.  If no VPN Gateway exist, use dummy IP."
         }
       },
       "(opt.) BootstrapStorageAccount": {
         "type": "string",
-        "defaultValue": "mrm001",
+        "defaultValue": "",
         "metadata": {
           "description": "(Optional) To bootstrap the firewalls, enter the Azure storage account name that contains the bootstrap file share."
         }
       },
       "(opt.) BootstrapAccessKey": {
         "type": "securestring",
-        "defaultValue": "3yHRKEtH+jqyXzaBuRHWs7Zzmd2b2+8d95zESMrX+skgDxUf5QqpNdguT0ZNEhd/naJ4pVf3F6XC4AMm31qAnA==",
+        "defaultValue": "",
         "metadata": {
           "description": "(Optional) To bootstrap the firewalls, enter the Azure storage account access key."
         }
       },
       "(opt.) BootstrapFileShareName": {
         "type": "string",
-        "defaultValue": "transit-vnet-2fw-panorama",
+        "defaultValue": "",
         "metadata": {
           "description": "(Optional) To bootstrap the firewalls, enter the name of the Azure storage account file share that contains the bootstrap configuration."
         }
       },
       "(opt.) BootstrapShareDirectory": {
-        "defaultValue": "",
         "type": "string",
+        "defaultValue": "",
         "metadata": {
           "description": "(Optional) To bootstrap from multiple bootstrap directories within the same file share, enter the subdirectory hosting the bootstrap files."
-        }
-      },
-      "prefixName": {
-        "type": "string",
-        "defaultValue": "panw-",
-        "metadata": {
-          "description": "If the NAME and CONFIGURATION of the created LBs/NSGs/VMs/VNET match an existing LBs/NSGs/VMs/VNET in the SAME resource group, the template will its skip creation.  If the new resource NAME matches, but the resource CONFIGURATION does not, the template will fail or will overwrite the existing resource."
         }
       }
     },
     "variables": {
       "COMMENT_global": "GLOBAL VARIABLES SHARED AMONG DEPLOYED RESOURCES",
       "global_var_resource_group": "[resourceGroup().name]",
-      "global_var_appendedString": "[parameters('prefixName')]",
+      "global_var_appendedString": "[parameters('namingPrefix')]",
       "global_var_idleTimeoutInMinutes": 4,
       "global_var_allocationMethod": "Static",
       "global_var_networkVersion": "IPv4",
