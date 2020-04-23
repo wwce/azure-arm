@@ -64,12 +64,8 @@
           "description": "Enter a name for the virtual network."
         }
       }
-      
     },
     "variables": {
-
-
-
         "global_resource_group": "[resourceGroup().name]",
         "global_apiVersion": "2019-09-01",
         "global_location": "[resourceGroup().location]",
@@ -177,7 +173,7 @@
                                 "allowRemoteVnetToUseHubVnetGateways": true,
                                 "enableInternetSecurity": true
                               },
-                              "name": "[variables('wan_hub_connection_name')]",
+                              "name": "[variables('wan_hub_connection_name')]"
                             }
                           ]
                     }
