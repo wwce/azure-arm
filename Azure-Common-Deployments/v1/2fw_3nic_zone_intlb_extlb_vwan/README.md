@@ -26,6 +26,18 @@ This template deploys the following into a new or existing VNET with 4 subnets:
 * 1 x Standard SKU Internal Load Balancer with HA Ports
     *  Backend Pool: `<fw1_name>-nic2` & `<fw2_name>-nic2`
 
+
+
+#### Part 1: Create Virtual WAN, Hub, and Hub VPN Gateway
+If you do not have a Virtual WAN, or you want to demo in a greenfield environment, run this template to create a Virtual WAN, the Virtual WAN Hub, and the Hub's VPN Gateway.
+
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_vwan%2Fpart1_vwan.json)
+
+#### Part 2: Create Transit VNET with Load Balanced VM-Series
+This part deploys a Transit VNET with 4 subnets: mgmt, untrust, trust, and GatewaySubnet.  2 x VM-Series firewalls are deployed with an interface in the mgmt, untrust, and trust subnets.  The GatewaySubnet will have a route table assigned to handle traffic from the vWAN Hub.  
+
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_vwan%2Fpart2_transit.json)
+
 ### Important Considerations
 
 #### VNET Considerations
@@ -36,6 +48,3 @@ Everything resource in the template is built strictly with variables.  The varia
 
 #### First Deployment
 Most deployment failures are due to conflicts with existing resources.  If this is your first time running the template, it is recommended to launch the template into a **new** resource group.  If you cannot deploy to a new resource group, it is highly recommended to use the `(opt.) Append String To Resources` parameter to append a string to all newly created resources.  This will avoid potential naming conflicts among any existing resources.
-
-
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_vwan%2Fpart1_vwan.json)
