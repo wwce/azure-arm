@@ -1,13 +1,10 @@
-# 2 x VM-Series (Zones 3 NIC) with Public & Internal Load Balancers
+## 2 x VM-Series (Zones 3 NIC) with Public & Internal Load Balancers
 
 ## Overview
 This build includes 3 templates to deploy different resources for securing egress traffic from vWAN Hub Connections through a pair of VM-Series firewalls.
 <p align="center">
 <img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_zone_intlb_extlb.png">
 </p>
-
-## Overview
-This build includes 3 templates to deploy different resources for securing egress traffic from vWAN Hub Connections through a pair of VM-Series firewalls.
 
 ## Part 1: Create Virtual WAN / Hub / Hub VPN Gateway
 **Run Time:** *1 Hour*
@@ -26,7 +23,6 @@ This part deploys a Transit VNET with 4 subnets: mgmt, untrust, trust, and Gatew
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_vwan%2Fpart2_transit.json)
 
 ## Part 3: Create Hub Spoke VNET
-</br>
 **Run Time:** *15 Minutes*
 </br>
 </br>
