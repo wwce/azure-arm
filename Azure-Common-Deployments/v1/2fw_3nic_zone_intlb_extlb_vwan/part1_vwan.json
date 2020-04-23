@@ -1,0 +1,190 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "WAN-Name": {
+        "type": "string",
+        "defaultValue": "virtual-wan",
+        "metadata": {
+          "description": "Name of the Virtual Wan."
+        }
+      },
+      "WAN-SKU": {
+        "type": "string",
+        "defaultValue": "Standard",
+        "metadata": {
+          "description": "Sku of the Virtual Wan."
+        },
+        "allowedValues": [
+          "Standard",
+          "Basic"
+        ]
+      },
+      "hub-Name": {
+        "type": "string",
+        "defaultValue": "hub01",
+        "metadata": {
+          "description": "Name of the Virtual Hub. A virtual hub is created inside a virtual wan."
+        }
+      },
+      "hub-AddressPrefix": {
+        "type": "string",
+        "defaultValue": "10.10.0.0/24",
+        "metadata": {
+          "description": "The hub address prefix. This address prefix will be used as the address prefix for the hub vnet"
+        }
+      },
+      "hub-GatewayName": {
+        "type": "string",
+        "defaultValue": "vpn-gateway",
+        "metadata": {
+          "description": "Name of the Vpn Gateway. A vpn gateway is created inside a virtual hub."
+        }
+      },
+      "site-Name": {
+        "type": "string",
+        "defaultValue": "security-network",
+        "metadata": {
+          "description": "Name of the vpnsite. A vpnsite represents the on-premise vpn device. A public ip address is mandatory for a vpn site creation."
+        }
+      },
+      "site-ConnectionName": {
+        "type": "string",
+        "defaultValue": "vmseries",
+        "metadata": {
+          "description": "Name of the vpnconnection. A vpn connection is established between a vpnsite and a vpn gateway."
+        }
+      },
+      "site-PeerAddress": {
+        "type": "string",
+        "defaultValue": "52.188.30.26",
+        "metadata": {
+          "description": "The public IP address of a vpn site."
+        }
+      },
+      "site-ASN": {
+        "type": "int",
+        "defaultValue": 64456,
+        "metadata": {
+          "description": "The bgp asn number of a vpnsite."
+        }
+      },
+      "site-BGPAddress": {
+        "type": "string",
+        "defaultValue": "10.0.3.4",
+        "metadata": {
+          "description": "The bgp peer IP address of a vpnsite."
+        }
+      },
+      "site-SharedKey": {
+        "type": "string",
+        "defaultValue": "matthewmclimanspaloalto012345",
+        "metadata": {
+          "description": "The bgp peer IP address of a vpnsite."
+        }
+      }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "api_version": "2019-09-01",
+        "wan_name": "[parameters('WAN-Name')]", 
+        "wan_sku": "[parameters('WAN-SKU')]", 
+        "hub_name": "[parameters('hub-Name')]",
+        "hub_address_prefix": "[parameters('hub-AddressPrefix')]",
+        "hub_vpn_gateway_name": "[parameters('hub-GatewayName')]",
+        "hub_vpn_site_name": "[parameters('site-Name')]",
+        "hub_vpn_connection_name": "[parameters('site-ConnectionName')]",
+        "hub_vpn_address_space_list": ["0.0.0.0/0"],
+        "hub_vpn_site_pip": "[parameters('site-PeerAddress')]",
+        "hub_vpn_bgp_asn": "[parameters('site-ASN')]",  
+        "hub_vpn_bgp_address": "[parameters('site-BGPAddress')]",  
+        "hub_vpn_bgp_enable": true,
+        "hub_vpn_shared_key": "[parameters('site-SharedKey')]",
+        "hub_vpn_connection_vendor": "VMSERIES-VNG",
+        "hub_vpn_connection_speed": 1
+    },
+    "resources": [
+      {
+        "type": "Microsoft.Network/virtualWans",
+        "name": "[variables('wan_name')]",
+        "apiVersion": "[variables('api_version')]",
+        "location": "[variables('location')]",
+        "properties": {
+          "type": "[variables('wan_sku')]"
+        }
+      },
+      {
+        "type": "Microsoft.Network/virtualHubs",
+        "name": "[variables('hub_name')]",
+        "apiVersion": "[variables('api_version')]",
+        "location": "[variables('location')]",
+        "dependsOn": [
+          "[concat('Microsoft.Network/virtualWans/', variables('wan_name'))]"
+        ],
+        "properties": {
+          "addressPrefix": "[variables('hub_address_prefix')]",
+          "virtualWan": {
+            "id": "[resourceId('Microsoft.Network/virtualWans', variables('wan_name'))]"
+          }
+        }
+      },
+      {
+        "type": "Microsoft.Network/vpnSites",
+        "name": "[variables('hub_vpn_site_name')]",
+        "apiVersion": "[variables('api_version')]",
+        "location": "[variables('location')]",
+        "dependsOn": [
+          "[concat('Microsoft.Network/virtualWans/', variables('wan_name'))]"
+        ],
+        "properties": {
+          "addressSpace": {
+            "addressPrefixes": "[variables('hub_vpn_address_space_list')]"
+          },
+          "bgpProperties": {
+            "asn": "[variables('hub_vpn_bgp_asn')]",
+            "bgpPeeringAddress": "[variables('hub_vpn_bgp_address')]",
+            "peerWeight": 0
+          },
+          "deviceProperties": {
+            "deviceVendor": "[variables('hub_vpn_connection_vendor')]",
+            "linkSpeedInMbps": "[variables('hub_vpn_connection_speed')]"
+          },
+          "ipAddress": "[variables('hub_vpn_site_pip')]",
+          "virtualWan": {
+            "id": "[resourceId('Microsoft.Network/virtualWans', variables('wan_name'))]"
+          }
+        }
+      },
+      {
+        "type": "Microsoft.Network/vpnGateways",
+        "name": "[variables('hub_vpn_gateway_name')]",
+        "apiVersion": "[variables('api_version')]",
+        "location": "[variables('location')]",
+        "dependsOn": [
+          "[concat('Microsoft.Network/virtualHubs/', variables('hub_name'))]",
+          "[concat('Microsoft.Network/vpnSites/', variables('hub_vpn_site_name'))]"
+        ],
+        "properties": {
+          "connections": [
+            {
+              "name": "[variables('hub_vpn_connection_name')]",
+              "properties": {
+                "connectionBandwidth": 10,
+                "enableBgp": "[variables('hub_vpn_bgp_enable')]",
+                "sharedKey": "[variables('hub_vpn_shared_key')]",
+                "remoteVpnSite": {
+                  "id": "[resourceId('Microsoft.Network/vpnSites', variables('hub_vpn_site_name'))]"
+                }
+              }
+            }
+          ],
+          "virtualHub": {
+            "id": "[resourceId('Microsoft.Network/virtualHubs', variables('hub_name'))]"
+          },
+          "bgpSettings": {
+            "asn": 65515
+          }
+        }
+      }
+    ]
+  }
