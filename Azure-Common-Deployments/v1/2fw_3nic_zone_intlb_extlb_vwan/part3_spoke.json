@@ -9,28 +9,28 @@
           "description": "Location where all resources will be created."
         }
       },
-      "WAN-Name": {
+      "existingWAN-Name": {
         "type": "string",
         "defaultValue": "virtual-wan",
         "metadata": {
           "description": "Name of the Virtual Wan."
         }
       },
-      "hub-Name": {
+      "existingHub-Name": {
         "type": "string",
         "defaultValue": "hub01",
         "metadata": {
           "description": "Name of the Virtual Hub. A virtual hub is created inside a virtual wan."
         }
       },
-      "hub-AddressPrefix": {
+      "existingHub-AddressPrefix": {
         "type": "string",
         "defaultValue": "10.10.0.0/24",
         "metadata": {
           "description": "The hub address prefix. This address prefix will be used as the address prefix for the hub vnet"
         }
       },
-      "hub-GatewayName": {
+      "existingHub-GatewayName": {
         "type": "string",
         "defaultValue": "vpn-gateway",
         "metadata": {
@@ -74,10 +74,11 @@
         "global_apiVersion": "2019-09-01",
         "global_location": "[resourceGroup().location]",
 
-        "wan_name": "[parameters('WAN-Name')]", 
-        "wan_hub_name": "[parameters('hub-Name')]",
-        "wan_hub_address_prefix": "[parameters('hub-AddressPrefix')]",
-        "wan_hub_gateway_name": "[parameters('hub-GatewayName')]",
+        "wan_name": "[parameters('existingWAN-Name')]", 
+        "wan_hub_name": "[parameters('existingHub-Name')]",
+        "wan_hub_address_prefix": "[parameters('existingHub-AddressPrefix')]",
+        "wan_hub_gateway_name": "[parameters('existingHub-GatewayName')]",
+        "wan_hub_connection_name": "[concat(variables('vnet_name'),'connection')]",
 
         "vnet_cidr": "[parameters('spokeVNET-Prefix')]",
         "vnet_name": "[parameters('spokeVNET-Name')]",
@@ -176,7 +177,7 @@
                                 "allowRemoteVnetToUseHubVnetGateways": true,
                                 "enableInternetSecurity": true
                               },
-                              "name": "vnetconnection1"
+                              "name": "[variables('wan_hub_connection_name')]",
                             }
                           ]
                     }
