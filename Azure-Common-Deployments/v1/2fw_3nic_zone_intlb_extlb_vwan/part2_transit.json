@@ -235,7 +235,6 @@
       },
       "password": {
         "type": "securestring",
-        "defaultValue": "Pal0Alt0@123",
         "minLength": 12,
         "maxLength": 72,
         "metadata": {
@@ -251,7 +250,7 @@
       },
       "hubPeerAddress": {
         "type": "string",
-        "defaultValue": "52.188.30.26",
+        "defaultValue": "5.5.5.5",
         "metadata": {
           "description": "Enter the vWAN Hub's VPN Gateway Address.  If no VPN Gateway exist, use dummy IP."
         }
@@ -710,9 +709,7 @@
                             "location": "[resourceGroup().location]",
                             "properties": {
                               "localNetworkAddressSpace": {
-                                "addressPrefixes": [
-                                  "10.0.0.0/16"
-                                ]
+                                "addressPrefixes": []
                               },
                               "gatewayIpAddress": "[variables('vwan_gateway_ip')]",
                               "bgpSettings": {
