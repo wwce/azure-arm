@@ -12,10 +12,12 @@ If you do not have a Virtual WAN, or you want to demo in a greenfield environmen
 
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_vwan%2Fpart1_vwan.json)
 
-**Before proceeding to Step 2, retrieve the Hub's VPN Gateway settings:
-1.  Navigate to the Hub.
-2.  Download the VPN Configuration File
-3.  Record the values: gatewayConfiguration/instance0, BgpPeeringAddresses/Instance0, & PSK:
+**Before proceeding to Part 2** r
+
+1.  Retrieve the Hub's VPN Gateway settings:
+    * Navigate to the Hub.
+    * Download the VPN Configuration File
+    * Record the values: **IpAddresses/instance0**, **BgpPeeringAddresses/Instance0**, & **PSK**:
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_zone_intlb_extlb_vwan_vpn_config.png">
