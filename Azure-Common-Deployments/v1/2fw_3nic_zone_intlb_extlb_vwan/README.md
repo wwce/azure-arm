@@ -9,10 +9,9 @@ This build includes 3 templates to deploy different resources for securing egres
 ## Part 1: Create Virtual WAN / Hub / Hub VPN Gateway
 This part creates a Virtual WAN, Virtual Hub, and Virtual Hub's VPN Gateway. 
 
-
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_vwan%2Fpart1_vwan.json)
-</br>
 **Run Time:** ~ *1 Hour*
+</br>
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_vwan%2Fpart1_vwan.json)
 
 ## Part 2: Create Security VNET with VM-Series
 This part deploys a VNET with 4 subnets (mgmt, untrust, trust, GatewaySubnet) and 2 x VM-Series firewalls.  The GatewaySubnet hosts a Virtual Network Gateway that connects to the Virtual Hub's VPN Gateway.  A route table(GatewaySubnet-RTB) is assigned to the GatewaySubnet to direct traffic from Virtual WAN to the VM-Series internal load balancer.
@@ -26,9 +25,9 @@ Before launching the template, perform the following:
 <img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_zone_intlb_extlb_vwan_vpn_config.png">
 </p>
 
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_vwan%2Fpart2_security.json)
-</br>
 **Run Time:** ~ *45 Minutes*
+</br>
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_vwan%2Fpart2_security.json)
 
 ## Part 3: Connect Security VNET's Virtual Network Gateway to Azure Virtual WAN
 1. Open the Local Network Gateway and change the ASN from 65510 to 65515.
