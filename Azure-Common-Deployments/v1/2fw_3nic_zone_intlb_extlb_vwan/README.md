@@ -3,35 +3,41 @@
 ## Overview
 This build includes 3 templates to deploy different resources for securing egress traffic from vWAN Hub Connections through a pair of VM-Series firewalls.
 <p align="center">
-<img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_zone_intlb_extlb.png">
+<img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_zone_intlb_extlb_vwan.png">
 </p>
 
 ## Part 1: Create Virtual WAN / Hub / Hub VPN Gateway
 **Run Time:** *1 Hour*
+</br>
+</br>
 If you do not have a Virtual WAN, or you want to demo in a greenfield environment, run this template to create a Virtual WAN, the Virtual Hub, and the Hub's VPN Gateway.
 
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_wan%2Fpart1_vwan.json)
-
-**Before proceeding to Part 2** r
-
-1.  Retrieve the Hub's VPN Gateway settings:
-    * Navigate to the Hub.
-    * Download the VPN Configuration File
-    * Record the values: **IpAddresses/instance0**, **BgpPeeringAddresses/Instance0**, & **PSK**:
-
-<p align="center">
-<img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_zone_intlb_extlb_vwan_vpn_config.png">
-</p>
-
-
-
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_wan%2Fpart1_wan.json)
 
 
 ## Part 2: Create Transit VNET with Load Balanced VM-Series
 **Run Time:** *35 Minutes*
 </br>
 </br>
-This part deploys a Transit VNET with 4 subnets: mgmt, untrust, trust, and GatewaySubnet.  2 x VM-Series firewalls are deployed with an interface in the mgmt, untrust, and trust subnets.  The GatewaySubnet will have a route table assigned to handle traffic from the vWAN Hub.  
+This part deploys a VNET with 4 subnets (mgmt, untrust, trust, GatewaySubnet). 2 VM-Series firewalls are deployed with an interface in the mgmt, untrust, and trust subnets.  The GatewaySubnet hosts a Virtual Network Gateway that connects to the Virtual Hub's VPN Gateway.  The Gateway Subnet will have a route table assigned (GatewaySubnet-RTB) that routes traffic from Virtual WAN to the VM-Series internal load balancer.
+
+1. Retrieve the Hub's VPN Gateway settings from Part 1:
+    * Navigate to the Hub.
+    * Download the VPN Configuration File
+    * Copy and paste the values from **IpAddresses/instance0**, **BgpPeeringAddresses/Instance0**, & **PSK** into the corresponding template values
+
+Colons can be used to align columns.
+
+| VPN Configuration File        | Part 2 Template Values |
+| ----------------------------- | ---------------------- |
+| IpAddresses/instance0         | Hub Peer Address       |
+| BgpPeeringAddresses/Instance0 | Hub BGP Address        |
+| PSK                           | Hub Shared Key         |
+  
+<p align="center">
+<img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_zone_intlb_extlb_vwan_vpn_config.png">
+</p>
+
 
 Connect the Transit VNET's Virtual Network Gateway to the vWAN Hub.
 * Copy the Virtual Network Gateway's Public IP address under Properties. 
