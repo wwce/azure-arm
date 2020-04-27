@@ -20,28 +20,25 @@ If you do not have a Virtual WAN, or you want to demo in a greenfield environmen
 </br>
 This part deploys a VNET with 4 subnets (mgmt, untrust, trust, GatewaySubnet). 2 VM-Series firewalls are deployed with an interface in the mgmt, untrust, and trust subnets.  The GatewaySubnet hosts a Virtual Network Gateway that connects to the Virtual Hub's VPN Gateway.  The Gateway Subnet will have a route table assigned (GatewaySubnet-RTB) that routes traffic from Virtual WAN to the VM-Series internal load balancer.
 
-1. Retrieve the Hub's VPN Gateway settings from Part 1:
-    * Navigate to the Hub's VPN Sites.
-    * Download the VPN Configuration File
-    * Copy the values from **IpAddresses/instance0**, **BgpPeeringAddresses/Instance0**, & **PSK** and paste them into the template fields for **Hub Peer Address**, **Hub BGP Address**, & **Hub Shared Key**.
+1. Download the Hub's VPN Gateway Configuration file from Part 1.
+2. Copy the values: **IpAddresses/Instance0**, **BgpPeeringAddresses/Instance0**, & **PSK** 
+3. Paste the values into the following template fields, respectively: **Hub Peer Address**, **Hub BGP Address**, & **Hub Shared Key**.
   
 <p align="center">
 <img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_zone_intlb_extlb_vwan_vpn_config.png">
 </p>
 
 
-Connect the Transit VNET's Virtual Network Gateway to the vWAN Hub.
-* Copy the Virtual Network Gateway's Public IP address under Properties. 
-* Go to the Hub's VPN settings and change the remote sites IP to match the Transit Virtual Network Gateway's IP.
-* Download Virtual Hub's VPN Configuration File
-* Open Transit VNET's Local Network Gateway
-    * Set the BGP ASN to 65515.  This is the ASN that Virtual WAN uses.
-    * The Local Network Gateway's IP address should be the Instance0 value from the VPN configuration file in Part 1.
+## Part 3: Connect Security VNET's Virtual Network Gateway to Azure Virtual WAN
+1. Open the Local Network Gateway and change the ASN from 65510 to 65515.
+2. Open the Virtual Netowrk Gateway, click Properties, and copy the Public IP Address, BGP IP Address, & BGP ASN.
+3. Open the Virtual Hub's VPN Connection page and paste the values from Step 2.
 
+It may take up to 10 minutes for the connection to appear as "Connected".
 
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_vwan%2Fpart2_security.json)
 
-## Part 3: Create Hub Spoke VNET
+## Part 4: Create Hub Spoke VNET
 **Run Time:** *15 Minutes*
 </br>
 </br>
