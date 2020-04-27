@@ -17,7 +17,8 @@ If you do not have a Virtual WAN, or you want to demo in a greenfield environmen
 2.  Download the VPN Configuration File
 3.  Record the values: gatewayConfiguration/instance0, BgpPeeringAddresses/Instance0, & PSK:
 
-<img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_zone_intlb_extlb_vwan_vpn_settings.png">
+<p align="center">
+<img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_zone_intlb_extlb_vwan_vpn_config.png">
 </p>
 
 
