@@ -263,7 +263,7 @@
         }
       },
       "hubSharedKey": {
-        "type": "securestring",
+        "type": "string",
         "metadata": {
           "description": "Enter the vWAN Hub's VPN Gateway Address.  If no VPN Gateway exist, use dummy IP."
         }
