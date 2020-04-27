@@ -12,8 +12,7 @@ This build includes 3 templates to deploy different resources for securing egres
 </br>
 If you do not have a Virtual WAN, or you want to demo in a greenfield environment, run this template to create a Virtual WAN, the Virtual Hub, and the Hub's VPN Gateway.
 
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_wan%2Fpart1_wan.json)
-
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_vwan%2Fpart1_vwan.json)
 
 ## Part 2: Create Transit VNET with Load Balanced VM-Series
 **Run Time:** *35 Minutes*
@@ -24,15 +23,7 @@ This part deploys a VNET with 4 subnets (mgmt, untrust, trust, GatewaySubnet). 2
 1. Retrieve the Hub's VPN Gateway settings from Part 1:
     * Navigate to the Hub.
     * Download the VPN Configuration File
-    * Copy and paste the values from **IpAddresses/instance0**, **BgpPeeringAddresses/Instance0**, & **PSK** into the corresponding template values
-
-Colons can be used to align columns.
-
-| VPN Configuration File        | Part 2 Template Values |
-| ----------------------------- | ---------------------- |
-| IpAddresses/instance0         | Hub Peer Address       |
-| BgpPeeringAddresses/Instance0 | Hub BGP Address        |
-| PSK                           | Hub Shared Key         |
+    * Copy and paste the values from **IpAddresses/instance0**, **BgpPeeringAddresses/Instance0**, & **PSK** into Hub Peer Address, Hub BGP Address, and Hub Shared Key template fields.
   
 <p align="center">
 <img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Common-Deployments/v1/images/2fw_3nic_zone_intlb_extlb_vwan_vpn_config.png">
