@@ -12,7 +12,7 @@ This part creates a Virtual WAN, Virtual Hub, and Virtual Hub's VPN Gateway.
 
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_vwan%2Fpart1_vwan.json)
 </br>
-**Run Time:** *~ 1 Hour*
+**Run Time:** ~ *1 Hour*
 
 ## Part 2: Create Security VNET with VM-Series
 This part deploys a VNET with 4 subnets (mgmt, untrust, trust, GatewaySubnet) and 2 x VM-Series firewalls.  The GatewaySubnet hosts a Virtual Network Gateway that connects to the Virtual Hub's VPN Gateway.  A route table(GatewaySubnet-RTB) is assigned to the GatewaySubnet to direct traffic from Virtual WAN to the VM-Series internal load balancer.
@@ -28,7 +28,7 @@ Before launching the template, perform the following:
 
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_vwan%2Fpart2_security.json)
 </br>
-**Run Time:** *~ 45 Minutes*
+**Run Time:** ~ *45 Minutes*
 
 ## Part 3: Connect Security VNET's Virtual Network Gateway to Azure Virtual WAN
 1. Open the Local Network Gateway and change the ASN from 65510 to 65515.
