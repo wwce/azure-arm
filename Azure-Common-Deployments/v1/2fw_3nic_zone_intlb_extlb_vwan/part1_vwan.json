@@ -49,7 +49,7 @@
     "wan_sku": "[parameters('WAN-SKU')]",
     "hub_name": "[parameters('hub-Name')]",
     "hub_address_prefix": "[parameters('hub-AddressPrefix')]",
-    "hub_vpn_gateway_name": "[parameters('hub-GatewayName')]",
+    "hub_vpn_gateway_name": "[parameters('hub-GatewayName')]"
   },
   "resources": [{
       "type": "Microsoft.Network/virtualWans",
