@@ -34,11 +34,11 @@
   "variables": {
     "location": "[resourceGroup().location]",
     "api_version": "2019-09-01",
-    "wan_name": "[parameters('WAN-Name')]",
+    "wan_name": "[parameters('WANName')]",
     "wan_sku": "Standard",
-    "hub_name": "[parameters('hub-Name')]",
-    "hub_address_prefix": "[parameters('hub-AddressPrefix')]",
-    "hub_vpn_gateway_name": "[parameters('hub-VPNGatewayName')]"
+    "hub_name": "[parameters('hubName')]",
+    "hub_vpn_gateway_name": "[parameters('hubVPNGatewayName')]",
+    "hub_address_prefix": "[parameters('hubAddressPrefix')]"
   },
   "resources": [{
       "type": "Microsoft.Network/virtualWans",
