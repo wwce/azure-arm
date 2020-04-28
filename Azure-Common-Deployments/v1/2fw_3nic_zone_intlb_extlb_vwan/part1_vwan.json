@@ -9,22 +9,18 @@
         "description": "Name of the Virtual Wan."
       }
     },
-    "WAN-SKU": {
-      "type": "string",
-      "defaultValue": "Standard",
-      "metadata": {
-        "description": "Sku of the Virtual Wan."
-      },
-      "allowedValues": [
-        "Standard",
-        "Basic"
-      ]
-    },
     "hub-Name": {
       "type": "string",
       "defaultValue": "hub01",
       "metadata": {
         "description": "Name of the Virtual Hub. A virtual hub is created inside a virtual wan."
+      }
+    },
+    "hub-VPNGatewayName": {
+      "type": "string",
+      "defaultValue": "hub01-vpn-gateway",
+      "metadata": {
+        "description": "Name of the Vpn Gateway. A vpn gateway is created inside a virtual hub."
       }
     },
     "hub-AddressPrefix": {
@@ -33,23 +29,16 @@
       "metadata": {
         "description": "The hub address prefix. This address prefix will be used as the address prefix for the hub vnet"
       }
-    },
-    "hub-GatewayName": {
-      "type": "string",
-      "defaultValue": "vpn-gateway",
-      "metadata": {
-        "description": "Name of the Vpn Gateway. A vpn gateway is created inside a virtual hub."
-      }
     }
   },
   "variables": {
     "location": "[resourceGroup().location]",
     "api_version": "2019-09-01",
     "wan_name": "[parameters('WAN-Name')]",
-    "wan_sku": "[parameters('WAN-SKU')]",
+    "wan_sku": "Standard",
     "hub_name": "[parameters('hub-Name')]",
     "hub_address_prefix": "[parameters('hub-AddressPrefix')]",
-    "hub_vpn_gateway_name": "[parameters('hub-GatewayName')]"
+    "hub_vpn_gateway_name": "[parameters('hub-VPNGatewayName')]"
   },
   "resources": [{
       "type": "Microsoft.Network/virtualWans",
