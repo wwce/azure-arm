@@ -2,32 +2,32 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "WAN-Name": {
+    "WANName": {
       "type": "string",
       "defaultValue": "virtual-wan",
       "metadata": {
-        "description": "Name of the Virtual Wan."
+        "description": "Name of the virtual WAN."
       }
     },
-    "hub-Name": {
+    "hubName": {
       "type": "string",
-      "defaultValue": "hub01",
+      "defaultValue": "hub1",
       "metadata": {
-        "description": "Name of the Virtual Hub. A virtual hub is created inside a virtual wan."
+        "description": "Name of the virtual hub. This virtual hub is created inside the virtual WAN."
       }
     },
-    "hub-VPNGatewayName": {
+    "hubVPNGatewayName": {
       "type": "string",
-      "defaultValue": "hub01-vpn-gateway",
+      "defaultValue": "hub1-vpn-gateway",
       "metadata": {
-        "description": "Name of the Vpn Gateway. A vpn gateway is created inside a virtual hub."
+        "description": "Name of the hub's VPN gateway. This VPN gateway is created inside the virtual hub."
       }
     },
-    "hub-AddressPrefix": {
+    "hubAddressPrefix": {
       "type": "string",
       "defaultValue": "10.10.0.0/24",
       "metadata": {
-        "description": "The hub address prefix. This address prefix will be used as the address prefix for the hub vnet"
+        "description": "Enter the hub's address prefix. This address prefix will be used as the address prefix for the hub's virtual network."
       }
     }
   },
