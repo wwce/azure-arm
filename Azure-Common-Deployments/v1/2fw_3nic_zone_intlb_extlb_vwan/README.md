@@ -9,7 +9,7 @@ This build includes 3 templates to deploy different resources for securing egres
 ## Part 1: Create Virtual WAN / Hub / Hub VPN Gateway
 This part creates a Virtual WAN, Virtual Hub, and Virtual Hub's VPN Gateway. 
 
-**Run Time:** ~ *1 Hour*
+**Run Time:** ~ *45 Minutes*
 </br>
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2FAzure-Common-Deployments%2Fv1%2F2fw_3nic_zone_intlb_extlb_vwan%2Fpart1_vwan.json)
 
