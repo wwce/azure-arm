@@ -6,6 +6,40 @@
         "author": "Matt McLimans (mmclimans@paloaltonetworks.com)"
     },
     "parameters": {
+        "spokeNamePrefix": {
+            "type": "string",
+            "defaultValue": "spoke1-",
+            "metadata": {
+                "description": "Enter a naming prefix to append to the resources created."
+            }
+        },
+        "spokeVNETPrefix": {
+            "type": "string",
+            "defaultValue": "192.168.1.0/24",
+            "metadata": {
+                "description": "Enter a IP prefix for the virtual network."
+            }
+        },
+        "spokeSubnetPrefix": {
+            "type": "string",
+            "defaultValue": "192.168.1.0/24",
+            "metadata": {
+                "description": "Enter a IP prefix for the VNET's subnet."
+            }
+        },
+        "spokeUsername": {
+            "type": "string",
+            "defaultValue": "paloalto",
+            "metadata": {
+                "description": "Enter a username for the test VM."
+            }
+        },
+        "spokePassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Enter a password for the test VM."
+            }
+        },
         "existing-WANName": {
             "type": "string",
             "defaultValue": "virtual-wan",
@@ -26,52 +60,18 @@
                 "description": "Name of the Virtual Hub. A virtual hub is created inside a Virtual WAN."
             }
         },
-        "existingHub-AddressPrefix": {
+        "existing-HubAddressPrefix": {
             "type": "string",
             "defaultValue": "10.10.0.0/24",
             "metadata": {
                 "description": "The hub address prefix. This address prefix will be used as the address prefix for the hub vnet"
             }
         },
-        "existingHub-VPNGatewayName": {
+        "existing-Hub VPNGatewayName": {
             "type": "string",
             "defaultValue": "hub1-vpn-gateway",
             "metadata": {
                 "description": "Name of the Vpn Gateway. A vpn gateway is created inside a virtual hub."
-            }
-        },
-        "spokeNamePrefix": {
-            "type": "string",
-            "defaultValue": "spoke1-",
-            "metadata": {
-                "description": "Enter a name for the virtual network."
-            }
-        },
-        "spokeVNETPrefix": {
-            "type": "string",
-            "defaultValue": "192.168.1.0/24",
-            "metadata": {
-                "description": "Enter a prefix for the virtual network."
-            }
-        },
-        "spokeSubnetPrefix": {
-            "type": "string",
-            "defaultValue": "192.168.1.0/24",
-            "metadata": {
-                "description": "Enter a IP prefix for the VNET's subnet."
-            }
-        },
-        "spokeUsername": {
-            "type": "string",
-            "defaultValue": "paloalto",
-            "metadata": {
-                "description": "Enter a IP prefix for the VNET's subnet."
-            }
-        },
-        "spokePassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Enter a IP prefix for the VNET's subnet."
             }
         }
     },
@@ -83,8 +83,8 @@
         "wan_rg": "[parameters('existing-WANResourceGroup')]",
         "wan_id": "[concat(resourceId(variables('wan_rg'), 'Microsoft.Network/virtualWans', parameters('existing-WANName')))]",
         "hub_name": "[parameters('existing-HubName')]",
-        "hub_address_prefix": "[parameters('existingHub-AddressPrefix')]",
-        "hub_vpn_gateway_id": "[concat(resourceId(variables('wan_rg'), 'Microsoft.Network/vpnGateways', parameters('existingHub-VPNGatewayName')))]",
+        "hub_address_prefix": "[parameters('existing-HubAddressPrefix')]",
+        "hub_vpn_gateway_id": "[concat(resourceId(variables('wan_rg'), 'Microsoft.Network/vpnGateways', parameters('existing-Hub VPNGatewayName')))]",
         "hub_connection_name": "[concat(variables('vnet_name'),'-connection')]",
         "vnet_cidr": "[parameters('spokeVNETPrefix')]",
 
