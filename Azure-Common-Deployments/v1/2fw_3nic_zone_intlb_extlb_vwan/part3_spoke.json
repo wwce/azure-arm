@@ -8,7 +8,7 @@
     "parameters": {
         "spokeNamePrefix": {
             "type": "string",
-            "defaultValue": "spoke1-",
+            "defaultValue": "spoke",
             "metadata": {
                 "description": "Enter a naming prefix to append to the resources created."
             }
