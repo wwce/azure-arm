@@ -69,10 +69,15 @@
     "imageVersion": {
       "type": "string",
       "allowedValues": [
-        "8.0.0",
-        "8.1.0",
-        "latest"
-      ],
+                "8.0.0",
+                "8.1.0",
+                "8.1.9",
+                "9.0.1",
+                "9.0.4",
+                "9.0.6",
+                "9.1.0",
+                "latest"
+            ],
       "metadata": {
         "description": "PAN OS Version"
       },
