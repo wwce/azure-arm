@@ -26,7 +26,8 @@ Deploy 2 x VM-Series (3 NIC) with External Load Balancer (Basic SKU) and 2 x Ubu
 
 ### [2fw_3nic_avset_extlb](https://github.com/wwce/azure-arm/tree/master/azure-stack/standard_deployments/v1/2fw_3nic_avset_extlb)
 Deploy 2 x VM-Series (3 NIC) with Public Load Balancer (Basic SKU)
-<img style="float: left;" src="https://github.com/wwce/azure-arm/raw/master/Azure-Stack/standard_deployments/v1/images/2fw_3nic_avset_extlb.png" alt="drawing" width="500"/>
+<img style="float: left;" src="https://github.com/wwce/azure-arm/raw/master/Azure-Stack/standard_deployments/v1/images/2fw_3nic_avset_extlb.png" 
+alt="drawing" width="500"/>
 
 ---
 
