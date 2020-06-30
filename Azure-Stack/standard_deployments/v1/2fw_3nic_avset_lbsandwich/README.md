@@ -1,29 +1,44 @@
-# Azure-Shared-Firewall-Ref-Architecture
-Deploy a shared firewall infrastructure described in the Paloaltonetworks Azure Reference Architecture Guide
+## 2 x VM-Series (3 NIC) with Public Load Balancer (Basic SKU) and 2 x Ubuntu servers
 
+<p align="center">
+<img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Stack/standard_deployments/v1/images/2fw_3nic_avset_lbsandwich.png">
+</p>
 
-![alt text](https://raw.githubusercontent.com/jharris10/shared-fw-ref-architecture/master/Architecture-Diagram.png)
+### Overview
+This template deploys the following into a new or existing VNET with 3 subnets:
+* 2 x VM-Series firewalls
+    * 3 x Interfaces
+        * management: `<fw_name>-nic0`
+        * dataplane1: `<fw_name>-nic1`
+        * dataplane2: `<fw_name>-nic2`
+    * Managed Disks
+    * BYOL License (Only)
+    * (Future) [Bootstrapping via VHD attachment]
+    * (Optional) Public IPs for interfaces:
+        * management: `<fw_name>-nic0-pip`
+        * dataplane1: `<fw_name>-nic1-pip`
+* 2 x Network Security Groups
+    *  management: `<nsg_name>-mgmt`
+    *  dataplane: `<nsg_name>-data`
+* 2 x Availability Set
+* 2 x Ubuntu servers
+* 1 x Basic SKU Public Load Balancer (Public)
+    *  Backend Pool: `<fw1_name>-nic1` & `<fw2_name>-nic1`
+* 1 x Basic SKU Public Load Balancer (Private)
+    *  Backend Pool: `<server_name>-nic1` & `<server_name>-nic1`
 
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjharris10%2Fshared-fw-ref-architecture%2Fmaster%2FazureDeploy.json)
+### Important Considerations
 
-This template automates deployment of firewall LB sandwich environment for Egress Security.
-It includes following components:
+#### VNET Considerations
+By default, the template will use the deployment resource group as the location of the VNET.  If the VNET is in a different resource group, the resource group must be specified at deployment time. If deploying a **new** VNET into a **different** resource group, the resource group **must exist** before deployment.
 
-- One Internal Load Balancer (LB-Egress) - "Standard SKU"
-- One External TCP Load Balancer (LB-Ingress) -"Standard - SKU"
-- Two Palo Alto Networks Firewalls
-- One Ubuntu Server to test outbound traffic
-- Multiple Subnets and UDRs to support the traffic flow
+#### Template Modifications
+Everything resource in the template is built strictly with variables.  The variables are defined based on the parameters values entered at deployment.  If you need to modify the template, most modifications can be done directly in the variable and parameter section without modifying the resource configuration.  
 
- The template allows selection of:
- - New or Existing VNET
- - Bootstraping
- - BYOL or PAYG Licensing
- and creates all the infrastructure and appropriate UDRs.
-
- For information on how to bootstrap the VM-Series firewall running PAN-OS 8.1 and up in Azure see [Bootstrap Instructions](https://www.paloaltonetworks.com/documentation/81/virtualization/virtualization/bootstrap-the-vm-series-firewall/bootstrap-the-vm-series-firewall-in-azure#idd51f75b8-e579-44d6-a809-2fafcfe4b3b6)
+#### First Deployment
+Most deployment failures are due to conflicts with existing resources.  If this is your first time running the template, it is recommended to launch the template into a **new** resource group.
 
  
- If bootstraping with default configuration file is used default credentials are:
+ If deploying with the included configuration file, the default credentials are:
  - Username: paloalto
  - Password: PaloAlt0!123!!
