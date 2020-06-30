@@ -1,0 +1,1032 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnetNewOrExisting": {
+            "defaultValue": "new",
+            "allowedValues": [
+                "new",
+                "existing"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "Identify whether to use a new or existing vnet"
+            }
+        },
+        "virtualNetworkName": {
+            "defaultValue": "test-vnet",
+            "type": "String",
+            "metadata": {
+                "description": "Virtual Network Name"
+            }
+        },
+        "virtualNetworkAddressPrefix": {
+            "defaultValue": "10.0.0.0/16",
+            "type": "String",
+            "metadata": {
+                "description": "CIDR for Virtual Network"
+            }
+        },
+        "mgmtSubnetName": {
+            "defaultValue": "Management",
+            "type": "String",
+            "metadata": {
+                "description": "Subnet for Management Network"
+            }
+        },
+        "mgmtSubnetPrefix": {
+            "defaultValue": "10.0.0.0/24",
+            "type": "String",
+            "metadata": {
+                "description": "CIDR for Management Network"
+            }
+        },
+        "untrustSubnetName": {
+            "defaultValue": "Untrust",
+            "type": "String",
+            "metadata": {
+                "description": "Subnet for firewall Untrust Network"
+            }
+        },
+        "untrustSubnetPrefix": {
+            "defaultValue": "10.0.1.0/24",
+            "type": "String",
+            "metadata": {
+                "description": "CIDR for firewall Untrust Network"
+            }
+        },
+        "trustSubnetName": {
+            "defaultValue": "Trust",
+            "type": "String",
+            "metadata": {
+                "description": "Subnet for firewall Trust Network"
+            }
+        },
+        "trustSubnetPrefix": {
+            "defaultValue": "10.0.2.0/24",
+            "type": "String",
+            "metadata": {
+                "description": "Subnet for firewall Trust Network"
+            }
+        },
+        "serverSubnetName": {
+            "defaultValue": "Servers",
+            "type": "String",
+            "metadata": {
+                "description": "Subnet name for server Network"
+            }
+        },
+        "serverSubnetPrefix": {
+            "defaultValue": "10.0.3.0/24",
+            "type": "String",
+            "metadata": {
+                "description": "Subnet for server Network"
+            }
+        },
+        "serverLBFrontEndAddress": {
+            "defaultValue": "10.0.3.100",
+            "type": "String",
+            "metadata": {
+                "description": "IP address for server SLB front end"
+            }
+        },
+        "imageSku": {
+            "defaultValue": "byol",
+            "allowedValues": [
+                "byol"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "Only byol (Bring Your Own License) is supported in Azure Stack at this time."
+            }
+        },
+        "firewallVmSize": {
+            "defaultValue": "Standard_DS3_v2",
+            "allowedValues": [
+                "Standard_DS3_v2",
+                "Standard_DS4_v2",
+                "Standard_DS5_v2"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "Azure VM size for VM-Series"
+            }
+        },
+        "serverVmSize": {
+            "defaultValue": "Standard_DS1_v2",
+            "allowedValues": [
+                "Standard_DS1_v2",
+                "Standard_DS2_v2",
+                "Standard_D1_v2",
+                "Standard_D2_v2"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "Azure VM size for VM-Series"
+            }
+        },
+        "disktype": {
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+                "Standard_LRS",
+                "Premium_LRS"
+            ],
+            "type": "String"
+        },
+        "imageVersion": {
+            "defaultValue": "latest",
+            "allowedValues": [
+                "latest",
+                "9.0.4",
+                "8.1.9",
+                "8.0.17"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "PAN OS Version"
+            }
+        },
+        "username": {
+            "defaultValue": "pandemo",
+            "type": "String",
+            "metadata": {
+                "description": "Username of the administrator account of VM instances"
+            }
+        },
+        "password": {
+            "defaultValue": "Dem0pa$$w0rd",
+            "type": "SecureString",
+            "metadata": {
+                "description": "Password for the administrator account of all VM instances. Must be specified if Authentication Type is 'password'."
+            }
+        },
+        "networkSecurityGroupInboundIP": {
+            "defaultValue": "0.0.0.0/0",
+            "type": "String",
+            "metadata": {
+                "description": "Your source public IP address. Added to the inbound NSG on eth0 (MGMT), to restrict access to the deployment."
+            }
+        },
+        "firewall-count": {
+            "defaultValue": 2,
+            "type": "Int",
+            "metadata": {
+                "description": "Number of firewall VMs to be created."
+            }
+        },
+        "ubuntuOSVersion": {
+            "type": "string",
+            "defaultValue": "18.04-LTS",
+            "allowedValues": [
+                "12.04.5-LTS",
+                "14.04.5-LTS",
+                "16.04.0-LTS",
+                "18.04-LTS"
+            ],
+            "metadata": {
+                "description": "The Ubuntu version for the VM. This will pick a fully patched image of the specified Ubuntu version."
+            }
+        },
+        "server-count": {
+            "defaultValue": 2,
+            "type": "Int",
+            "metadata": {
+                "description": "Number of server VMs to be created."
+            }
+        },
+        "virtualNetworkExistingRGName": {
+            "defaultValue": "",
+            "type": "String",
+            "metadata": {
+                "description": "Name of resource group of EXISTING VNET"
+            }
+        }
+    },
+    "variables": {
+        "compute-api": "2017-12-01",
+        "network-api": "2017-10-01",
+        "vnetID": "[resourceId(parameters('virtualNetworkExistingRGName'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "firewall-name-prefix": "firewall",
+        "server-name-prefix": "server",
+        "uniqueId": "[uniqueString(resourceGroup().id)]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "[variables('network-api')]",
+            "name": "[parameters('virtualNetworkName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', 'Allow-All')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', 'Management')]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('virtualNetworkAddressPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('mgmtSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('mgmtSubnetPrefix')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'Management')]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "[parameters('untrustSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('untrustSubnetPrefix')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'Allow-All')]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "[parameters('trustSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('trustSubnetPrefix')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'Allow-All')]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "[parameters('serverSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('serverSubnetPrefix')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'Allow-All')]"
+                            }
+                        }
+                    }
+                ]
+            },
+            "condition": "[equals(parameters('vnetNewOrExisting'),'new')]"
+        },
+                {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "[variables('network-api')]",
+            "name": "Allow-All",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "Allow-All-In",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Allow-All-Out",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Outbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ],
+                "defaultSecurityRules": [
+                    {
+                        "name": "AllowVnetInBound",
+                        "properties": {
+                            "description": "Allow inbound traffic from all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Inbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowAzureLoadBalancerInBound",
+                        "properties": {
+                            "description": "Allow inbound traffic from azure load balancer",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "AzureLoadBalancer",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Inbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllInBound",
+                        "properties": {
+                            "description": "Deny all inbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Inbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowVnetOutBound",
+                        "properties": {
+                            "description": "Allow outbound traffic from all VMs to all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Outbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowInternetOutBound",
+                        "properties": {
+                            "description": "Allow outbound traffic from all VMs to Internet",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "Internet",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Outbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllOutBound",
+                        "properties": {
+                            "description": "Deny all outbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Outbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "[variables('network-api')]",
+            "name": "Management",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "Allow-All-In",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "[parameters('networkSecurityGroupInboundIP')]",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Allow-All-Out",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Outbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ],
+                "defaultSecurityRules": [
+                    {
+                        "name": "AllowVnetInBound",
+                        "properties": {
+                            "description": "Allow inbound traffic from all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Inbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowAzureLoadBalancerInBound",
+                        "properties": {
+                            "description": "Allow inbound traffic from azure load balancer",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "AzureLoadBalancer",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Inbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllInBound",
+                        "properties": {
+                            "description": "Deny all inbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Inbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowVnetOutBound",
+                        "properties": {
+                            "description": "Allow outbound traffic from all VMs to all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Outbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowInternetOutBound",
+                        "properties": {
+                            "description": "Allow outbound traffic from all VMs to Internet",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "Internet",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Outbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllOutBound",
+                        "properties": {
+                            "description": "Deny all outbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Outbound",
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "[variables('network-api')]",
+            "name": "[concat(variables('firewall-name-prefix'), copyindex(1), '-untrust-pip')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[concat(variables('firewall-name-prefix'), copyindex(1), '-untrust-pip')]"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static",
+                "publicIPAddressVersion": "IPv4"
+            },
+            "copy": {
+                "name": "fwPipLoop",
+                "count": "[parameters('firewall-count')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "[variables('network-api')]",
+            "name": "[concat(variables('firewall-name-prefix'), copyindex(1), '-mgmt')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups','Allow-All')]"
+            ],
+            "tags": {
+                "displayName": "[concat(variables('firewall-name-prefix'), copyindex(1), '-mgmt')]"
+            },
+            "properties": {
+                "enableIPForwarding": true,
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('firewall-name-prefix'), copyindex(1), '-mgmt-pip'))]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/',parameters('mgmtSubnetName'))]"
+                            }
+                        }
+                    }
+                ],
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups','Allow-All')]"
+                }
+            },
+            "copy": {
+                "name": "nic1Loop",
+                "count": "[parameters('firewall-count')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "[variables('network-api')]",
+            "name": "[concat(variables('firewall-name-prefix'), copyindex(1), '-untrust')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+                "[resourceId('Microsoft.Network/loadBalancers', 'Ingress-SLB')]",
+                "fwPipLoop"
+            ],
+            "tags": {
+                "displayName": "[concat(variables('firewall-name-prefix'), copyindex(1), '-untrust')]"
+            },
+            "properties": {
+                "enableIPForwarding": true,
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('firewall-name-prefix'), copyindex(1), '-untrust-pip'))]"
+                            },
+                            "subnet": {
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/',parameters('untrustSubnetName'))]"
+                            },
+                            "loadBalancerBackendAddressPools": [
+                                {
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'Ingress-SLB'), '/backendAddressPools/FW-AS')]"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "copy": {
+                "name": "nic1Loop",
+                "count": "[parameters('firewall-count')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "[variables('network-api')]",
+            "name": "[concat(variables('firewall-name-prefix'), copyindex(1), '-trust')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+            ],
+            "tags": {
+                "displayName": "[concat(variables('firewall-name-prefix'), copyindex(1), '-trust')]"
+            },
+            "properties": {
+                "enableIPForwarding": true,
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/',parameters('trustSubnetName'))]"
+                            }
+                        }
+                    }
+                ]
+            },
+            "copy": {
+                "name": "nic1Loop",
+                "count": "[parameters('firewall-count')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "[variables('network-api')]",
+            "name": "[concat(variables('server-name-prefix'), copyindex(1))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+                "[resourceId('Microsoft.Network/loadBalancers', 'Server-SLB')]"
+            ],
+            "tags": {
+                "displayName": "[concat(variables('server-name-prefix'), copyindex(1))]"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/',parameters('serverSubnetName'))]"
+                            },
+                            "loadBalancerBackendAddressPools": [
+                                {
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'Server-SLB'), '/backendAddressPools/Server-AS')]"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "copy": {
+                "name": "nic1Loop",
+                "count": "[parameters('server-count')]"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/availabilitySets",
+            "apiVersion": "[variables('compute-api')]",
+            "name": "FW-AS",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "tags": {},
+            "sku": {
+                "name": "Aligned"
+            },
+            "properties": {
+                "platformUpdateDomainCount": 2,
+                "platformFaultDomainCount": 2
+            },
+            "resources": []
+        },
+        {
+            "type": "Microsoft.Compute/availabilitySets",
+            "apiVersion": "[variables('compute-api')]",
+            "name": "Server-AS",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "tags": {},
+            "sku": {
+                "name": "Aligned"
+            },
+            "properties": {
+                "platformUpdateDomainCount": 2,
+                "platformFaultDomainCount": 2
+            },
+            "resources": []
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "[variables('compute-api')]",
+            "name": "[concat(variables('firewall-name-prefix'), copyindex(1))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/availabilitySets', 'FW-AS')]",
+                "[concat('Microsoft.Network/networkInterfaces/', concat(variables('firewall-name-prefix'), copyindex(1), '-mgmt'))]",
+                "[concat('Microsoft.Network/networkInterfaces/', concat(variables('firewall-name-prefix'), copyindex(1), '-untrust'))]",
+                "[concat('Microsoft.Network/networkInterfaces/', concat(variables('firewall-name-prefix'), copyindex(1), '-trust'))]"
+            ],
+            "tags": {
+                "displayName": "[concat(variables('firewall-name-prefix'), copyindex(1))]"
+            },
+            "plan": {
+                "name": "[parameters('imageSku')]",
+                "product": "vmseries1",
+                "publisher": "paloaltonetworks"
+            },
+            "properties": {
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', 'FW-AS')]"
+                },
+                "osProfile": {
+                    "computerName": "VM-FW1",
+                    "adminUsername": "[parameters('Username')]",
+                    "adminPassword": "[parameters('Password')]"
+                },
+                "hardwareProfile": {
+                    "vmSize": "[parameters('firewallVmSize')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "paloaltonetworks",
+                        "offer": "vmseries1",
+                        "sku": "[parameters('imageSku')]",
+                        "version": "[parameters('imageVersion')]"
+                    },
+                    "osDisk": {
+                        "managedDisk": {
+                            "storageAccountType": "[parameters('disktype')]"
+                        },
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('firewall-name-prefix'), copyindex(1), '-mgmt'))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        },
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('firewall-name-prefix'), copyindex(1), '-untrust'))]",
+                            "properties": {
+                                "primary": false
+                            }
+                        },
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('firewall-name-prefix'), copyindex(1), '-trust'))]",
+                            "properties": {
+                                "primary": false
+                            }
+                        }
+                    ]
+                }
+            },
+            "copy": {
+                "name": "vmLoop",
+                "count": "[parameters('firewall-count')]"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "[variables('compute-api')]",
+            "name": "[concat(variables('server-name-prefix'), copyindex(1))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/availabilitySets', 'Server-AS')]",
+                "[concat('Microsoft.Network/networkInterfaces/', concat(variables('server-name-prefix'), copyindex(1)))]"
+            ],
+            "tags": {
+                "displayName": "[concat(variables('server-name-prefix'), copyindex(1))]"
+            },
+            "properties": {
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', 'Server-AS')]"
+                },
+                "osProfile": {
+                    "computerName": "server",
+                    "adminUsername": "[parameters('Username')]",
+                    "adminPassword": "[parameters('Password')]"
+                },
+                "hardwareProfile": {
+                    "vmSize": "[parameters('serverVmSize')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "[parameters('ubuntuOSVersion')]",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "managedDisk": {
+                            "storageAccountType": "[parameters('disktype')]"
+                        },
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('server-name-prefix'), copyindex(1)))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        }
+                    ]
+                }
+            },
+            "copy": {
+                "name": "vmLoop",
+                "count": "[parameters('server-count')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "[variables('network-api')]",
+            "name": "[concat(variables('firewall-name-prefix'), copyindex(1), '-mgmt-pip')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[concat(variables('firewall-name-prefix'), copyindex(1), '-mgmt-pip')]"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static",
+                "publicIPAddressVersion": "IPv4"
+            },
+            "copy": {
+                "name": "fwPipLoop",
+                "count": "[parameters('firewall-count')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "[variables('network-api')]",
+            "name": "Ingress-SLB-PIP",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "dnsSettings": {
+                    "domainNameLabel": "[concat('publiclb', variables('uniqueId'))]"
+                }
+            },
+            "resources": []
+        },
+        {
+            "type": "Microsoft.Network/loadBalancers",
+            "apiVersion": "[variables('network-api')]",
+            "name": "Ingress-SLB",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+                "[resourceId('Microsoft.Compute/availabilitySets', 'FW-AS')]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', 'Ingress-SLB-PIP')]"
+            ],
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "Ingress-SLB-FrontEnd",
+                        "properties": {
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'Ingress-SLB-PIP')]"
+                            }
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "FW-AS"
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "name": "Allow-80-in",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers','Ingress-SLB'), '/frontendIPConfigurations/Ingress-SLB-FrontEnd')]"
+                            },
+                            "protocol": "Tcp",
+                            "frontendPort": 80,
+                            "backendPort": 80,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 4,
+                            "loadDistribution": "SourceIPProtocol",
+                            "backendAddressPool": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'Ingress-SLB'), '/backendAddressPools/FW-AS')]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'Ingress-SLB'), '/probes/TCP-80')]"
+                            }
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "name": "TCP-80",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "port": 80,
+                            "intervalInSeconds": 5,
+                            "numberOfProbes": 2
+                        }
+                    }
+                ],
+                "inboundNatRules": [],
+                "outboundNatRules": [],
+                "inboundNatPools": []
+            },
+            "resources": []
+        },
+        {
+            "type": "Microsoft.Network/loadBalancers",
+            "apiVersion": "[variables('network-api')]",
+            "name": "Server-SLB",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+                "[resourceId('Microsoft.Compute/availabilitySets', 'Server-AS')]"
+            ],
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "Server-SLB-FrontEnd",
+                        "properties": {
+                            "privateIPAddress": "[parameters('serverLBFrontEndAddress')]",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/',parameters('serverSubnetName'))]"
+                            }
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "Server-AS"
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "name": "Allow-80-in",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers','Server-SLB'), '/frontendIPConfigurations/Server-SLB-FrontEnd')]"
+                            },
+                            "protocol": "Tcp",
+                            "frontendPort": 80,
+                            "backendPort": 80,
+                            "enableFloatingIP": false,
+                            "idleTimeoutInMinutes": 4,
+                            "loadDistribution": "SourceIPProtocol",
+                            "backendAddressPool": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'Server-SLB'), '/backendAddressPools/Server-AS')]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'Server-SLB'), '/probes/TCP-80')]"
+                            }
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "name": "TCP-80",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "port": 80,
+                            "intervalInSeconds": 5,
+                            "numberOfProbes": 2
+                        }
+                    }
+                ],
+                "inboundNatRules": [],
+                "outboundNatRules": [],
+                "inboundNatPools": []
+            },
+            "resources": []
+        }
+    ],
+    "outputs": {}
+}

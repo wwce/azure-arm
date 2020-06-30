@@ -1,0 +1,450 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "comments": "This template is released under an as-is, best effort, and is community supported.",
+    "author": "Matt McLimans (mmclimans@paloaltonetworks.com), Patrick Glynn (pglynn@paloaltonetworks.com)"
+  },
+  "parameters": {
+    "VNETOption": {
+      "type": "string",
+      "defaultValue": "Create new VNET",
+      "allowedValues": [
+        "Create new VNET",
+        "Use existing VNET"
+      ],
+      "metadata": {
+        "description": "If creating a new VNET, anything not specified in the template will be deleted."
+      }
+    },
+    "VNETResourceGroup": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "If you are deploying a VNET to a different resource than the firewalls, the resource group MUST exist before launch.  If deploying a VNET to the same resource group as the firewalls, leave the field blank or enter the main resource group name."
+      }
+    },
+    "VNETName": {
+      "type": "string",
+      "defaultValue": "vmseries-vnet",
+      "metadata": {
+        "description": "Enter a name for the virtual network."
+      }
+    },
+    "VNETPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/16",
+      "metadata": {
+        "description": "Enter a prefix for the virtual network."
+      }
+    },
+    "subnetName-Management": {
+      "type": "string",
+      "defaultValue": "mgmt-subnet",
+      "metadata": {
+        "description": "Enter a subnet name for the firewall's management interface."
+      }
+    },
+    "subnetPrefix-Management": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/24",
+      "metadata": {
+        "description": "Enter a subnet prefix for the firewall's management interface."
+      }
+    },
+    "FW1-Name": {
+      "type": "string",
+      "defaultValue": "vmseries-fw-vm1",
+      "metadata": {
+        "description": "Enter a name for the first firewall."
+      }
+    },
+    "FW1-IPManagement": {
+      "type": "string",
+      "defaultValue": "10.0.0.4",
+      "metadata": {
+        "description": "Enter a private IP address for firewall-1's management interface."
+      }
+    },
+    "licenseType": {
+      "type": "string",
+      "defaultValue": "byol",
+      "allowedValues": [
+        "byol"
+      ],
+      "metadata": {
+        "description": "More info: https://docs.paloaltonetworks.com/vm-series/8-1/vm-series-deployment/license-the-vm-series-firewall/license-typesvm-series-firewalls"
+      }
+    },
+    "PANOSVersion": {
+      "type": "string",
+      "defaultValue": "8.1.0",
+      "allowedValues": [
+        "8.1.0"
+      ],
+      "metadata": {
+        "description": "Select the PAN-OS version to deploy.  Selecting 'Latest' deploys the latest available image on the Azure Marketplace."
+      }
+    },
+    "VMSize": {
+      "type": "string",
+      "defaultValue": "Standard_DS3_v2",
+      "allowedValues": [
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D3_v2",
+        "Standard_D4_v2",
+        "Standard_A4",
+        "Standard_DS3_v2",
+        "Standard_DS4_v2",
+        "Standard_DS5_v2"
+      ],
+      "metadata": {
+        "description": "Select a VM size for the firewalls."
+      }
+    },
+    "OSDiskType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "description": "Select the storage type for the firewall's OS disk. More info: https://docs.microsoft.com/en-us/azure/virtual-machines/windows/managed-disks-overview"
+      }
+    },
+    "availabilitySetOption": {
+      "type": "string",
+      "defaultValue": "Create new availability set",
+      "allowedValues": [
+        "Create new availability set",
+        "Use existing availability set - Must be in firewall/main resource group",
+        "Do not use availability set"
+      ],
+      "metadata": {
+        "description": "Select an option for the firewall's availability set.  The availability set uses 'aligned' as the SKU."
+      }
+    },
+    "availabilitySetName": {
+      "type": "string",
+      "defaultValue": "vmseries-fw-as",
+      "metadata": {
+        "description": "Enter a name for the firewall's availability set.  If you are not using an availability set, enter any string."
+      }
+    },
+    "applyPublicIPToManagement": {
+      "type": "string",
+      "defaultValue": "Yes",
+      "allowedValues": [
+        "Yes",
+        "No"
+      ],
+      "metadata": {
+        "description": "Select 'Yes' to add a public IP to the firewall's management interface."
+      }
+    },
+    "NSGName": {
+      "type": "string",
+      "defaultValue": "vmseries-nsg",
+      "metadata": {
+        "description": "Enter a name for firewall NSG.  The name entered will have '-mgmt' appended for the mangement NSG."
+      }
+    },
+    "NSGSourcePrefix": {
+      "type": "string",
+      "defaultValue": "0.0.0.0/0",
+      "metadata": {
+        "description": "Enter a valid address prefix. This address will be able to access the firewall's management interface over TCP/443 (GUI), and TCP/22 (Terminal)."
+      }
+    },
+    "username": {
+      "type": "string",
+      "defaultValue": "paloalto",
+      "metadata": {
+        "description": "Enter the firewall's administrator username. DO NOT USE ADMIN OR ROOT."
+      }
+    },
+    "password": {
+      "type": "securestring",
+      "minLength": 12,
+      "maxLength": 72,
+      "metadata": {
+        "description": "Enter the firewall's administrator password. Password must be 12-72 characters and must have 3 of the following: 1 lower case character, 1 upper case character, 1 number, and 1 special character that is not '\\' or '-'."
+      }
+    },
+    "(opt.) AppendStringToResources": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "If the NAME and CONFIGURATION of the created LBs/NSGs/VMs/AVSET/VNET match an existing LBs/NSGs/VMs/AVSET/VNET in the SAME resource group, the template will its skip creation.  If the new resource NAME matches, but the resource CONFIGURATION does not, the template will fail or will overwrite the existing resource."
+      }
+    }
+  },
+  "variables": {
+    "COMMENT_global": "GLOBAL VARIABLES SHARED AMONG DEPLOYED RESOURCES",
+    "global_var_resource_group": "[resourceGroup().name]",
+    "global_var_appendedString": "[if(equals(parameters('(opt.) AppendStringToResources'), ''), '', parameters('(opt.) AppendStringToResources'))]",
+    "global_var_idleTimeoutInMinutes": 4,
+    "global_var_allocationMethod": "Static",
+    "global_var_networkVersion": "IPv4",
+    "global_resource_apiVersion": "2016-06-01",
+    "global_network_apiVersion": "2018-11-01",
+    "global_compute_apiVersion": "2017-12-01",
+    "global_vnet_name": "[if(equals(parameters('VNETOption'), 'Use existing VNET'), parameters('VNETName'), take(replace(concat(parameters('VNETName'), variables('global_var_appendedString')), ' ', ''), 64))]",
+    "global_vnet_resource_group": "[if(equals(parameters('VNETResourceGroup'), ''), variables('global_var_resource_group'), parameters('VNETResourceGroup'))]",
+    "global_vnet_option": "[parameters('VNETOption')]",
+    "global_vnet_subnet0_name": "[take(replace(parameters('subnetName-Management'), ' ', ''), 80)]",
+    "global_fw_mgmtnsg_name": "[take(replace(concat(parameters('NSGName'), '-mgmt', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "global_fw_interface0_pip_option": "[parameters('applyPublicIPToManagement')]",
+    "global_fw_storageAccountType": "[parameters('OSDiskType')]",
+    "global_fw_adminUsername": "[parameters('username')]",
+    "global_fw_adminPassword": "[parameters('password')]",
+    "global_fw_publisher": "paloaltonetworks",
+    "global_fw_license": "[parameters('licenseType')]",
+    "global_fw_version": "[parameters('PANOSVersion')]",
+    "global_fw_product": "vmseries1",
+    "global_fw_vmSize": "[parameters('VMSize')]",
+    "global_fw_avset_option": "[parameters('availabilitySetOption')]",
+    "global_fw_avset_name": "[if(equals(parameters('availabilitySetOption'), 'Use existing availability set - Must be in firewall/main resource group'), parameters('availabilitySetName'), take(replace(concat(parameters('availabilitySetName'), variables('global_var_appendedString')), ' ', ''), 80))]",
+    "global_fw_avset_id": { "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('global_fw_avset_name'))]"},
+
+    "COMMENT_nsg": "NSG TEMPLATE VARIABLES",
+    "nsg_mgmt_inbound_rule_name": "allow-inbound-https-ssh",
+    "nsg_mgmt_inbound_rule_sourceAddress": "[parameters('NSGSourcePrefix')]",
+    "nsg_mgmt_inbound_rule_ports": ["22", "443"],
+
+    "COMMENT_vnet": "NEW VNET TEMPLATE VARIABLES",
+    "vnet_cidr": "[parameters('VNETPrefix')]",
+    "vnet_subnet0_cidr": "[parameters('subnetPrefix-Management')]",
+
+    "COMMENT_avset": "AV SET NESTED TEMPLATE VARIABLES (L. 805-834)",
+    "avset_sku": "Aligned",
+    "avset_platformUpdateDomainCount": 5,
+    "avset_platformFaultDomainCount": 2,
+
+    "COMMENT_fw1": "FW1 TEMPLATE VARIABLES",
+    "fw1_computerName": "[take(replace(replace(concat(parameters('FW1-Name'), variables('global_var_appendedString')), ' ', ''), '_', ''), 64)]",
+    "fw1_interface0_name": "[take(replace(concat(parameters('FW1-Name'), '-nic0', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "fw1_interface0_ip": "[parameters('FW1-IPManagement')]",
+    "fw1_interface0_pip_name": "[take(replace(concat(parameters('FW1-Name'), '-nic0-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
+    "fw1_interface0_pip_id": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('fw1_interface0_pip_name'))]" }
+  },
+  "resources": [
+    {
+      "comments": "CREATE FIREWALL MGMT & DATA NSGS",
+      "type": "Microsoft.Resources/deployments",
+      "name": "CREATE_NSGS",
+      "apiVersion": "[variables('global_resource_apiVersion')]",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": [
+            {
+              "type": "Microsoft.Network/networkSecurityGroups",
+              "name": "[variables('global_fw_mgmtnsg_name')]",
+              "apiVersion": "[variables('global_network_apiVersion')]",
+              "location": "[resourceGroup().location]",
+              "properties": {
+                "securityRules": [
+                  {
+                    "name": "[variables('nsg_mgmt_inbound_rule_name')]",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "sourceAddressPrefix": "[variables('nsg_mgmt_inbound_rule_sourceAddress')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": "100",
+                      "direction": "Inbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": "[variables('nsg_mgmt_inbound_rule_ports')]",
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "comments": "CREATE VIRTUAL NETWORK WITH 4 SUBNETS",
+      "type": "Microsoft.Resources/deployments",
+      "name": "CREATE_VNET",
+      "apiVersion": "[variables('global_resource_apiVersion')]",
+      "condition": "[equals(variables('global_vnet_option'), 'Create new VNET')]",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": [
+            {
+              "type": "Microsoft.Network/virtualNetworks",
+              "name": "[variables('global_vnet_name')]",
+              "apiVersion": "[variables('global_network_apiVersion')]",
+              "location": "[resourceGroup().location]",
+              "properties": {
+                "addressSpace": {
+                  "addressPrefixes": [
+                    "[variables('vnet_cidr')]"
+                  ]
+                },
+                "subnets": [
+                  {
+                    "name": "[variables('global_vnet_subnet0_name')]",
+                    "properties": {
+                      "addressPrefix": "[variables('vnet_subnet0_cidr')]"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "comments": "CREATE FIREWALL AVAILABILITY SET",
+      "type": "Microsoft.Resources/deployments",
+      "name": "CREATE_AVSET",
+      "apiVersion": "[variables('global_resource_apiVersion')]",
+      "condition": "[equals(variables('global_fw_avset_option'), 'Create new availability set')]",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": [
+            {
+              "type": "Microsoft.Compute/availabilitySets",
+              "sku": {
+                "name": "[variables('avset_sku')]"
+              },
+              "name": "[variables('global_fw_avset_name')]",
+              "apiVersion": "[variables('global_compute_apiVersion')]",
+              "location": "[resourceGroup().location]",
+              "properties": {
+                "platformUpdateDomainCount": "[variables('avset_platformUpdateDomainCount')]",
+                "platformFaultDomainCount": "[variables('avset_platformFaultDomainCount')]"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "comments": "CREATE FW1 WITH INTERFACES",
+      "type": "Microsoft.Resources/deployments",
+      "name": "CREATE_FW1",
+      "apiVersion": "[variables('global_resource_apiVersion')]",
+      "dependsOn": [
+        "CREATE_VNET",
+        "CREATE_AVSET",
+        "CREATE_NSGS"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": [
+            {
+              "condition": "[equals(variables('global_fw_interface0_pip_option'), 'Yes')]",
+              "type": "Microsoft.Network/publicIPAddresses",
+              "name": "[variables('fw1_interface0_pip_name')]",
+              "apiVersion": "[variables('global_network_apiVersion')]",
+              "location": "[resourceGroup().location]",
+              "properties": {
+                "publicIPAddressVersion": "[variables('global_var_networkVersion')]",
+                "publicIPAllocationMethod": "[variables('global_var_allocationMethod')]",
+                "idleTimeoutInMinutes": "[variables('global_var_idleTimeoutInMinutes')]"
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "name": "[variables('fw1_interface0_name')]",
+              "apiVersion": "[variables('global_network_apiVersion')]",
+              "location": "[resourceGroup().location]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "ipconfig1",
+                    "properties": {
+                      "privateIpAddress": "[variables('fw1_interface0_ip')]",
+                      "privateIPAllocationMethod": "[variables('global_var_allocationMethod')]",
+                      "publicIpAddress": "[if(equals(variables('global_fw_interface0_pip_option'), 'Yes'), variables('fw1_interface0_pip_id'), json('null'))]",
+                      "subnet": {
+                        "id": "[concat(resourceId(variables('global_vnet_resource_group'), 'Microsoft.Network/virtualNetworks', variables('global_vnet_name')), '/subnets/', variables('global_vnet_subnet0_name'))]"
+                      },
+                      "primary": true,
+                      "privateIPAddressVersion": "[variables('global_var_networkVersion')]"
+                    }
+                  }
+                ],
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('global_fw_mgmtnsg_name'))]"
+                },
+                "tapConfigurations": []
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses/', variables('fw1_interface0_pip_name'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Compute/virtualMachines",
+              "name": "[variables('fw1_computerName')]",
+              "apiVersion": "[variables('global_compute_apiVersion')]",
+              "location": "[resourceGroup().location]",
+              "properties": {
+                "availabilitySet": "[if(equals(variables('global_fw_avset_option'), 'Do not use availability set'), json('null'), variables('global_fw_avset_id'))]",
+                "hardwareProfile": {
+                  "vmSize": "[variables('global_fw_vmSize')]"
+                },
+                "storageProfile": {
+                  "imageReference": {
+                    "publisher": "[variables('global_fw_publisher')]",
+                    "offer": "[variables('global_fw_product')]",
+                    "sku": "[variables('global_fw_license')]",
+                    "version": "[variables('global_fw_version')]"
+                  },
+                  "osDisk": {
+                    "createOption": "FromImage",
+                    "caching": "ReadWrite",
+                    "managedDisk": {
+                      "storageAccountType": "[variables('global_fw_storageAccountType')]"
+                    }
+                  }
+                },
+                "osProfile": {
+                  "computerName": "[variables('fw1_computerName')]",
+                  "adminUsername": "[variables('global_fw_adminUsername')]",
+                  "adminPassword": "[variables('global_fw_adminPassword')]"
+                },
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('fw1_interface0_name'))]",
+                      "properties": {
+                        "primary": true
+                      }
+                    }
+                  ]
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('fw1_interface0_name'))]"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
