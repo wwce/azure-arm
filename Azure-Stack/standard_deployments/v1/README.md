@@ -20,7 +20,7 @@ These ARM templates are released under an as-is, best effort, support policy. Th
 
 ### [2fw_3nic_avset_lbsandwich](https://github.com/wwce/azure-arm/tree/master/azure-stack/standard_deployments/v1/2fw_3nic_avset_lbsandwich)
 Deploy 2 x VM-Series (3 NIC) with External Load Balancer (Basic SKU) and 2 x Ubuntu hosts to act as servers
-<img style="float: left;" src="https://github.com/wwce/azure-arm/raw/master/Azure-Stack/standard_deployments/v1/images/2fw_3nic_avset_lbsandwich.png" alt="drawing" width="500"/>
+<img style="float: left;" src="https://github.com/wwce/azure-arm/raw/master/Azure-Stack/standard_deployments/v1/images/2fw_3nic_avset_lbsandwich.png" alt="drawing" width="800"/>
 
 ---
 
