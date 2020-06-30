@@ -26,46 +26,46 @@ Deploy 2 x VM-Series (3 NIC) with External Load Balancer (Basic SKU) and 2 x Ubu
 
 ### [2fw_3nic_avset_extlb](https://github.com/wwce/azure-arm/tree/master/azure-stack/standard_deployments/v1/2fw_3nic_avset_extlb)
 Deploy 2 x VM-Series (3 NIC) with Public Load Balancer (Basic SKU)
-<img style="float: left;" src="https://raw.githubusercontent.com/wwce/azure-arm/master/azure-stack/standard_deployments/v1/images/2fw_3nic_avset_extlb.png" alt="drawing" width="500"/>
+<img style="float: left;" src="https://github.com/wwce/azure-arm/raw/master/Azure-Stack/standard_deployments/v1/images/2fw_3nic_avset_extlb.png" alt="drawing" width="500"/>
 
 ---
 
 ### [2fw_3nic_avset](https://github.com/wwce/azure-arm/tree/master/azure-stack/standard_deployments/v1/2fw_3nic_avset)
 Deploy 2 x VM-Series (3 NIC)
 </br>
-<img style="float: left;" src="https://raw.githubusercontent.com/wwce/azure-arm/master/azure-stack/standard_deployments/v1/images/2fw_3nic_avset.png" alt="drawing" width="400"/>
+<img style="float: left;" src="https://github.com/wwce/azure-arm/raw/master/Azure-Stack/standard_deployments/v1/images/2fw_3nic_avset.png" alt="drawing" width="400"/>
 
 ---
 
 ### [2fw_2nic_avset](https://github.com/wwce/azure-arm/tree/master/azure-stack/standard_deployments/v1/2fw_2nic_avset)
 Deploy 2 x VM-Series (2 NIC)
 </br>
-<img style="float: left;" src="https://raw.githubusercontent.com/wwce/azure-arm/master/azure-stack/standard_deployments/v1/images/2fw_2nic_avset.png" alt="drawing" width="400"/>
+<img style="float: left;" src="https://github.com/wwce/azure-arm/raw/master/Azure-Stack/standard_deployments/v1/images/2fw_2nic_avset.png" alt="drawing" width="400"/>
 
 ---
 
 ### [2fw_1nic_avset](https://github.com/wwce/azure-arm/tree/master/azure-stack/standard_deployments/v1/2fw_1nic_avset)
 Deploy 2 x VM-Series (1 NIC)
 </br>
-<img style="float: left;" src="https://raw.githubusercontent.com/wwce/azure-arm/master/azure-stack/standard_deployments/v1/images/2fw_1nic_avset.png" alt="drawing" width="400"/>
+<img style="float: left;" src="https://github.com/wwce/azure-arm/raw/master/Azure-Stack/standard_deployments/v1/images/2fw_1nic_avset.png" alt="drawing" width="400"/>
 
 ---
 
 ### [1fw_3nic_avset](https://github.com/wwce/azure-arm/tree/master/azure-stack/standard_deployments/v1/1fw_3nic_avset)
 Deploy 1 x VM-Series (3 NIC)
 </br>
-<img style="float: left;" src="https://raw.githubusercontent.com/wwce/azure-arm/master/azure-stack/standard_deployments/v1/images/1fw_3nic_avset.png" alt="drawing" width="400"/>
+<img style="float: left;" src="https://github.com/wwce/azure-arm/raw/master/Azure-Stack/standard_deployments/v1/images/1fw_3nic_avset.png" alt="drawing" width="400"/>
 
 ---
 
 ### [1fw_2nic_avset](https://github.com/wwce/azure-arm/tree/master/azure-stack/standard_deployments/v1/1fw_2nic_avset)
 Deploy 1 x VM-Series (2 NIC)
 </br>
-<img style="float: left;" src="https://raw.githubusercontent.com/wwce/azure-arm/master/azure-astack/standard_deployments/v1/images/1fw_2nic_avset.png" alt="drawing" width="400"/>
+<img style="float: left;" src="https://github.com/wwce/azure-arm/raw/master/Azure-Stack/standard_deployments/v1/images/1fw_2nic_avset.png" alt="drawing" width="400"/>
 
 ---
 
 ### [1fw_1nic_avset](https://github.com/wwce/azure-arm/tree/master/azure-stack/standard_deployments/v1/1fw_1nic_avset)
 Deploy 1 x VM-Series (1 NIC)
 </br>
-<img style="float: left;" src="https://raw.githubusercontent.com/wwce/azure-arm/master/azure-stack/standard_deployments/v1/images/1fw_1nic_avset.png" alt="drawing" width="400"/>
+<img style="float: left;" src="https://github.com/wwce/azure-arm/raw/master/Azure-Stack/standard_deployments/v1/images/1fw_1nic_avset.png" alt="drawing" width="400"/>
