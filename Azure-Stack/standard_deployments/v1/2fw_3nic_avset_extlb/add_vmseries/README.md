@@ -20,6 +20,3 @@ This template deploys the following into a new or existing VNET with 4 subnets:
 * 2 x Network Security Groups
     *  management: `<fw_name>-mgmt`
     *  dataplane: `<fw_name>-data`
-
-
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2Fazure-arm-mclimans%2Fstandard_deployments%2Fv1%2F2fw_3nic_avset_extlb%2F%2Fadd_vmseries%2FazureDeploy.json)
