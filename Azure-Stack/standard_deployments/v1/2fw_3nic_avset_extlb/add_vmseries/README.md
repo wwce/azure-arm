@@ -1,6 +1,6 @@
 ## Add 1 x VM-Series (3 NIC) to existing Public Load Balancer's Backend Pool
 <p align="center">
-<img src="https://raw.githubusercontent.com/wwce/azure-arm/master/azure-arm-mclimans/standard_deployments/v1/images/2fw_3nic_avset_intlb_extlb.png">
+<img src="https://raw.githubusercontent.com/wwce/azure-arm/master/Azure-Stack/standard_deployments/v1/images/2fw_3nic_avset_extlb.png">
 </p>
 
 ### Overview
