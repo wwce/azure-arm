@@ -190,21 +190,21 @@
     },
     "(opt.) BootstrapStorageAccount": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "mrmdemo01",
       "metadata": {
         "description": "(Optional) To bootstrap the firewalls, enter the Azure storage account name that contains the bootstrap file share."
       }
     },
     "(opt.) BootstrapAccessKey": {
       "type": "securestring",
-      "defaultValue": "",
+      "defaultValue": "ufOuiDH0cpTV0swolczL10RVBYVikDPvPwb7LtJHB0soPmFzuNgrSM427ckwUQmuGvM0lIjur6QhAKqysa3P/Q==",
       "metadata": {
         "description": "(Optional) To bootstrap the firewalls, enter the Azure storage account access key."
       }
     },
     "(opt.) BootstrapFileShareName": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "vwan-demo",
       "metadata": {
         "description": "(Optional) To bootstrap the firewalls, enter the name of the Azure storage account file share that contains the bootstrap configuration."
       }
@@ -303,6 +303,9 @@
     "vnet_subnet1_cidr": "[parameters('subnetPrefix-Untrust')]",
     "vnet_subnet2_cidr": "[parameters('subnetPrefix-Trust')]",
     "vnet_subnet3_cidr": "[parameters('subnetPrefix-Gateway')]",
+    "vnet_subnet_rtb_name": "[concat(variables('global_var_appendedString'), 'RTB')]",
+    "vnet_subnet_rtb_route0_name": "default1-udr",
+    "vnet_subnet_rtb_route0_destination": "0.0.0.0/0",
     "vnet_subnet3_rtb_name": "GatewaySubnet-RTB",
     "vnet_subnet3_rtb_route0_name": "default1-udr",
     "vnet_subnet3_rtb_route0_destination": "0.0.0.0/1",
@@ -507,6 +510,24 @@
           "contentVersion": "1.0.0.0",
           "resources": [
             {
+              "type": "Microsoft.Network/routeTables",
+              "name": "[variables('vnet_subnet_rtb_name')]",
+              "apiVersion": "[variables('global_var_apiVersion')]",
+              "location": "[resourceGroup().location]",
+              "properties": {
+                "disableBgpRoutePropagation": true,
+                "routes": [
+                  {
+                    "name": "[variables('vnet_subnet_rtb_route0_name')]",
+                    "properties": {
+                      "addressPrefix": "[variables('vnet_subnet_rtb_route0_destination')]",
+                      "nextHopType": "Internet"
+                    }
+                  }
+                ]
+              }
+            },
+            {
               "type": "Microsoft.Network/virtualNetworks",
               "name": "[variables('global_vnet_name')]",
               "apiVersion": "2020-03-01",
@@ -521,13 +542,19 @@
                   {
                     "name": "[variables('global_vnet_subnet0_name')]",
                     "properties": {
-                      "addressPrefix": "[variables('vnet_subnet0_cidr')]"
+                      "addressPrefix": "[variables('vnet_subnet0_cidr')]",
+                      "routeTable": {
+                        "id": "[resourceId('Microsoft.Network/routeTables', variables('vnet_subnet_rtb_name'))]"
+                      }
                     }
                   },
                   {
                     "name": "[variables('global_vnet_subnet1_name')]",
                     "properties": {
-                      "addressPrefix": "[variables('vnet_subnet1_cidr')]"
+                      "addressPrefix": "[variables('vnet_subnet1_cidr')]",
+                      "routeTable": {
+                        "id": "[resourceId('Microsoft.Network/routeTables', variables('vnet_subnet_rtb_name'))]"
+                      }
                     }
                   },
                   {
@@ -543,7 +570,10 @@
                     }
                   }
                 ]
-              }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/routeTables', variables('vnet_subnet_rtb_name'))]"
+              ]
             },
             {
               "type": "Microsoft.Network/routeTables",
