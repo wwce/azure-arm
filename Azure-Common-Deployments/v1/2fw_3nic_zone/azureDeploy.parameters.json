@@ -2,16 +2,16 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "vnetOption": {
+    "VNETOption": {
       "value": "Create new VNET"
     },
-    "vnetResourceGroup": {
-      "value": ""
+    "VNETResourceGroup": {
+      "value": null
     },
-    "vnetName": {
+    "VNETName": {
       "value": "vmseries-vnet"
     },
-    "vnetPrefix": {
+    "VNETPrefix": {
       "value": "10.0.0.0/16"
     },
     "subnetName-Management": {
@@ -32,46 +32,49 @@
     "subnetPrefix-Dataplane2": {
       "value": "10.0.2.0/24"
     },
-    "fW1-Name": {
+    "healthProbePort": {
+      "value": "22"
+    },
+    "FW1-Name": {
       "value": "vmseries-fw-vm1"
     },
     "FW1-Zone": {
       "value": "1"
     },
-    "fW1-IPManagement": {
+    "FW1-IPManagement": {
       "value": "10.0.0.4"
     },
-    "fW1-IPDataplane1": {
+    "FW1-IPDataplane1": {
       "value": "10.0.1.4"
     },
-    "fW1-IPDataplane2": {
+    "FW1-IPDataplane2": {
       "value": "10.0.2.4"
     },
-    "fW2-Name": {
+    "FW2-Name": {
       "value": "vmseries-fw-vm2"
     },
     "FW2-Zone": {
       "value": "2"
     },
-    "fW2-IPManagement": {
+    "FW2-IPManagement": {
       "value": "10.0.0.5"
     },
-    "fW2-IPDataplane1": {
+    "FW2-IPDataplane1": {
       "value": "10.0.1.5"
     },
-    "fW2-IPDataplane2": {
+    "FW2-IPDataplane2": {
       "value": "10.0.2.5"
     },
     "licenseType": {
       "value": "byol"
     },
-    "panosVersion": {
+    "PANOSVersion": {
       "value": "latest"
     },
-    "vmSize": {
+    "VMSize": {
       "value": "Standard_DS3_v2"
     },
-    "osDiskType": {
+    "OSDiskType": {
       "value": "Standard_LRS"
     },
     "acceleratedNetworking": {
@@ -83,10 +86,10 @@
     "applyPublicIPToDataplane1": {
       "value": "Yes"
     },
-    "nsgName": {
+    "NSGName": {
       "value": "vmseries-nsg"
     },
-    "nsgSourcePrefix": {
+    "NSGSourcePrefix": {
       "value": "0.0.0.0/0"
     },
     "username": {
@@ -96,19 +99,19 @@
       "value": null
     },
     "(opt.) BootstrapStorageAccount": {
-      "value": ""
+      "value": null
     },
     "(opt.) BootstrapAccessKey": {
       "value": null
     },
     "(opt.) BootstrapFileShareName": {
-      "value": ""
+      "value": null
     },
     "(opt.) BootstrapShareDirectory": {
-      "value": ""
+      "value": null
     },
     "(opt.) AppendStringToResources": {
-      "value": ""
+      "value": null
     }
   }
 }
