@@ -35,6 +35,9 @@
     "fW1-Name": {
       "value": "vmseries-fw-vm1"
     },
+    "FW1-Zone": {
+      "value": "1"
+    },
     "fW1-IPManagement": {
       "value": "10.0.0.4"
     },
@@ -46,6 +49,9 @@
     },
     "fW2-Name": {
       "value": "vmseries-fw-vm2"
+    },
+    "FW2-Zone": {
+      "value": "2"
     },
     "fW2-IPManagement": {
       "value": "10.0.0.5"
@@ -67,12 +73,6 @@
     },
     "osDiskType": {
       "value": "Standard_LRS"
-    },
-    "availabilitySetOption": {
-      "value": "Create new availability set"
-    },
-    "availabilitySetName": {
-      "value": "vmseries-fw-as"
     },
     "acceleratedNetworking": {
       "value": "disable"
