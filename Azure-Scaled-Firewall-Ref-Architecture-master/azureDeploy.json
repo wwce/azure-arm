@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "vnetNewOrExisting": {
@@ -262,7 +262,7 @@
                         "properties": {
                             "addressPrefix": "[parameters('mgmtSubnetPrefix')]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'Management')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'Management-nsg')]"
                             }
                         }
                     },
@@ -271,7 +271,7 @@
                         "properties": {
                             "addressPrefix": "[parameters('untrustSubnetPrefix')]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'Allow-All')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'Dataplane-nsg')]"
                             }
                         }
                     },
@@ -280,15 +280,15 @@
                         "properties": {
                             "addressPrefix": "[parameters('trustSubnetPrefix')]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'Allow-All')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'Dataplane-nsg')]"
                             }
                         }
                     }
                 ]
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', 'Allow-All')]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', 'Management')]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', 'Dataplane-nsg')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', 'Management-nsg')]"
             ],
             "condition": "[equals(parameters('vnetNewOrExisting'),'new')]"
         },
@@ -411,12 +411,12 @@
                     }
                 ],
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups','Allow-All')]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups','Dataplane-nsg')]"
                 }
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups','Allow-All')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups','Dataplane-nsg')]",
                 "LB-Egress"
             ]
         },
@@ -493,7 +493,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "Allow-All",
+            "name": "Dataplane-nsg",
             "apiVersion": "2017-06-01",
             "location": "[resourceGroup().location]",
             "properties": {
@@ -632,7 +632,7 @@
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "Management",
+            "name": "Management-nsg",
             "apiVersion": "2017-06-01",
             "location": "[resourceGroup().location]",
             "properties": {
@@ -1052,12 +1052,12 @@
                     }
                 ],
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups','Allow-All')]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups','Dataplane-nsg')]"
                 }
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups','Allow-All')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups','Dataplane-nsg')]",
                 "LB-Ingress"
             ]
         },
