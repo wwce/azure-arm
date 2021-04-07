@@ -1,1 +1,0 @@
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwwce%2Fazure-arm%2Fmaster%2Fazure-arm-mclimans%2Fdemo_deployments%2Ftwotier_2fw_3nic_intlb%2FazureDeploy.json)

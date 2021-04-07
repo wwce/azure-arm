@@ -34,13 +34,6 @@
         "description": "Enter a subnet name for the firewall's first dataplane interface."
       }
     },
-    "subnetName-InternalLB": {
-      "type": "string",
-      "defaultValue": "lb-subnet",
-      "metadata": {
-        "description": "Enter the subnet name for the internal load balancer."
-      }
-    },
     "internalLBResourceGroup": {
       "type": "string",
       "defaultValue": "",
