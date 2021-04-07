@@ -98,19 +98,19 @@
     "password": {
       "value": null
     },
-    "(opt.) BootstrapStorageAccount": {
+    "optional-BootstrapStorageAccount": {
       "value": null
     },
-    "(opt.) BootstrapAccessKey": {
+    "optional-BootstrapAccessKey": {
       "value": null
     },
-    "(opt.) BootstrapFileShareName": {
+    "optional-BootstrapFileShareName": {
       "value": null
     },
-    "(opt.) BootstrapShareDirectory": {
+    "optional-BootstrapShareDirectory": {
       "value": null
     },
-    "(opt.) AppendStringToResources": {
+    "optional-AppendStringToResources": {
       "value": null
     }
   }

@@ -292,35 +292,35 @@
         "description": "Enter the firewall's administrator password. Password must be 12-72 characters and must have 3 of the following: 1 lower case character, 1 upper case character, 1 number, and 1 special character that is not slash or hyphen."
       }
     },
-    "(opt.) BootstrapStorageAccount": {
+    "optional-BootstrapStorageAccount": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
         "description": "(Optional) To bootstrap the firewalls, enter the Azure storage account name that contains the bootstrap file share."
       }
     },
-    "(opt.) BootstrapAccessKey": {
+    "optional-BootstrapAccessKey": {
       "type": "securestring",
       "defaultValue": "",
       "metadata": {
         "description": "(Optional) To bootstrap the firewalls, enter the Azure storage account access key."
       }
     },
-    "(opt.) BootstrapFileShareName": {
+    "optional-BootstrapFileShareName": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
         "description": "(Optional) To bootstrap the firewalls, enter the name of the Azure storage account file share that contains the bootstrap configuration."
       }
     },
-    "(opt.) BootstrapShareDirectory": {
+    "optional-BootstrapShareDirectory": {
       "defaultValue": "",
       "type": "String",
       "metadata": {
         "description": "(Optional) To bootstrap from multiple bootstrap directories within the same file share, enter the subdirectory hosting the bootstrap files."
       }
     },
-    "(opt.) AppendStringToResources": {
+    "optional-AppendStringToResources": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
@@ -331,7 +331,7 @@
   "variables": {
     "COMMENT_global": "GLOBAL VARIABLES SHARED AMONG DEPLOYED RESOURCES",
     "global_var_resource_group": "[resourceGroup().name]",
-    "global_var_appendedString": "[if(equals(parameters('(opt.) AppendStringToResources'), ''), '', parameters('(opt.) AppendStringToResources'))]",
+    "global_var_appendedString": "[if(equals(parameters('optional-AppendStringToResources'), ''), '', parameters('optional-AppendStringToResources'))]",
     "global_var_idleTimeoutInMinutes": 4,
     "global_var_allocationMethod": "Static",
     "global_var_networkVersion": "IPv4",
@@ -352,7 +352,7 @@
     "global_fw_adminUsername": "[parameters('username')]",
     "global_fw_adminPassword": "[parameters('password')]",
     "global_fw_diskSizeGB": 60,
-    "global_fw_bootstrap": "[concat('storage-account=', parameters('(opt.) BootstrapStorageAccount'), ',access-key=', parameters('(opt.) BootstrapAccessKey'), ',file-share=', parameters('(opt.) BootstrapFileShareName'), ',share-directory=', parameters('(opt.) BootstrapShareDirectory'))]",
+    "global_fw_bootstrap": "[concat('storage-account=', parameters('optional-BootstrapStorageAccount'), ',access-key=', parameters('optional-BootstrapAccessKey'), ',file-share=', parameters('optional-BootstrapFileShareName'), ',share-directory=', parameters('optional-BootstrapShareDirectory'))]",
     "global_fw_publisher": "paloaltonetworks",
     "global_fw_license": "[parameters('licenseType')]",
     "global_fw_version": "[parameters('PANOSVersion')]",

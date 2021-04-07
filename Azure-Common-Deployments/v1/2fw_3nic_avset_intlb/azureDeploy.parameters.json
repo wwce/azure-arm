@@ -110,19 +110,19 @@
     "password": {
       "value": null
     },
-    "(opt.) BootstrapStorageAccount": {
+    "optional-BootstrapStorageAccount": {
       "value": "mclimanseastus"
     },
-    "(opt.) BootstrapAccessKey": {
+    "optional-BootstrapAccessKey": {
       "value": null
     },
-    "(opt.) BootstrapFileShareName": {
+    "optional-BootstrapFileShareName": {
       "value": "transit-build-demo"
     },
-    "(opt.) BootstrapShareDirectory": {
+    "optional-BootstrapShareDirectory": {
       "value": ""
     },
-    "(opt.) AppendStringToResources": {
+    "optional-AppendStringToResources": {
       "value": ""
     }
   }
