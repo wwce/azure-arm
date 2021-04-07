@@ -92,7 +92,7 @@
     "password": {
       "value": null
     },
-    "(opt.) AppendStringToResources": {
+    "optional-AppendStringToResources": {
       "value": ""
     }
   }
