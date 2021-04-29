@@ -22,7 +22,7 @@
             }
         },
         "virtualNetworkAddressPrefix": {
-            "defaultValue": "10.0.0.0/16",
+            "defaultValue": "172.31.0.0/16",
             "type": "String",
             "metadata": {
                 "description": "CIDR for Virtual Network"
@@ -57,14 +57,14 @@
             }
         },
 
-        "mgmtSubnetName": {
+        "managementSubnetName": {
             "defaultValue": "Mgmt",
             "type": "String",
             "metadata": {
                 "description": "Subnet for Management Network"
             }
         },
-        "mgmtSubnetPrefix": {
+        "managementSubnetPrefix": {
             "defaultValue": "10.0.0.0/24",
             "type": "String",
             "metadata": {
@@ -227,9 +227,9 @@
                 },
                 "subnets": [
                     {
-                        "name": "[parameters('mgmtSubnetName')]",
+                        "name": "[parameters('managementSubnetName')]",
                         "properties": {
-                            "addressPrefix": "[parameters('mgmtSubnetPrefix')]",
+                            "addressPrefix": "[parameters('managementSubnetPrefix')]",
                             "networkSecurityGroup": {
                                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'Management')]"
                             }
@@ -371,7 +371,7 @@
                             },
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
-                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/',parameters('mgmtSubnetName'))]"
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName')), '/subnets/',parameters('managementSubnetName'))]"
                             }
                         }
                     }
