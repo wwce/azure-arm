@@ -9,7 +9,7 @@
       "value": "latest"
     },
     "imageSku": {
-      "value": "bundle2"
+      "value": "byol"
     },
     "vnetNewOrExisting": {
       "value": "new"
@@ -18,46 +18,46 @@
       "value": "NET-Demo"
     },
     "virtualNetworkAddressPrefix": {
-      "value": "10.0.0.0/16"
+      "value": "172.31.0.0/16"
     },
     "managementSubnetName": {
       "value": "Management"
     },
-    "managementSubnetAddressPrefix": {
-      "value": "10.0.0.0/24"
+    "managementSubnetPrefix": {
+      "value": "172.31.255.0/24"
     },
     "untrustSubnetName": {
       "value": "Untrust"
     },
-    "untrustSubnetAddressPrefix": {
-      "value": "10.0.1.0/24"
+    "untrustSubnetPrefix": {
+      "value": "172.31.0.0/24"
     },
     "trustSubnetName": {
       "value": "Trust"
     },
-    "trustSubnetAddressPrefix": {
-      "value": "10.0.2.0/24"
+    "trustSubnetPrefix": {
+      "value": "172.31.1.0/24"
     },
     "vpnSubnetName":{
       "value": "VPN"
     },
-    "vpnSubnetAddressPrefix": {
-      "value": "10.0.3.0/24"
+    "vpnSubnetPrefix": {
+      "value": "172.31.2.0/24"
     },
     "protectedSubnetName": {
-      "value": "Dev"
+      "value": "inside_dev"
     },
-    "protectedSubnetAddressPrefix": {
-      "value": "10.0.4.0/24"
+    "protectedSubnetPrefix": {
+      "value": "172.31.3.0/24"
     },
     "egressLBFrontEndAddress": {
-      "value": "10.0.2.100"
+      "value": "172.31.1.100"
     },
     "egressLBVPNFrontEndAddress": {
-      "value": "10.0.3.100"
+      "value": "172.31.2.100"
     },
     "Username": {
-      "value": "paloalto"
+      "value": "squadra"
     },
     "Password": {
       "value": ""
@@ -66,7 +66,7 @@
       "value": "0.0.0.0/0"
     },
     "bootstrapFirewall": {
-      "value": "yes"
+      "value": "no"
     },
     "BootstrapStorageAccount":{
       "value": ""
