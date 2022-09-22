@@ -530,12 +530,6 @@
                     "properties": {
                       "addressPrefix": "[variables('vnet_subnet2_cidr')]"
                     }
-                  },
-                  {
-                    "name": "[variables('global_vnet_subnet3_name')]",
-                    "properties": {
-                      "addressPrefix": "[variables('vnet_subnet3_cidr')]"
-                    }
                   }
                 ]
               }
