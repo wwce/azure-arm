@@ -322,21 +322,21 @@
     },
     "optional-BootstrapStorageAccount": {
       "type": "string",
-      "defaultValue": "mclimanseastus",
+      "defaultValue": "",
       "metadata": {
         "description": "(Optional) To bootstrap the firewalls, enter the Azure storage account name that contains the bootstrap file share."
       }
     },
     "optional-BootstrapAccessKey": {
       "type": "securestring",
-      "defaultValue": "OgJsX1/dbZyN+IF+Dgk2GwYvY0Et8tzqzBrYxwHsgRn7fE45tkaM9mNC5w/gdNPj111wWrZzU3QVtJK4ybDqew==",
+      "defaultValue": "",
       "metadata": {
         "description": "(Optional) To bootstrap the firewalls, enter the Azure storage account access key."
       }
     },
     "optional-BootstrapFileShareName": {
       "type": "string",
-      "defaultValue": "transit-build-demo",
+      "defaultValue": "",
       "metadata": {
         "description": "(Optional) To bootstrap the firewalls, enter the name of the Azure storage account file share that contains the bootstrap configuration."
       }
