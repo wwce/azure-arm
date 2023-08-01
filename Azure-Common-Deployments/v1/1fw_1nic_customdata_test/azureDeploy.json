@@ -83,9 +83,9 @@
       "defaultValue": "latest",
       "allowedValues": [
         "latest",
-        "8.1.0",
-        "8.0.0",
-        "7.1.1"
+        "10.2.4",
+        "10.2.3",
+        "10.2.2"
       ],
       "metadata": {
         "description": "Select the PAN-OS version to deploy.  Selecting 'Latest' deploys the latest available image on the Azure Marketplace."
@@ -228,7 +228,7 @@
     "global_fw_publisher": "paloaltonetworks",
     "global_fw_license": "[parameters('licenseType')]",
     "global_fw_version": "[parameters('PANOSVersion')]",
-    "global_fw_product": "vmseries1",
+    "global_fw_product": "vmseries-flex",
     "global_fw_vmSize": "[parameters('VMSize')]",
     "global_fw_enableAcceleratedNetworking": "[if(equals(parameters('acceleratedNetworking'), 'enable (Only supported on PAN-OS 9.0 or greater)'), 'true', 'false')]",
     "global_fw_avset_option": "[parameters('availabilitySetOption')]",
