@@ -62,16 +62,7 @@
     "password": {
       "value": null
     },
-    "optional-BootstrapStorageAccount": {
-      "value": ""
-    },
-    "optional-BootstrapAccessKey": {
-      "value": null
-    },
-    "optional-BootstrapFileShareName": {
-      "value": ""
-    },
-    "optional-BootstrapShareDirectory": {
+    "optional-CustomData": {
       "value": ""
     },
     "optional-AppendStringToResources": {

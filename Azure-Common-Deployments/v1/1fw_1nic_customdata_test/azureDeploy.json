@@ -189,13 +189,11 @@
         "description": "Enter the firewall's administrator password. Password must be 12-72 characters and must have 3 of the following: 1 lower case character, 1 upper case character, 1 number, and 1 special character that is not a slash or hyphen."
       }
     },
-    {
     "optional-CustomData": {
-        "type": "string",
-        "defaultValue": "",
-        "metadata": {
-          "description": "(Optional) Custom data to bootstrap the VM-Series"
-        }
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "(Optional) Custom data to bootstrap the VM-Series."
       }
     },
     "optional-AppendStringToResources": {
