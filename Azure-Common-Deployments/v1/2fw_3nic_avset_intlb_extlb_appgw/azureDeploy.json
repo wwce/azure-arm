@@ -117,13 +117,10 @@
     },
     "appGWSize": {
       "type": "string",
-      "defaultValue": "Standard_Small",
+      "defaultValue": "Standard_v2",
       "allowedValues": [
-        "Standard_Small",
-        "Standard_Medium",
-        "Standard_Large",
-        "WAF_Medium",
-        "WAF_Large"
+        "Standard_v2",
+        "WAF_v2"
       ],
       "metadata": {
         "description": "Select size and tier of the Application Gateway.  The WAF_Medium and WAF_Large deploy an unconfigured WAF.  Changing from WAF to Standard tier after deployment is not supported."
@@ -505,7 +502,7 @@
     "appgw_id": "[resourceId('Microsoft.Network/applicationGateways',variables('appgw_name'))]",
 
     "appgw_size": "[parameters('appGWSize')]",
-    "appgw_tier": "[if(contains(parameters('appGWSize'), 'WAF'), 'WAF', 'Standard')]",
+    "appgw_tier": "[if(contains(parameters('appGWSize'), 'WAF_v2'), 'WAF_v2', 'Standard_v2')]",
     "appgw_capacity": "[parameters('appGWCapacity')]",
     "appgw_pool_name": "appGatewayBackendPool",
     "appgw_frontend_name": "appGatewayFrontEnd",
