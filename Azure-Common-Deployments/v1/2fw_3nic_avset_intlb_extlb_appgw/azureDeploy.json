@@ -515,6 +515,7 @@
     "appgw_http_rule_name": "rule-0",
     "appgw_pip_name": "[take(replace(concat(variables('appgw_name'), '-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
     "appgw_api_version": "2023-07-01",
+    
     "COMMENT_avset": "AV SET NESTED TEMPLATE VARIABLES (L. 805-834)",
     "avset_sku": "Aligned",
     "avset_platformUpdateDomainCount": 5,
@@ -885,126 +886,136 @@
         }
       }
     },
-    {
-      "comments": "CREATE FIREWALL APP GW",
-      "type": "Microsoft.Resources/deployments",
-      "name": "CREATE_APPGW",
-      "apiVersion": "[variables('appgw_api_version')]",
-      "resourceGroup": "[resourceGroup().name]",
-      "dependsOn": [
-        "CREATE_VNET"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "resources": [
-            {
-              "name": "[variables('appgw_pip_name')]",
-              "apiVersion": "[variables('global_var_apiVersion')]",
-              "type": "Microsoft.Network/publicIPAddresses",
-              "location": "[resourceGroup().location]",
-              "properties": {
-                "publicIPAllocationMethod": "Dynamic"
-              }
+{
+  "comments": "CREATE FIREWALL APP GW",
+  "type": "Microsoft.Resources/deployments",
+  "name": "CREATE_APPGW",
+  "apiVersion": "[variables('appgw_api_version')]",
+  "resourceGroup": "[resourceGroup().name]",
+  "dependsOn": [
+    "CREATE_VNET"
+  ],
+  "properties": {
+    "mode": "Incremental",
+    "template": {
+      "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+      "contentVersion": "1.0.0.0",
+      "resources": [
+        {
+          "name": "[variables('appgw_pip_name')]",
+          "apiVersion": "[variables('appgw_api_version')]",,
+          "type": "Microsoft.Network/publicIPAddresses",
+          "location": "[resourceGroup().location]",
+          "properties": {
+            "publicIPAllocationMethod": "Static"
+          },
+          "sku": {
+            "name": "Standard"
+          }
+        },
+        {
+          "name": "[variables('appgw_name')]",
+          "apiVersion": "[variables('appgw_api_version')]",
+          "location": "[resourceGroup().location]",
+          "type": "Microsoft.Network/applicationGateways",
+          "properties": {
+            "sku": {
+              "name": "[variables('appgw_size')]",
+              "tier": "[variables('appgw_tier')]",
+              "capacity": "[variables('appgw_capacity')]"
             },
-            {
-              "name": "[variables('appgw_name')]",
-              "apiVersion": "[variables('global_var_apiVersion')]",
-              "location": "[resourceGroup().location]",
-              "type": "Microsoft.Network/applicationGateways",
-              "properties": {
-                "sku": {
-                  "name": "[variables('appgw_size')]",
-                  "tier": "[variables('appgw_tier')]",
-                  "capacity": "[variables('appgw_capacity')]"
-                },
-                "gatewayIPConfigurations": [
-                  {
-                    "name": "ipconfig1",
-                    "properties": {
-                      "subnet": {
-                        "id": "[concat(resourceId(variables('global_vnet_resource_group'), 'Microsoft.Network/virtualNetworks', variables('global_vnet_name')), '/subnets/', variables('global_vnet_subnet4_name'))]"
-                      }
-                    }
+            "gatewayIPConfigurations": [
+              {
+                "name": "ipconfig1",
+                "properties": {
+                  "subnet": {
+                    "id": "[concat(resourceId(variables('global_vnet_resource_group'), 'Microsoft.Network/virtualNetworks', variables('global_vnet_name')), '/subnets/', variables('global_vnet_subnet4_name'))]"
                   }
-                ],
-                "frontendIPConfigurations": [
-                  {
-                    "name": "[variables('appgw_frontend_name')]",
-                    "properties": {
-                      "PublicIPAddress": {
-                        "id": "[resourceId('Microsoft.Network/publicIPAddresses/', variables('appgw_pip_name'))]"
-                      }
-                    }
+                }
+              }
+            ],
+            "frontendIPConfigurations": [
+              {
+                "name": "[variables('appgw_frontend_name')]",
+                "properties": {
+                  "privateIPAllocationMethod": "Dynamic",
+                  "PublicIPAddress": {
+                    "id": "[resourceId('Microsoft.Network/publicIPAddresses/', variables('appgw_pip_name'))]"
                   }
-                ],
-                "frontendPorts": [
-                  {
-                    "name": "[variables('appgw_frontend_port_name')]",
-                    "properties": {
-                      "Port": "[variables('appgw_frontend_port')]"
-                    }
+                }
+              }
+            ],
+            "frontendPorts": [
+              {
+                "name": "[variables('appgw_frontend_port_name')]",
+                "properties": {
+                  "Port": "[variables('appgw_frontend_port')]"
+                }
+              }
+            ],
+            "backendAddressPools": [
+              {
+                "name": "[variables('appgw_pool_name')]",
+                "properties": {}
+              }
+            ],
+            "backendHttpSettingsCollection": [
+              {
+                "name": "[variables('appgw_http_settings_name')]",
+                "properties": {
+                  "Port": "[variables('appgw_frontend_port')]",
+                  "Protocol": "[variables('appgw_frontend_protocol')]",
+                  "CookieBasedAffinity": "[variables('appgw_frontend_cookie')]",
+                  "pickHostNameFromBackendAddress": false,
+                  "requestTimeout": 20
+                }
+              }
+            ],
+            "httpListeners": [
+              {
+                "name": "[variables('appgw_http_listener_name')]",
+                "properties": {
+                  "FrontendIPConfiguration": {
+                    "Id": "[concat(variables('appgw_id'), '/frontendIPConfigurations/', variables('appgw_frontend_name'))]"
+                  },
+                  "FrontendPort": {
+                    "Id": "[concat(variables('appgw_id'), '/frontendPorts/', variables('appgw_frontend_port_name'))]"
+                  },
+                  "Protocol": "[variables('appgw_frontend_protocol')]",
+                  "hostNames": [],
+                  "requireServerNameIndication": false,
+                  "customErrorConfigurations": [],
+                  "SslCertificate": null
+                }
+              }
+            ],
+            "requestRoutingRules": [
+              {
+                "name": "[variables('appgw_http_rule_name')]",
+                "properties": {
+                  "RuleType": "Basic",
+                  "httpListener": {
+                    "id": "[concat(variables('appgw_id'), '/httpListeners/', variables('appgw_http_listener_name'))]"
+                  },
+                  "backendAddressPool": {
+                    "id": "[concat(variables('appgw_id'), '/backendAddressPools/', variables('appgw_pool_name'))]"
+                  },
+                  "backendHttpSettings": {
+                    "id": "[concat(variables('appgw_id'), '/backendHttpSettingsCollection/', variables('appgw_http_settings_name'))]"
                   }
-                ],
-                "backendAddressPools": [
-                  {
-                    "name": "[variables('appgw_pool_name')]",
-                    "properties": {}
-                  }
-                ],
-                "backendHttpSettingsCollection": [
-                  {
-                    "name": "[variables('appgw_http_settings_name')]",
-                    "properties": {
-                      "Port": "[variables('appgw_frontend_port')]",
-                      "Protocol": "[variables('appgw_frontend_protocol')]",
-                      "CookieBasedAffinity": "[variables('appgw_frontend_cookie')]"
-                    }
-                  }
-                ],
-                "httpListeners": [
-                  {
-                    "name": "[variables('appgw_http_listener_name')]",
-                    "properties": {
-                      "FrontendIPConfiguration": {
-                        "Id": "[concat(variables('appgw_id'), '/frontendIPConfigurations/', variables('appgw_frontend_name'))]"
-                      },
-                      "FrontendPort": {
-                        "Id": "[concat(variables('appgw_id'), '/frontendPorts/', variables('appgw_frontend_port_name'))]"
-                      },
-                      "Protocol": "[variables('appgw_frontend_protocol')]",
-                      "SslCertificate": null
-                    }
-                  }
-                ],
-                "requestRoutingRules": [
-                  {
-                    "name": "[variables('appgw_http_rule_name')]",
-                    "properties": {
-                      "RuleType": "Basic",
-                      "httpListener": {
-                        "id": "[concat(variables('appgw_id'), '/httpListeners/', variables('appgw_http_listener_name'))]"
-                      },
-                      "backendAddressPool": {
-                        "id": "[concat(variables('appgw_id'), '/backendAddressPools/', variables('appgw_pool_name'))]"
-                      },
-                      "backendHttpSettings": {
-                        "id": "[concat(variables('appgw_id'), '/backendHttpSettingsCollection/', variables('appgw_http_settings_name'))]"
-                      }
-                    }
-                  }
-                ]
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses/', variables('appgw_pip_name'))]"
-              ]
-            }
+                }
+              }
+            ],
+            "enableHttp2": true
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Network/publicIPAddresses/', variables('appgw_pip_name'))]"
           ]
         }
-      }
-    },
+      ]
+    }
+  }
+},
     {
       "comments": "CREATE FIREWALL AVAILABILITY SET",
       "type": "Microsoft.Resources/deployments",
