@@ -516,7 +516,8 @@
         "appgw_http_listener_name": "appGatewayHttpListener",
         "appgw_http_rule_name": "rule-0",
         "appgw_pip_name": "[take(replace(concat(variables('appgw_name'), '-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
-        "appgw_api_version": "2023-07-01",
+        "appgw_api_version": "2022-09-01",
+        "appgw_route_priority": 10,
         "COMMENT_avset": "AV SET NESTED TEMPLATE VARIABLES (L. 805-834)",
         "avset_sku": "Aligned",
         "avset_platformUpdateDomainCount": 5,
@@ -902,7 +903,7 @@
                     "resources": [
                         {
                             "name": "[variables('appgw_pip_name')]",
-                            "apiVersion": "[variables('global_var_apiVersion')]",
+                            "apiVersion": "[variables('appgw_api_version')]",
                             "type": "Microsoft.Network/publicIPAddresses",
                             "location": "[resourceGroup().location]",
                             "properties": {
@@ -993,6 +994,7 @@
                                         "name": "[variables('appgw_http_rule_name')]",
                                         "properties": {
                                             "RuleType": "Basic",
+                                            "priority": "[variables('appgw_route_priority')]",
                                             "httpListener": {
                                                 "id": "[concat(variables('appgw_id'), '/httpListeners/', variables('appgw_http_listener_name'))]"
                                             },
