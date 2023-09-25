@@ -517,7 +517,7 @@
     "appgw_http_listener_name": "appGatewayHttpListener",
     "appgw_http_rule_name": "rule-0",
     "appgw_pip_name": "[take(replace(concat(variables('appgw_name'), '-pip', variables('global_var_appendedString')), ' ', ''), 80)]",
-
+    "appgw_api_version": "2023-06-01",
     "COMMENT_avset": "AV SET NESTED TEMPLATE VARIABLES (L. 805-834)",
     "avset_sku": "Aligned",
     "avset_platformUpdateDomainCount": 5,
@@ -892,7 +892,7 @@
       "comments": "CREATE FIREWALL APP GW",
       "type": "Microsoft.Resources/deployments",
       "name": "CREATE_APPGW",
-      "apiVersion": "2022-06-01",
+      "apiVersion": "[variables('appgw_api_version')]",
       "resourceGroup": "[resourceGroup().name]",
       "dependsOn": [
         "CREATE_VNET"
