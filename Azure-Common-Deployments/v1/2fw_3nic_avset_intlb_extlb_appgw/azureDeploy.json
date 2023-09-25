@@ -903,7 +903,7 @@
       "resources": [
         {
           "name": "[variables('appgw_pip_name')]",
-          "apiVersion": "[variables('appgw_api_version')]",,
+          "apiVersion": "[variables('appgw_api_version')]",
           "type": "Microsoft.Network/publicIPAddresses",
           "location": "[resourceGroup().location]",
           "properties": {
