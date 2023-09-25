@@ -902,7 +902,7 @@
                     "resources": [
                         {
                             "name": "[variables('appgw_pip_name')]",
-                            "apiVersion": "[variables('appgw_api_version')]",
+                            "apiVersion": "[variables('global_var_apiVersion')]",
                             "type": "Microsoft.Network/publicIPAddresses",
                             "location": "[resourceGroup().location]",
                             "properties": {
