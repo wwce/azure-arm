@@ -892,7 +892,7 @@
       "comments": "CREATE FIREWALL APP GW",
       "type": "Microsoft.Resources/deployments",
       "name": "CREATE_APPGW",
-      "apiVersion": "[variables('global_var_apiVersion')]",
+      "apiVersion": "2022-02-01",
       "resourceGroup": "[resourceGroup().name]",
       "dependsOn": [
         "CREATE_VNET"
