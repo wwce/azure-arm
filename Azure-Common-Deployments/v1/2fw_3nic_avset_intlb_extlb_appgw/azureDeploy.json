@@ -1005,8 +1005,7 @@
                   }
                 }
               }
-            ],
-            "enableHttp2": true
+            ]
           },
           "dependsOn": [
             "[resourceId('Microsoft.Network/publicIPAddresses/', variables('appgw_pip_name'))]"
