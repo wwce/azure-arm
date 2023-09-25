@@ -416,7 +416,7 @@
     "global_var_idleTimeoutInMinutes": 4,
     "global_var_allocationMethod": "Static",
     "global_var_networkVersion": "IPv4",
-    "global_var_apiVersion": "2018-06-01",
+    "global_var_apiVersion": "2022-06-01",
     "global_var_tier": "Regional",
     "global_var_sku": "Standard",
     "global_vnet_name": "[if(equals(parameters('VNETOption'), 'Use existing VNET'), parameters('VNETName'), take(replace(concat(parameters('VNETName'), variables('global_var_appendedString')), ' ', ''), 64))]",
@@ -892,7 +892,7 @@
       "comments": "CREATE FIREWALL APP GW",
       "type": "Microsoft.Resources/deployments",
       "name": "CREATE_APPGW",
-      "apiVersion": "2022-06-01",
+      "apiVersion": "[variables('global_var_apiVersion')]",
       "resourceGroup": "[resourceGroup().name]",
       "dependsOn": [
         "CREATE_VNET"
