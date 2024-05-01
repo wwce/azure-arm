@@ -395,7 +395,6 @@
       "global_fw_adminUsername": "[parameters('username')]",
       "global_fw_adminPassword": "[parameters('password')]",
       "global_fw_diskSizeGB": 60,
-      "global_fw_bootstrap": "[parameters('optional-CustomData')]",
       "global_fw_bootstrap": "[concat('storage-account=', parameters('optional-BootstrapStorageAccount'), ',access-key=', parameters('optional-BootstrapAccessKey'), ',file-share=', parameters('optional-BootstrapFileShareName'), ',share-directory=', parameters('optional-BootstrapShareDirectory'))]",
       "global_fw_publisher": "paloaltonetworks",
       "global_fw_license": "[parameters('licenseType')]",
