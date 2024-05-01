@@ -395,11 +395,12 @@
       "global_fw_adminUsername": "[parameters('username')]",
       "global_fw_adminPassword": "[parameters('password')]",
       "global_fw_diskSizeGB": 60,
+      "global_fw_bootstrap": "[parameters('optional-CustomData')]",
       "global_fw_bootstrap": "[concat('storage-account=', parameters('optional-BootstrapStorageAccount'), ',access-key=', parameters('optional-BootstrapAccessKey'), ',file-share=', parameters('optional-BootstrapFileShareName'), ',share-directory=', parameters('optional-BootstrapShareDirectory'))]",
       "global_fw_publisher": "paloaltonetworks",
       "global_fw_license": "[parameters('licenseType')]",
       "global_fw_version": "[parameters('PANOSVersion')]",
-      "global_fw_product": "vmseries1",
+      "global_fw_product": "vmseries-flex",
       "global_fw_vmSize": "[parameters('VMSize')]",
       "global_fw_enableAcceleratedNetworking": "[if(equals(parameters('acceleratedNetworking'), 'enable (Only supported on PAN-OS 9.0 or greater)'), 'true', 'false')]",
 
